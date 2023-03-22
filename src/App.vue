@@ -1,6 +1,7 @@
 <script  lang="ts">
 import RootStore from '@xkit-yx/im-store'
 import { NimKitCore } from '@xkit-yx/core-kit/dist/uniapp-nim-core'
+import { customRedirectTo, customReLaunch, customSwitchTab } from './utils/customNavigate'
 
 const STORAGE_KEY = '__yx_im_options__'
 export default {
@@ -16,7 +17,7 @@ export default {
       this.initNim(imOptions)
     } else {
       // 需要登录 im
-      uni.redirectTo({
+      customRedirectTo({
         url: '/pages/Login/index'
       })
     }
@@ -33,7 +34,7 @@ export default {
       });
       const nim = uni.$UIKitNIM = new NimKitCore({
         initOptions: {
-          "appkey": "3e215d27b6a6a9e27dad7ef36dd5b65c",
+          "appkey": "",
           "lbsUrls": [
             "https://lbs.netease.im/lbs/webconf.jsp"
           ],
@@ -54,13 +55,13 @@ export default {
         teamInviteMode: 'all',
       })
       nim.connect()
-      uni.switchTab({
+      customSwitchTab({
         url: '/pages/Conversation/index'
       })
     },
     logout() {
       uni.removeStorageSync(STORAGE_KEY);
-      uni.reLaunch({
+      customReLaunch({
         url: '/pages/Login/index'
       })
       uni.$UIKitNIM.disconnect()

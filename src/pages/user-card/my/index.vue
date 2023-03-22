@@ -32,7 +32,8 @@ import { ref } from 'vue';
 import Icon from '../../../components/Icon.vue';
 import UniLink from '../../../uni_modules/uni-link/components/uni-link/uni-link.vue';
 import { autorun } from 'mobx';
-import { setTabUnread } from '@/utils/msg';
+import { setTabUnread } from '../../../utils/msg';
+import { customNavigateTo } from '../../../utils/customNavigate';
 const myUserInfo = ref()
 autorun(() => {
   const store = uni.$UIKitStore
@@ -49,14 +50,15 @@ onShow(() => {
 })
 
 const gotoSetting = () => {
-  uni.navigateTo({
+  customNavigateTo({
     url: '/pages/user-card/my/setting'
   })
 }
 
 const navigatorToMydetail = () => {
   console.log('myUserInfo.value.account', myUserInfo.value.account);
-  uni.navigateTo({
+  
+  customNavigateTo({
     url: `/pages/user-card/my-detail/index?account=${myUserInfo.value.account}`
   })
 }

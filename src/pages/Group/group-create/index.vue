@@ -11,13 +11,14 @@
 </template>
 
 <script lang="ts" setup>
-import FriendSelect from '@/components/FriendSelect.vue';
+import FriendSelect from '../../../components/FriendSelect.vue';
 import { ref } from 'vue'
 import NavBar from '../../../components/NavBar.vue';
 import { t } from '../../../utils/i18n';
 import { onLoad } from '@dcloudio/uni-app';
 import { debounce } from '@xkit-yx/utils';
 import Icon from '../../../components/Icon.vue';
+import { customRedirectTo } from '../../../utils/customNavigate';
 const friendList = ref()
 const groupMembers = ref<string[]>([])
 const store = uni.$UIKitStore
@@ -87,7 +88,9 @@ const createGroup = debounce(() => {
       avatar: createTeamAvatar(),
       name: createGroupName(groupMembers.value)
     }).then(async (res) => {
-      uni.redirectTo({ url: '/pages/Chat/index' })
+      customRedirectTo({
+        url: '/pages/Chat/index'
+      })
       uni.showToast({
         title: t('createTeamSuccessText'),
         icon: "success"

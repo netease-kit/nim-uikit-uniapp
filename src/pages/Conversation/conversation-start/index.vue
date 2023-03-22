@@ -27,6 +27,7 @@ import NavBar from '../../../components/NavBar.vue';
 import Icon from '../../../components/Icon.vue';
 import Empty from '../../../components/Empty.vue';
 import { t } from '../../../utils/i18n'
+import { customRedirectTo } from '../../../utils/customNavigate';
 const store = uni.$UIKitStore
 const searchResState = ref<"beginSearch" | "searchEmpty" | "searchResult">('beginSearch')
 const userInfo = ref()
@@ -53,7 +54,9 @@ const gotoChat = async () => {
     try {
       await store.friendStore.addFriendActive(sessionId)
       await store.uiStore.selectSession('p2p-' + sessionId)
-      uni.redirectTo({ url: '/pages/Chat/index' })
+      customRedirectTo({
+        url: '/pages/Chat/index' 
+      })
     } catch (error) {
       uni.showToast({
         title: t('gotoChatFailText'),

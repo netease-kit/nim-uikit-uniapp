@@ -43,8 +43,9 @@ import Icon from '../../../components/Icon.vue'
 import NetworkAlert from '../../../components/NetworkAlert.vue'
 import Empty from '../../../components/Empty.vue'
 import ConversationItem from './conversation-item.vue'
-import { setTabUnread } from '@/utils/msg';
+import { setTabUnread } from '../../../utils/msg';
 import { t } from '../../../utils/i18n';
+import { customNavigateTo } from '../../../utils/customNavigate';
 
 const store = uni.$UIKitStore
 const sessionList = ref<NimKitCoreTypes.ISession[]>([])
@@ -61,7 +62,9 @@ const handleSessionItemClick = async (
   moreActionsSession.value = null
   try {
     await store.uiStore.selectSession(session.id)
-    uni.navigateTo({ url: '/pages/Chat/index' })
+    customNavigateTo({
+      url: '/pages/Chat/index'
+    })
   } catch {
     uni.showToast({
       title: t('selectSessionFailText'),
@@ -110,14 +113,14 @@ const handleSessionItemStickTopChange = async (
 // 发起单聊
 const startConversation = () => {
   addDropdownVisible.value = false
-  uni.navigateTo({
+  customNavigateTo({
     url: '/pages/Conversation/conversation-start/index'
   })
 }
 // 创建群聊
 const onCreateGroup = () => {
   addDropdownVisible.value = false
-  uni.navigateTo({
+  customNavigateTo({
     url: '/pages/Group/group-create/index'
   })
 }

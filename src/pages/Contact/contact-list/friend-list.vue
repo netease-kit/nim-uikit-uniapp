@@ -21,12 +21,13 @@ import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
 import { autorun } from 'mobx';
 import { ref } from 'vue';
 import { friendGroupByPy } from '../../../utils/friend'
+import { customNavigateTo } from '../../../utils/customNavigate';
 
 const friendGroupList = ref<{ key: string, data: NimKitCoreTypes.IFriendInfo[] }[]>([])
 const store = uni.$UIKitStore
 
 function handleFriendItemClick(friend: NimKitCoreTypes.IFriendInfo) {
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/user-card/friend/index?account=${friend.account}`
   })
 }

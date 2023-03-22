@@ -89,6 +89,7 @@ import { formatDateRange } from '../../../utils/date';
 import { t } from '../../../utils/i18n';
 import { handleNoPermission } from '../../../utils/permission';
 import { autorun } from 'mobx'
+import { customNavigateTo } from '../../../utils/customNavigate';
 const myUserInfo = ref()
 const store = uni.$UIKitStore.userStore
 
@@ -98,7 +99,7 @@ autorun(() => {
 
 const navigatorToUserItem = (key: string, value: string) => {
   console.log(value);
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/user-card/detail-item/index?key=${key}&value=${value}`
   })
 }

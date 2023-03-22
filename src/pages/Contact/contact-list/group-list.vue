@@ -19,13 +19,16 @@ import { ref } from 'vue';
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import NavBar from '../../../components/NavBar.vue'
+import { customNavigateTo } from '../../../utils/customNavigate';
 
 const store = uni.$UIKitStore
 const teamList = ref<Team[]>([])
 
 const handleClick = async (team: Team) => {
   await store.uiStore.selectSession(`team-${team.teamId}`)
-  uni.navigateTo({ url: '/pages/Chat/index' })
+  customNavigateTo({
+    url: '/pages/Chat/index' 
+  })
 }
 
 autorun(() => {

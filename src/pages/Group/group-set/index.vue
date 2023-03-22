@@ -50,6 +50,7 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref, computed } from 'vue';
 import { autorun } from 'mobx';
 import { t } from '../../../utils/i18n'
+import { customNavigateTo } from '../../../utils/customNavigate';
 
 
 const store = uni.$UIKitStore
@@ -64,7 +65,7 @@ const isGroupOwner = computed(() => {
 })
 
 const handleInfoClick = () => {
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/Group/group-set/group-info-edit?id=${teamId}`
   })
 }
@@ -135,13 +136,13 @@ onLoad((option) => {
 
 
 const addTeamMember = () => {
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/Group/group-add/index?teamId=${teamId}`
   })
 }
 
 const gotoTeamMember = () => {
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/Group/group-member/index?teamId=${teamId}`
   })
 }

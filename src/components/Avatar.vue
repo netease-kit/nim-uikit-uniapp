@@ -16,6 +16,7 @@
 </template>
 
 <script lang="ts" setup>
+import { customNavigateTo } from '../utils/customNavigate';
 import type { UserNameCard } from '@xkit-yx/im-store';
 import { autorun } from 'mobx';
 import { computed, defineProps, ref, onMounted } from 'vue'
@@ -62,11 +63,11 @@ if (!color) {
 
 const handleAvatarClick = () => {
   if (props.account === store.userStore.myUserInfo.account) {
-    uni.navigateTo({
+    customNavigateTo({
       url: `/pages/user-card/my-detail/index`
     })
   } else {
-    uni.navigateTo({
+    customNavigateTo({
       url: `/pages/user-card/friend/index?account=${props.account}`
     })
   }

@@ -9,7 +9,7 @@
           
 <script lang="ts" setup>
 import NavBar from '../../../components/NavBar.vue';
-import { t } from '@/utils/i18n'
+import { t } from '../../../utils/i18n'
 
 const logout = () => {
   uni.showModal({

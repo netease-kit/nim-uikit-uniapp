@@ -121,7 +121,6 @@ import encodeText from '../../../utils/encodeText'
 import Svg from '../../../components/Svg.vue'
 import { events } from '../../../utils/constants'
 import MessageFile from './message-file.vue'
-import { t } from '@/utils/i18n'
 
 const props = defineProps<{
   scene: TMsgScene

@@ -27,6 +27,7 @@ import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { storeUtils } from '@xkit-yx/im-store'
+import { customNavigateTo, customSwitchTab } from '../../../utils/customNavigate'
 
 let isMounted = false
 
@@ -131,11 +132,11 @@ const back = () => {
 }
 
 const backToConversation = () => {
-  uni.switchTab({ url: "/pages/Conversation/index" })
+  customSwitchTab({ url: "/pages/Conversation/index" })
 }
 
 const handleTeamSetting = () => {
-  uni.navigateTo({
+  customNavigateTo({
     url: `/pages/Group/group-set/index?id=${to}`
   })
 }

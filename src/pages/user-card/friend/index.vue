@@ -42,6 +42,7 @@ import { ref } from 'vue';
 import NavBar from '../../../components/NavBar.vue';
 import Icon from '../../../components/Icon.vue';
 import { autorun } from 'mobx';
+import { customNavigateTo } from '../../../utils/customNavigate';
 const props = defineProps<{
   account: string
 }>()
@@ -58,7 +59,9 @@ autorun(async () => {
 
 const gotoChat = async () => {
   await store.uiStore.selectSession('p2p-'+ userInfo.value.account)
-  uni.navigateTo({ url: '/pages/Chat/index' })
+  customNavigateTo({
+    url: '/pages/Chat/index'
+  })
 }
 const back = () => {
   uni.navigateBack({
