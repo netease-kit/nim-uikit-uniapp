@@ -3,7 +3,6 @@ node_modules
 .idea
 junit.xml
 .history
-.DS_Store
 dist
 *-error.log
 es
