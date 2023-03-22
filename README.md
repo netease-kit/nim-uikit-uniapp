@@ -20,6 +20,32 @@ im-uikit-uniapp 界面效果如下图所示：
 - iOS <br>
   <img src="https://yx-web-nosdn.netease.im/common/f479aecb78e0b9365d48476687a6f76d/POPO20230322-190238.webp" width="300" height="300" >
 
+## 前提条件
+
+##### 创建应用并获取 App Key 和 App Secret
+
+1. 在左侧导航栏中找到“应用”，并单击“创建” <br>
+   <br>
+   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-CreateApplication1.png"/>
+
+2. 填写应用的基本信息后，单击“创建” <br>
+   <br>
+   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-CreateApplication2.png"/>
+
+3. 创建应用后，可以在左侧导航栏中查看该应用，并单击 “App Key 管理”，并获取 App Key 和 App Secret <br>
+   <br>
+   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-AppKey.png"/>
+
+##### 注册云信 IM 账号，获取 accid 和 token。accid 和 token 将用于登录云信服务端。
+
+1. 在左侧导航栏中单击指定应用名称，进入该应用的详情页面
+2. 在“功能管理”中单击“账号管理” <br>
+   <img src="https://yx-web-nosdn.netease.im/common/477a10a40bf615d9c1b2a22bfc7ff9f0/%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86.png"/>
+
+3. 在测试页面，单击“新建账号”，并填写账号（即 accid）、昵称（即 name）、密码（即 Token）后，单击“确定”<br>
+   <br>
+   <img src="https://yx-web-nosdn.netease.im/common/98ecdd505fbb9f194ff59d8cf2a53bc8/%E7%A1%AE%E5%AE%9A.png"/>
+
 ## 发送您的第一条消息
 
 ### 开发环境要求
@@ -265,33 +291,8 @@ const preUrl = '/pages/NEUIKit/src'
 
 ```
 
-#### 步骤 6： 云信控制台的一些操作
 
-##### 创建应用并获取 App Key 和 App Secret
-
-1. 在左侧导航栏中找到“应用”，并单击“创建” <br>
-   <br>
-   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-CreateApplication1.png"/>
-
-2. 填写应用的基本信息后，单击“创建” <br>
-   <br>
-   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-CreateApplication2.png"/>
-
-3. 创建应用后，可以在左侧导航栏中查看该应用，并单击 “App Key 管理”，并获取 App Key 和 App Secret <br>
-   <br>
-   <img src="https://yx-web-nosdn.netease.im/quickhtml%2Fassets%2Fyunxin%2Fdoc%2FG2-GettingStarted-AppKey.png"/>
-
-##### 注册云信 IM 账号，获取 accid 和 token。accid 和 token 将用于登录云信服务端。
-
-1. 在左侧导航栏中单击指定应用名称，进入该应用的详情页面
-2. 在“功能管理”中单击“账号管理” <br>
-   <img src="https://yx-web-nosdn.netease.im/common/477a10a40bf615d9c1b2a22bfc7ff9f0/%E8%B4%A6%E5%8F%B7%E7%AE%A1%E7%90%86.png"/>
-
-3. 在测试页面，单击“新建账号”，并填写账号（即 accid）、昵称（即 name）、密码（即 Token）后，单击“确定”<br>
-   <br>
-   <img src="https://yx-web-nosdn.netease.im/common/98ecdd505fbb9f194ff59d8cf2a53bc8/%E7%A1%AE%E5%AE%9A.png"/>
-
-#### 步骤 7：运行效果
+#### 步骤 6：运行效果
 
 Andriod：<br>
 
