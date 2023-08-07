@@ -1,12 +1,6 @@
 {
   "pages": [
     {
-      "path": "pages/index/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/Conversation/index",
       "style": {
         "navigationStyle": "custom"

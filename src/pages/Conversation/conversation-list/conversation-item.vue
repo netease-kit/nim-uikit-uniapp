@@ -30,11 +30,12 @@ import { computed, ref } from 'vue'
 import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
 import dayjs from 'dayjs'
 import { t } from '../../../utils/i18n';
-
 const props = defineProps<{
   session: NimKitCoreTypes.ISession
   showMoreActions: boolean
 }>()
+
+const store = uni.$UIKitStore
 
 const $emit = defineEmits<{
   (event: 'click', session: NimKitCoreTypes.ISession): void,
@@ -77,8 +78,8 @@ const teamAvatar = computed(() => {
 const avatarId = computed(() => {
   const { session } = props
   if (session.scene === 'p2p') {
-    const { account } = props.session as NimKitCoreTypes.P2PSession
-    return account
+    const { to } = props.session as NimKitCoreTypes.P2PSession
+    return to
   }
   const { teamId } = props.session as NimKitCoreTypes.TeamSession
   return teamId
@@ -90,8 +91,9 @@ const unread = computed(() => {
 const title = computed(() => {
   const { session } = props
   if (session.scene === 'p2p') {
-    const { alias, nick, account } = props.session as NimKitCoreTypes.P2PSession
-    return alias || nick || account
+    const { to } = props.session as NimKitCoreTypes.P2PSession
+    const store = uni.$UIKitStore
+    return store.uiStore.getAppellation({ account: to })
   }
   const { name, teamId } = props.session as NimKitCoreTypes.TeamSession
   return name || teamId
@@ -105,7 +107,7 @@ const content = computed(() => {
       return ''
     }
     if (status === 'sendFailed' || status === 'refused') {
-      // TODO: 
+      // TODO:
       return '[发送失败]'
     }
     return getMsgContentTipByType(lastMsg)
