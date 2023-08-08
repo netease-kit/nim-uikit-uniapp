@@ -78,7 +78,8 @@ move ${组件项目路径}/src .\pages\NEUIKit
 ```
 
 成功后目录结构如图所示：<br>
-<img src="https://yx-web-nosdn.netease.im/common/dbad6532f172811c30d6c621ffcb4111/WechatIMG216.png" width="500" height="500" />
+<img src="https://yx-web-nosdn.netease.im/common/d6e55f2175e90d60d5e42408087553a8/WX20230807-172036.png" width="500" height="500" />
+
 
 #### 步骤 3：在项目根目录下添加依赖和图片引入
 
