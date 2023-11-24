@@ -2,20 +2,20 @@
   <div class="msg-face-wrapper">
     <div class="msg-face">
       <div class="msg-face-row" v-for="emojiRow, rowIndex in emojiMatrix">
-        <Icon @tap="() => { props.onEmojiClick({ key, type: emojiMap[key] }) }" class="msg-face-item"
+        <Icon @tap.stop="() => { props.onEmojiClick({ key, type: emojiMap[key] }) }" class="msg-face-item" :size="27"
           v-for="key in emojiRow" :key="key" :type="emojiMap[key]"></Icon>
         <!-- 下面放三个看不到的 Icon 占个位 -->
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete"
+        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
           type="icon-tuigejian"></Icon>
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete"
+        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
           type="icon-tuigejian"></Icon>
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete"
+        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
           type="icon-tuigejian"></Icon>
       </div>
     </div>
     <div class="msg-face-control">
       <div @tap="onEmojiDelete" class="msg-delete-btn">
-        <Icon type="icon-tuigejian" class="msg-face-delete-btn" />
+        <Icon type="icon-tuigejian" :size="25" :color="'#333'" />
       </div>
       <div @tap="onEmojiSend" class="msg-send-btn">{{ $t('sendText') }}</div>
     </div>
@@ -91,10 +91,5 @@ const props = defineProps<{
   background-color: #fff;
   margin-right: 10px;
   padding: 0 16px;
-}
-
-.msg-face-delete-btn {
-  font-size: 25px;
-  color: #333;
 }
 </style>

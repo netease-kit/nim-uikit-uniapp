@@ -15,7 +15,7 @@ trackInit('ConversationUIKit')
 @import "../styles/common.scss";
 
 page {
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 </style>

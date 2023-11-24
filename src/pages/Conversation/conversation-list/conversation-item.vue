@@ -3,16 +3,23 @@
     @touchstart="handleTouchStart" @touchmove="handleTouchMove" @click="handleConversationItemClick()">
     <div class="conversation-item-content">
       <div class="conversation-item-left">
-        <div v-if="session.unread !== 0" class="conversation-item-badge">{{ unread }}</div>
+        <Badge v-if="session.unread !== 0" class="conversation-item-badge" :num="session.unread"
+          :dot="(session as NimKitCoreTypes.P2PSession).isMute" />
         <Avatar :account="avatarId" :avatar="teamAvatar" />
       </div>
       <div class="conversation-item-right">
         <div class="conversation-item-top">
-          <span class="conversation-item-title">{{ title }}</span>
+          <Appellation class="conversation-item-title" v-if="session.scene === 'p2p'" :account="session.to" />
+          <span v-else class="conversation-item-title">{{ (session as NimKitCoreTypes.TeamSession).name || (session as
+            NimKitCoreTypes.TeamSession).teamId }}</span>
           <span class="conversation-item-time">{{ date }}</span>
         </div>
         <div class="conversation-item-desc">
-          <span>{{ content }}</span>
+          <span v-if="session.beMentioned" class="beMentioned">{{ '[' + t('someoneText') + '@' + t('meText') + ']'
+          }}</span>
+          <span class="conversation-item-desc-content">{{ content }}</span>
+          <Icon v-if="(session as NimKitCoreTypes.P2PSession).isMute" class="conversation-item-desc-state"
+            type="icon-xiaoximiandarao" color="#ccc" />
         </div>
       </div>
     </div>
@@ -25,13 +32,17 @@
 
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
+import Appellation from '../../../components/Appellation.vue'
+import Icon from '../../../components/Icon.vue'
+import Badge from '../../../components/Badge.vue'
 import { getMsgContentTipByType } from '../../../utils/msg'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
 import dayjs from 'dayjs'
 import { t } from '../../../utils/i18n';
+
 const props = defineProps<{
-  session: NimKitCoreTypes.ISession
+  session: NimKitCoreTypes.ISession & { beMentioned: boolean }
   showMoreActions: boolean
 }>()
 
@@ -83,20 +94,6 @@ const avatarId = computed(() => {
   }
   const { teamId } = props.session as NimKitCoreTypes.TeamSession
   return teamId
-})
-const unread = computed(() => {
-  return props.session.unread > 99 ? '99+' : props.session.unread
-})
-
-const title = computed(() => {
-  const { session } = props
-  if (session.scene === 'p2p') {
-    const { to } = props.session as NimKitCoreTypes.P2PSession
-    const store = uni.$UIKitStore
-    return store.uiStore.getAppellation({ account: to })
-  }
-  const { name, teamId } = props.session as NimKitCoreTypes.TeamSession
-  return name || teamId
 })
 
 const content = computed(() => {
@@ -167,6 +164,16 @@ $cellHeight: 72px;
   &.stick-on-top {
     background: #F3F5F7;
   }
+
+  .beMentioned {
+    color: #FF4D4F;
+  }
+
+  .content {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .right-action-list {
@@ -201,7 +208,6 @@ $cellHeight: 72px;
   padding: 10px 20px;
   height: $cellHeight;
   box-sizing: border-box;
-
 }
 
 .conversation-item-left {
@@ -209,19 +215,9 @@ $cellHeight: 72px;
 
   .conversation-item-badge {
     position: absolute;
-    top: -5px;
-    right: -5px;
-    background-color: #FF4D4F;
-    color: #fff;
-    font-size: 12px;
-    min-width: 20px;
-    height: 20px;
-    line-height: 19px;
-    border-radius: 10px;
-    padding: 0 5px;
-    box-sizing: border-box;
-    text-align: center;
-    z-index: 99;
+    top: 0px;
+    right: 0px;
+    z-index: 10;
   }
 }
 
@@ -256,8 +252,20 @@ $cellHeight: 72px;
 .conversation-item-desc {
   font-size: 13px;
   color: #999999;
-  overflow: hidden; //超出的文本隐藏
-  text-overflow: ellipsis; //溢出用省略号显示
-  white-space: nowrap; //溢出不换行
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+
+  .conversation-item-desc-content {
+    overflow: hidden; //超出的文本隐藏
+    text-overflow: ellipsis; //溢出用省略号显示
+    white-space: nowrap; //溢出不换行
+    flex: 1;
+  }
+
+  .conversation-item-desc-state {
+    margin-left: 10px;
+  }
 }
 </style>

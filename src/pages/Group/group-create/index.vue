@@ -1,40 +1,43 @@
 <template>
-  <NavBar :title="$t('createTeamText')">
-    <template v-slot:left>
-      <Icon @click="back" type="icon-zuojiantou"></Icon>
-    </template>
-    <template v-slot:right>
-      <div class="nav-bar-right" @click="createGroup">{{ $t('createButtonText') + '(' + groupMembers.length + ')' }}</div>
-    </template>
-  </NavBar>
-  <FriendSelect :friendList="friendList" @checkboxChange="checkboxChange"></FriendSelect>
+  <NavBar :title="$t('createTeamText')" />
+  <FriendSelect :friendList="friendList" @checkboxChange="checkboxChange" :showBtn="true"
+    :btnText="$t('createButtonText') + '(' + groupMembers.length + ')'" :onBtnClick="createGroup"></FriendSelect>
 </template>
 
 <script lang="ts" setup>
-import FriendSelect from '../../../components/FriendSelect.vue';
-import { ref } from 'vue'
+import FriendSelect, { type FriendSelectItem } from '../../../components/FriendSelect.vue';
+import { computed, ref } from 'vue'
 import NavBar from '../../../components/NavBar.vue';
 import { t } from '../../../utils/i18n';
 import { onLoad } from '@dcloudio/uni-app';
-import { debounce } from '@xkit-yx/utils';
-import Icon from '../../../components/Icon.vue';
 import { customRedirectTo } from '../../../utils/customNavigate';
-const friendList = ref()
-const groupMembers = ref<string[]>([])
+
+const friendList = ref<FriendSelectItem[]>([])
 const store = uni.$UIKitStore
 
-onLoad(() => {
+const groupMembers = computed(() => {
+  return friendList.value.filter(item => item.checked).map(item => item.account)
+})
+
+onLoad((options) => {
+  const defaultCheckedAccount = options?.account
   const list = store.uiStore.friendsWithoutBlacklist.map(item => {
-    return { 
+    return {
       ...item,
-      nick: store.uiStore.getAppellation({account: item.account})
+      nick: store.uiStore.getAppellation({ account: item.account }),
+      checked: defaultCheckedAccount === item.account
     }
   })
   friendList.value = list
 })
 
 const checkboxChange = (selectList: string[]) => {
-  groupMembers.value = selectList
+  friendList.value = friendList.value.map(item => {
+    return {
+      ...item,
+      checked: selectList.includes(item.account)
+    }
+  })
   if (selectList.length >= 200) {
     uni.showToast({
       title: t('maxSelectedText'),
@@ -66,8 +69,11 @@ const createTeamAvatar = () => {
   return teamAvatarArr[_index]
 }
 
-const createGroup = debounce(() => {
+let flag = false
+
+const createGroup = async () => {
   try {
+    if (flag) return
     if (groupMembers.value.length == 0) {
       uni.showToast({
         title: t('friendSelect'),
@@ -83,45 +89,50 @@ const createGroup = debounce(() => {
       })
       return
     }
-    store.teamStore.createTeamActive({
+    flag = true
+    await store.teamStore.createTeamActive({
       accounts: [...groupMembers.value],
       avatar: createTeamAvatar(),
       name: createGroupName(groupMembers.value)
-    }).then(async (res) => {
-      customRedirectTo({
-        url: '/pages/Chat/index'
-      })
-      uni.showToast({
-        title: t('createTeamSuccessText'),
-        icon: "success"
-      })
-    }).catch(() => {
-      uni.showToast({
-        title: t('createTeamFailedText'),
-        icon: "error"
-      })
+    })
+    customRedirectTo({
+      url: '/pages/Chat/index'
+    })
+    uni.showToast({
+      title: t('createTeamSuccessText'),
+      icon: "success"
     })
   } catch (error) {
     uni.showToast({
       title: t('createTeamFailedText'),
       icon: "error"
     })
+  } finally {
+    flag = false
   }
-}, 800)
-
-const back = () => {
-  uni.navigateBack({
-    delta: 1
-  })
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../../styles/common.scss";
 
-.nav-bar-right {
-  color: rgb(20, 146, 209);
-  ;
+.create-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.select-wrapper {
+  // height: calc(100vh - var(--status-bar-height) - 42px);
+  flex: 1;
+}
+
+.create-btn {
+  color: #fff;
+  background-color: rgb(20, 146, 209);
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
 }
 
 .group-input-wrapper {

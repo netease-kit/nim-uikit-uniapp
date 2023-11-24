@@ -1,6 +1,6 @@
 import type { IMMessage } from '@xkit-yx/im-store'
 import { t } from './i18n'
-
+import type { TMsgScene } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
 const translate = (key: string): string => {
   const text =
     {
@@ -31,7 +31,6 @@ export const getMsgContentTipByType = (
       return translate('fileMsgText')
     case 'image':
       return translate('imgMsgText')
-    /*
     case 'custom':
       return body || translate('customMsgText')
     case 'audio':
@@ -48,7 +47,6 @@ export const getMsgContentTipByType = (
       return translate('tipMsgText')
     case 'video':
       return translate('videoMsgText')
-      */
     default:
       return translate('unknowMsgText')
   }
@@ -79,5 +77,41 @@ export const setTabUnread = (): void => {
       index: 0, //tabbar下标
       text: unread > 99 ? '99+' : unread.toString(), //显示的数字
     })
+  }
+}
+
+export const setContactTabUnread = (): void => {
+  const routes = getCurrentPages()
+  const curRoute = routes[routes.length - 1].route
+  const tabPaths = [
+    'pages/user-card/my/index',
+    'pages/Contact/index',
+    'pages/Conversation/index',
+  ]
+  if (curRoute && !tabPaths.includes(curRoute)) {
+    // 不是首页和聊天页，不需要设置tabbar的badge
+    return
+  }
+  const unread = uni.$UIKitStore.sysMsgStore.unreadSysMsgCount
+  if (unread === 0) {
+    uni.hideTabBarRedDot({
+      //隐藏数字
+      index: 1, //tabbar下标
+    })
+  } else {
+    uni.showTabBarRedDot({
+      index: 1, //tabbar下标
+    })
+  }
+}
+
+export const parseSessionId = (
+  sessionId: string
+): { scene: TMsgScene; to: string } => {
+  const [scene, ...to] = sessionId.split('-')
+  return {
+    scene: scene as TMsgScene,
+    // 这样处理是为了防止有些用户 accid 中自带 -
+    to: to.join('-'),
   }
 }

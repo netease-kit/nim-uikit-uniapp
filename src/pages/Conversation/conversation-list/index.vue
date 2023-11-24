@@ -5,17 +5,22 @@
       <image src="../../../static/logo.png" class="logo-img" />
       <div>{{ $t('appText') }}</div>
     </div>
-    <div class="button-box">
-      <Icon class="button-icon" type="icon-More" style="font-size: 22px;color: #333333;"
-        @click="addDropdownVisible = true" />
+    <div :class="buttonClass">
+      <!-- #ifdef MP -->
+      <image src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
+        class="button-icon" @tap="addDropdownVisible = true" />
+      <!-- #endif -->
+      <!-- #ifndef MP -->
+      <Icon class="button-icon" type="icon-More" @tap="addDropdownVisible = true" />
+      <!-- #endif -->
       <div v-if="addDropdownVisible" class="dropdown-container">
         <div class="add-menu-list">
-          <div class="add-menu-item" @click="startConversation">
-            <Icon type="icon-tianjiahaoyou" />
-            {{ $t('createP2PText') }}
+          <div class="add-menu-item" @tap="onDropdownClick('addFriend')">
+            <Icon type="icon-tianjiahaoyou" :style="{ marginRight: '5px' }" />
+            {{ $t('addFriendText') }}
           </div>
-          <div class="add-menu-item" @click="onCreateGroup">
-            <Icon type="icon-chuangjianqunzu" />
+          <div class="add-menu-item" @tap="onDropdownClick('createGroup')">
+            <Icon type="icon-chuangjianqunzu" :style="{ marginRight: '5px' }" />
             {{ $t('createTeamText') }}
           </div>
         </div>
@@ -43,9 +48,10 @@ import Icon from '../../../components/Icon.vue'
 import NetworkAlert from '../../../components/NetworkAlert.vue'
 import Empty from '../../../components/Empty.vue'
 import ConversationItem from './conversation-item.vue'
-import { setTabUnread } from '../../../utils/msg';
+import { setContactTabUnread, setTabUnread } from '../../../utils/msg';
 import { t } from '../../../utils/i18n';
 import { customNavigateTo } from '../../../utils/customNavigate';
+import { H5_HAS_LOGIN_KEY } from '../../../utils/constants';
 
 const store = uni.$UIKitStore
 const sessionList = ref<NimKitCoreTypes.ISession[]>([])
@@ -55,12 +61,16 @@ const moreActionsSession = ref<NimKitCoreTypes.ISession | null>(null)
 const handleSessionItemLeftSlide = (session: NimKitCoreTypes.ISession | null) => {
   moreActionsSession.value = session
 }
+
+let flag = false
 // 点击会话
 const handleSessionItemClick = async (
   session: NimKitCoreTypes.ISession
 ) => {
+  if (flag) return
   moreActionsSession.value = null
   try {
+    flag = true
     await store.uiStore.selectSession(session.id)
     customNavigateTo({
       url: '/pages/Chat/index'
@@ -70,6 +80,8 @@ const handleSessionItemClick = async (
       title: t('selectSessionFailText'),
       icon: 'error'
     })
+  } finally {
+    flag = false
   }
 }
 // 删除会话
@@ -108,22 +120,25 @@ const handleSessionItemStickTopChange = async (
       })
     }
   }
+}
 
-}
-// 发起单聊
-const startConversation = () => {
+const onDropdownClick = (urlType: string) => {
+  const urlMap = {
+    // 添加好友
+    addFriend: '/pages/Friend/add-friend/index',
+    // 创建群聊
+    createGroup: '/pages/Group/group-create/index'
+  }
   addDropdownVisible.value = false
   customNavigateTo({
-    url: '/pages/Conversation/conversation-start/index'
+    url: urlMap[urlType]
   })
 }
-// 创建群聊
-const onCreateGroup = () => {
-  addDropdownVisible.value = false
-  customNavigateTo({
-    url: '/pages/Group/group-create/index'
-  })
-}
+
+let buttonClass = 'button-box'
+// #ifdef MP
+buttonClass = 'button-box-mp'
+// #endif
 
 onHide(() => {
   addDropdownVisible.value = false
@@ -133,6 +148,23 @@ onShow(() => {
   // 重置选中会话
   store.uiStore.selectSession('')
   setTabUnread()
+  setContactTabUnread()
+  // #ifdef H5 
+  uni.getStorage({
+    key: H5_HAS_LOGIN_KEY,
+    success: function (res) {
+      if (!res.data) {
+        setTimeout(() => {
+          window.location.reload();
+        }, 500)
+        uni.setStorageSync(H5_HAS_LOGIN_KEY,true)
+      }
+    },
+    fail: function (error) {
+      uni.setStorageSync(H5_HAS_LOGIN_KEY,true)
+    }
+  })
+  // #endif
 })
 
 autorun(() => {
@@ -140,9 +172,17 @@ autorun(() => {
   setTabUnread()
 })
 
+autorun(() => {
+  // 为了监听会触发得留着这个 console
+  console.log('unreadSysMsgCount:', store.sysMsgStore.unreadSysMsgCount)
+  setContactTabUnread()
+})
+
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/common.scss';
+
 .navigation-bar {
   height: 60px;
   border-bottom: 1rpx solid #E9EFF5;
@@ -155,21 +195,10 @@ autorun(() => {
 
 .conversation-list {
   height: calc(100% - 60px - var(--status-bar-height));
+  box-sizing: border-box;
   width: 100%;
   overflow-y: auto;
   overflow-x: hidden;
-}
-
-.button-box {
-  display: flex;
-  align-items: center;
-  position: relative;
-
-  .button-icon {
-    margin-left: 20px;
-  }
-
-
 }
 
 .logo-box {
@@ -196,7 +225,12 @@ autorun(() => {
 
 .dropdown-container {
   position: absolute;
+  // #ifdef MP
+  top: -105px;
+  // #endif
+  // #ifndef MP
   top: 100%;
+  // #endif
   right: 0;
   min-width: 122px;
   min-height: 40px;
@@ -217,6 +251,8 @@ autorun(() => {
     margin-bottom: 10px;
     height: 30px;
     line-height: 30px;
+    display: flex;
+    align-items: center;
 
     &:last-child {
       margin-bottom: 0;

@@ -13,6 +13,12 @@
       }
     },
     {
+      "path": "pages/Chat/message/p2p-set",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/Group/group-set/index",
       "style": {
         "navigationStyle": "custom"
@@ -37,16 +43,30 @@
       }
     },
     {
+      "path": "pages/Contact/contact-list/valid-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Contact/contact-list/black-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/Chat/index",
       "style": {
-        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#F6F8FA",
         "navigationBarTextStyle": "black",
         "enablePullDownRefresh": true,
         "app-plus": {
-          "softinputMode": "adjustResize"
+          "softinputMode": "adjustResize",
+          "softinputNavBar": "none"
         }
       }
     },
+
     {
       "path": "pages/Group/group-member/index",
       "style": {
@@ -66,7 +86,7 @@
       }
     },
     {
-      "path": "pages/Conversation/conversation-start/index",
+      "path": "pages/Friend/add-friend/index",
       "style": {
         "navigationStyle": "custom"
       }
@@ -97,6 +117,12 @@
     },
     {
       "path": "pages/user-card/detail-item/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Chat/forward",
       "style": {
         "navigationStyle": "custom"
       }

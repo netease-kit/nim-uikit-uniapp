@@ -1,4 +1,6 @@
+// #ifdef APP-PLUS
 import pinyin from 'pinyin'
+// #endif
 
 export const friendGroupByPy = <
   T extends {
@@ -36,20 +38,24 @@ export const friendGroupByPy = <
         add(str.toLowerCase(), item)
       } else if (/^[\u4e00-\u9fa5]$/.test(str)) {
         const en = '*abcdefghjklmnopqrstwxyz'.split('')
+        // #ifdef APP-PLUS
+        // @ts-ignore
         const k = en.find((k) => {
           const py = pinyin(str, {
             style: 'FIRST_LETTER',
           })
           return py[0][0] === k
         })
-        /*
+        // #endif
+        // #ifndef APP-PLUS
         const zh = '阿八嚓哒妸发旮哈讥咔垃痳拏噢妑七呥扨它穵夕丫帀'.split('')
+        // @ts-ignore
         const k = en.find(
           (k, ki) =>
             (!zh[ki - 1] || zh[ki - 1].localeCompare(str, 'zh') <= 0) &&
             str.localeCompare(zh[ki], 'zh') == -1
         )
-        */
+        // #endif
         if (k && k !== '*') {
           add(k, item)
         } else {

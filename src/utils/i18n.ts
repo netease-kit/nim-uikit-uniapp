@@ -5,8 +5,14 @@ const messages = {
   en,
   zh,
 }
+const localeMap = {
+  'zh-Hans': 'zh',
+  'zh-Hant': 'zh',
+  en: 'en',
+}
+
 const i18nConfig = {
-  locale: uni.getLocale(), // 获取已设置的语言
+  locale: localeMap[uni.getLocale()],
   fallbackLocale: 'zh', //  设置备用语言
   messages,
 }

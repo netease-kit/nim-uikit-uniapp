@@ -1,13 +1,10 @@
 <template>
-  <NavBar title="群成员">
-    <template v-slot:left>
-      <Icon @click="back" type="icon-zuojiantou"></Icon>
-    </template>
-  </NavBar>
+  <NavBar :title="$t('teamMemberText')" />
   <div class="group-item" v-for=" item in groupMembers" :key="item.account">
     <Avatar :goto-user-card="true" :account="item.account" size="48" />
     <div class="user-name">{{ item.name }}</div>
     <div v-if="item.type === 'owner'" class="owner">{{ $t('teamOwner') }}</div>
+    <div v-else-if="item.type === 'manager'" class="manager">{{ $t('teamManager') }}</div>
   </div>
 </template>
 
@@ -16,34 +13,31 @@ import Avatar from '../../../components/Avatar.vue'
 import { ref } from 'vue'
 import NavBar from '../../../components/NavBar.vue';
 import { onLoad } from '@dcloudio/uni-app';
-import Icon from '../../../components/Icon.vue';
+import { autorun } from 'mobx';
 const groupMembers = ref()
 const store = uni.$UIKitStore
 
 onLoad((props) => {
   const teamId = props?.teamId
-  store.teamMemberStore.getTeamMemberActive(teamId).then((res) => {
-    groupMembers.value = sortGroupMembers(res, teamId)
+
+  autorun(() => {
+    const sortGroupMembers = (members, teamId) => {
+      const owner = members.filter((item) => item.type === 'owner')
+      const manager = members.filter((item) => item.type === 'manager').sort((a, b) => a.joinTime - b.joinTime)
+      const other = members.filter(
+        (item) => !['owner', 'manager'].includes(item.type)
+      ).sort((a, b) => a.joinTime - b.joinTime)
+      const result = [...owner, ...manager, ...other].map(item => {
+        return { ...item, name: store.uiStore.getAppellation({ account: item.account, teamId }) }
+      })
+      return result
+    }
+
+    groupMembers.value = sortGroupMembers(store.teamMemberStore.getTeamMember(teamId), teamId)
   })
+
+  store.teamMemberStore.getTeamMemberActive(teamId)
 })
-
-const sortGroupMembers = (members, teamId) => {
-  const owner = members.filter((item) => item.type === 'owner')
-  const manager = members.filter((item) => item.type === 'manager')
-  const other = members.filter(
-    (item) => !['owner', 'manager'].includes(item.type)
-  )
-  const result = [...owner, ...manager, ...other].map(item => {
-    return { ...item, name: store.uiStore.getAppellation({ account: item.account, teamId }) }
-  })
-  return result
-}
-
-const back = () => {
-  uni.navigateBack({
-    delta: 1
-  })
-}
 </script>
 
 <style lang="scss" scoped>
@@ -62,10 +56,10 @@ const back = () => {
     white-space: nowrap;
   }
 
-  .owner {
+  .owner,
+  .manager {
     color: rgb(6, 155, 235);
     background-color: rgb(210, 229, 246);
-    width: 35px;
     height: 20px;
     line-height: 20px;
     border-radius: 4px;

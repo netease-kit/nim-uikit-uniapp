@@ -1,11 +1,8 @@
 <template>
   <div>
-    <NavBar :title="$t('friendSelectText')">
-      <template v-slot:right>
-        <div @click="addTeamMember" class="right-button">{{ $t('okText') }}</div>
-      </template>
-    </NavBar>
-    <FriendSelect :friendList="friendList" @checkboxChange="checkboxChange"></FriendSelect>
+    <NavBar :title="$t('friendSelectText')" />
+    <FriendSelect :friendList="friendList" @checkboxChange="checkboxChange" :showBtn="true" :onBtnClick="addTeamMember">
+    </FriendSelect>
   </div>
 </template>
 
@@ -16,8 +13,9 @@ import NavBar from '../../../components/NavBar.vue';
 import { t } from '../../../utils/i18n';
 import { onLoad } from '@dcloudio/uni-app';
 import { debounce } from '@xkit-yx/utils';
+import type { IFriendInfo } from '@xkit-yx/core-kit/dist/types/nim-kit-core/types';
 const store = uni.$UIKitStore
-const friendList = ref()
+const friendList = ref<IFriendInfo[]>([])
 let teamId = ''
 let newTeamMember: string[] = []
 onLoad((props) => {
@@ -28,7 +26,7 @@ onLoad((props) => {
       return item.account
     })
     friendList.value = _friendList.map(item => {
-      item = {...item, nick: store.uiStore.getAppellation({account: item.account})}
+      item = { ...item, nick: store.uiStore.getAppellation({ account: item.account }) }
       if (_teamMembers.includes(item.account)) {
         return { ...item, disable: true }
       } else {
@@ -60,10 +58,20 @@ const addTeamMember = debounce(() => {
   store.teamMemberStore.addTeamMemberActive({ teamId, accounts: newTeamMember }).then(async res => {
     uni.navigateBack()
   }).catch((err) => {
-    uni.showToast({
-      title: t('addTeamMemberFailText'),
-      icon: "none"
-    })
+    switch (err?.code) {
+      case 802:
+        uni.showToast({
+          title: t('noPermission'),
+          icon: 'error'
+        })
+        break;
+      default:
+        uni.showToast({
+          title: t('addTeamMemberFailText'),
+          icon: "none"
+        })
+        break
+    }
   })
 }, 800)
 

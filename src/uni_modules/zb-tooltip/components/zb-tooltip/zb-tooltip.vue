@@ -4,7 +4,7 @@
   }">
     <view class="zb_tooltip_content" @longpress.stop="handleClick">
       <slot></slot>
-      <view class="zb_tooltip__mask" v-show="isShow" @touchstart="close"></view>
+      <view class="zb_tooltip__mask" @longpress.stop v-show="isShow" @touchstart="close"></view>
       <view class="zb_tooltip__popper" @tap.stop="() => { }" :style="[style, {
         visibility: isShow ? 'visible' : 'hidden',
         color: color === 'white' ? '' : '#fff',
@@ -32,10 +32,10 @@ export default {
       type: String,
       default: '#303133',
     },
-    placement: {
-      type: String,
-      default: 'top',
-    },
+    // placement: {
+    //   type: String,
+    //   default: 'top',
+    // },
     content: {
       type: String,
       default: ''
@@ -55,7 +55,8 @@ export default {
       style: {
 
       },
-      arrowStyle: {}
+      arrowStyle: {},
+      placement: 'top'
     }
   },
   onLoad() {
@@ -109,6 +110,11 @@ export default {
           let obj1 = data[1]
           let objStyle = {}
           let objStyle1 = {}
+          if (top <= 100) {
+            this.placement = 'bottom'
+          } else {
+            this.placement = 'top'
+          }
           switch (this.placement) {
             case 'top':
               if (obj1.width > width) {
@@ -120,15 +126,6 @@ export default {
               objStyle.bottom = `${height + 8}px`
               objStyle1.left = (obj1.width / 2 - 6) + 'px'
               break;
-            case 'top-start':
-              objStyle.left = `0px`
-              objStyle.bottom = `${height + 8}px`
-              break;
-            case 'top-end':
-              objStyle.right = `0px`
-              objStyle.bottom = `${height + 8}px`
-              objStyle1.right = `8px`
-              break;
             case 'bottom':
               if (obj1.width > width) {
                 objStyle.left = `-${(obj1.width - width) / 2}px`
@@ -138,63 +135,72 @@ export default {
               objStyle.top = `${height + 8}px`
               objStyle1.left = (obj1.width / 2 - 6) + 'px'
               break;
-            case 'bottom-start':
-              objStyle.left = `0px`
-              objStyle.top = `${height + 8}px`
-              objStyle1.left = `8px`
-              break;
+            // case 'top-start':
+            //   objStyle.left = `0px`
+            //   objStyle.bottom = `${height + 8}px`
+            //   break;
+            // case 'top-end':
+            //   objStyle.right = `0px`
+            //   objStyle.bottom = `${height + 8}px`
+            //   objStyle1.right = `8px`
+            //   break;
+            // case 'bottom-start':
+            //   objStyle.left = `0px`
+            //   objStyle.top = `${height + 8}px`
+            //   objStyle1.left = `8px`
+            //   break;
 
-            case 'bottom-end':
-              objStyle.right = `0px`
-              objStyle.top = `${height + 8}px`
-              objStyle1.right = `8px`
-              break;
+            // case 'bottom-end':
+            //   objStyle.right = `0px`
+            //   objStyle.top = `${height + 8}px`
+            //   objStyle1.right = `8px`
+            //   break;
 
-            case 'right':
-              objStyle.left = `${width + 8}px`
-              if (obj1.height > height) {
-                objStyle.top = `-${(obj1.height - height) / 2}px`
-              } else {
-                objStyle.top = `${Math.abs((obj1.height - height) / 2)}px`
-              }
+            // case 'right':
+            //   objStyle.left = `${width + 8}px`
+            //   if (obj1.height > height) {
+            //     objStyle.top = `-${(obj1.height - height) / 2}px`
+            //   } else {
+            //     objStyle.top = `${Math.abs((obj1.height - height) / 2)}px`
+            //   }
 
-              objStyle1.top = `${obj1.height / 2 - 6}px`
-              break;
-            case 'right-start':
-              objStyle.left = `${width + 8}px`
-              objStyle.top = `0px`
-              objStyle1.top = `8px`
-              break;
+            //   objStyle1.top = `${obj1.height / 2 - 6}px`
+            //   break;
+            // case 'right-start':
+            //   objStyle.left = `${width + 8}px`
+            //   objStyle.top = `0px`
+            //   objStyle1.top = `8px`
+            //   break;
 
-            case 'right-end':
-              objStyle.left = `${width + 8}px`
-              objStyle.bottom = `0px`
-              objStyle1.bottom = `8px`
-              break;
+            // case 'right-end':
+            //   objStyle.left = `${width + 8}px`
+            //   objStyle.bottom = `0px`
+            //   objStyle1.bottom = `8px`
+            //   break;
 
-            case 'left':
-              objStyle.right = `${width + 8}px`
+            // case 'left':
+            //   objStyle.right = `${width + 8}px`
 
-              if (obj1.height > height) {
-                objStyle.top = `-${(obj1.height - height) / 2}px`
-              } else {
-                objStyle.top = `${Math.abs((obj1.height - height) / 2)}px`
-              }
+            //   if (obj1.height > height) {
+            //     objStyle.top = `-${(obj1.height - height) / 2}px`
+            //   } else {
+            //     objStyle.top = `${Math.abs((obj1.height - height) / 2)}px`
+            //   }
 
-              objStyle1.top = `${obj1.height / 2 - 6}px`
-              break;
+            //   objStyle1.top = `${obj1.height / 2 - 6}px`
+            //   break;
 
-            case 'left-start':
-              objStyle.right = `${width + 8}px`
-              objStyle.top = `0px`
-              objStyle1.top = `8px`
-              break;
+            // case 'left-start':
+            //   objStyle.right = `${width + 8}px`
+            //   objStyle.top = `0px`
+            //   objStyle1.top = `8px`
+            //   break;
 
-            case 'left-end':
-              objStyle.right = `${width + 8}px`
-              objStyle.bottom = `0px`
-              objStyle1.bottom = `8px`
-              break;
+            // case 'left-end':
+            //   objStyle.right = `${width + 8}px`
+            //   objStyle.bottom = `0px`
+            //   objStyle1.bottom = `8px`
+            //   break;
           }
           this.style = objStyle
           // 三角形箭头
@@ -241,7 +247,7 @@ $theme-bg-color: var(--theme-bg-color);
   word-wrap: break-word;
   display: inline-block;
   white-space: nowrap;
-  z-index: 9;
+  z-index: 99;
 }
 
 .zb_tooltip__mask {
