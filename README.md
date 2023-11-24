@@ -367,3 +367,4 @@ const preUrl = '/pages/NEUIKit/src'
 - 如果 iOS 低版本构建后无法运行，需要在构建出的资源 dist/build/app/app-service.js 文件最前面添加 `var globalThis = Function('return this')();`
 - 部分uniapp兼容问题，已在代码中说明
 - 由于uniapp uni.setNavigationBarTitle限制，chat页面的NavigationBarTitle，需要您自行调整page结构设置
+- 推送相关请参考 https://doc.yunxin.163.com/messaging-enhanced/docs/TE1NjY4Nzk?platform=uniapp
