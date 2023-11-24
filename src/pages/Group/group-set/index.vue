@@ -3,38 +3,44 @@
   <div class="group-set-container" v-if="team">
     <div class="group-set-card">
       <div class="group-set-item">
-        <div class="group-info-item" @click="handleInfoClick">
+        <div class="group-info-item" @tap="handleInfoClick">
           <Avatar :account="team.teamId" :avatar="team.avatar" />
           <div class="group-info-title">{{ team.name }}</div>
-          <Icon class="more-icon" type="icon-jiantou" />
+          <Icon class="more-icon" color="#999" type="icon-jiantou" />
         </div>
       </div>
       <div class="group-set-item">
         <div class="group-members-item">
-          <div class="group-members-info-item">
+          <div class="group-members-info-item" @tap="gotoTeamMember">
             <div class="group-members-info">
               <div class="group-info-title">{{ $t('teamMemberText') }}</div>
               <div class="group-info-subtitle">
                 {{ team.memberNum }}
               </div>
             </div>
-            <Icon @click="gotoTeamMember" class="more-icon" type="icon-jiantou" />
+            <Icon class="more-icon" color="#999" type="icon-jiantou" />
           </div>
           <div class="member-list">
             <div class="member-add">
-              <Icon @click="addTeamMember" type="icon-tianjiaanniu" />
+              <Icon @tap="addTeamMember" type="icon-tianjiaanniu" />
             </div>
             <div class="member-item" v-for="member in teamMembers" :key="member.account">
-              <Avatar :account="member.account" size="32" :key="member.account" font-size="10"/>
+              <Avatar :account="member.account" size="32" :key="member.account" font-size="10" />
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="group-set-button" v-if="isGroupOwner" @click="showDismissConfirm">
+    <div class="group-set-card">
+      <div class="group-set-item group-set-item-flex">
+        <div>{{ $t('stickTopText') }}</div>
+        <switch :checked="session?.stickTopInfo?.isStickOnTop" @change="changeStickTopInfo" />
+      </div>
+    </div>
+    <div class="group-set-button" v-if="isGroupOwner" @tap="showDismissConfirm">
       {{ $t('dismissTeamText') }}
     </div>
-    <div class="group-set-button" v-else @click="showLeaveConfirm">
+    <div class="group-set-button" v-else @tap="showLeaveConfirm">
       {{ $t('leaveTeamTitle') }}
     </div>
   </div>
@@ -45,12 +51,12 @@ import NavBar from '../../../components/NavBar.vue';
 import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
 
-import type { Team, TeamMember } from '@xkit-yx/im-store';
+import type { Session, Team, TeamMember } from '@xkit-yx/im-store';
 import { onLoad } from '@dcloudio/uni-app'
 import { ref, computed } from 'vue';
 import { autorun } from 'mobx';
 import { t } from '../../../utils/i18n'
-import { customNavigateTo } from '../../../utils/customNavigate';
+import { customNavigateTo, customRedirectTo, customSwitchTab } from '../../../utils/customNavigate';
 
 
 const store = uni.$UIKitStore
@@ -58,6 +64,7 @@ const store = uni.$UIKitStore
 let teamId = ''
 const team = ref<Team>()
 const teamMembers = ref<TeamMember[]>([])
+const session = ref<Session>()
 
 const isGroupOwner = computed(() => {
   const myUser = store.userStore.myUserInfo
@@ -67,6 +74,12 @@ const isGroupOwner = computed(() => {
 const handleInfoClick = () => {
   customNavigateTo({
     url: `/pages/Group/group-set/group-info-edit?id=${teamId}`
+  })
+}
+
+const goBackChat = () => {
+  customRedirectTo({
+    url: '/pages/Conversation/index',
   })
 }
 
@@ -84,7 +97,7 @@ const showDismissConfirm = () => {
             title: t('dismissTeamSuccessText'),
             icon: 'success'
           })
-          uni.navigateBack()
+          customSwitchTab({ url: '/pages/Conversation/index' })
         }).catch(() => {
           uni.showToast({
             title: t('dismissTeamFailedText'),
@@ -110,7 +123,7 @@ const showLeaveConfirm = () => {
             title: t('leaveTeamSuccessText'),
             icon: 'success'
           })
-          uni.navigateBack()
+          goBackChat()
         }).catch(() => {
           uni.showToast({
             title: t('leaveTeamFailedText'),
@@ -132,8 +145,11 @@ onLoad((option) => {
       teamMembers.value = members
     })
   })
-})
 
+  autorun(() => {
+    session.value = store.sessionStore.sessions.get('team-' + teamId)
+  })
+})
 
 const addTeamMember = () => {
   customNavigateTo({
@@ -146,6 +162,23 @@ const gotoTeamMember = () => {
     url: `/pages/Group/group-member/index?teamId=${teamId}`
   })
 }
+
+const changeStickTopInfo = async (e: any) => {
+  const checked = e.detail.value
+  const sessionId = 'team-' + teamId
+  try {
+    if (checked) {
+      await store.sessionStore.addStickTopSessionActive(sessionId)
+    } else {
+      await store.sessionStore.deleteStickTopSessionActive(sessionId)
+    }
+  } catch (error) {
+    uni.showToast({
+      title: checked ? t('addStickTopFailText') : t('deleteStickTopFailText'),
+      icon: 'error'
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -153,12 +186,13 @@ const gotoTeamMember = () => {
 
 page {
   padding-top: var(--status-bar-height);
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .group-set-container {
-  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
   background-color: #eff1f4;
   padding: 10px 20px;
 }
@@ -167,6 +201,7 @@ page {
   background: #FFFFFF;
   border-radius: 8px;
   padding-left: 16px;
+  margin-bottom: 10px;
 }
 
 .group-set-button {
@@ -176,15 +211,17 @@ page {
   color: #E6605C;
   height: 40px;
   line-height: 40px;
-  margin-top: 20px;
 }
 
-.group-set-item {
+.group-set-item:not(:last-child) {
   border-bottom: 1rpx solid #F5F8FC;
 }
 
-.group-set-item:nth-last-child {
-  border: none;
+.group-set-item-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
 }
 
 .more-icon {

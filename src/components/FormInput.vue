@@ -3,7 +3,7 @@
     <slot name="addonBefore" />
     <input class="input" :key="inputKey" :type="type" :value="inputValue" @input="handleInput" :focus="inputFocus"
       @focus="handleFocus" @blur="handleBlur" :placeholder="placeholder" :maxlength="maxlength" />
-    <icon v-show="modelValue && allowClear" type="clear" size="16" @click="clearInput()" />
+    <icon v-show="modelValue && allowClear" type="clear" size="16" @tap="clearInput()" />
     <slot name="addonAfter" />
   </div>
   <div v-if="inputError && rule" class="error-tips">{{ rule?.message }}</div>

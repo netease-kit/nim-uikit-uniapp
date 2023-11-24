@@ -7,14 +7,12 @@
       <div class="nick">{{ nick || account }}</div>
       <div class="account">
         {{ props.account }}
-        <div @click.stop="copyAccount" class="copy-icon">
-          <Icon type="icon-fuzhi1"></Icon>
-        </div>
+        <Icon @tap.stop="copyAccount" class="copy-icon" type="icon-fuzhi1" color="#A6ADB6" :size="20"></Icon>
       </div>
     </div>
   </div>
 </template>
-     
+
 <script lang="ts" setup>
 import Avatar from './Avatar.vue'
 import Icon from './Icon.vue'
@@ -32,7 +30,7 @@ const copyAccount = () => {
 }
 
 </script>
-    
+
 <style lang="scss" scoped>
 @import "../pages/styles/common.scss";
 
@@ -41,35 +39,34 @@ const copyAccount = () => {
   display: flex;
   height: 140px;
   align-items: center;
-
   .avatar-wrapper {
     margin: 0 15px;
     flex: 0 0 70px;
   }
-  .account-wrapper{
+
+  .account-wrapper {
     flex: 1;
     overflow: hidden;
     padding-right: 40px;
+
     .nick {
       font-size: 20px;
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
       font-weight: 500;
+    }
+
+    .account {
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .copy-icon {
+      margin-left: 2px;
+    }
   }
 
-  .account {
-    font-size: 14px;
-  }
-
-  .copy-icon {
-    color: #A6ADB6;
-    font-family: iconfont;
-    font-size: 20px;
-    display: inline-block;
-  }
-  }
- 
 }
 </style>
-    

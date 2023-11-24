@@ -2,7 +2,7 @@
   <div class="group-list-container">
     <NavBar :title="$t('teamMenuText')" />
     <div class="group-list-content">
-      <Empty v-if="teamList.length === 0" :text="$t('TeamEmptyText')" />
+      <Empty v-if="teamList.length === 0" :text="$t('teamEmptyText')" />
       <div v-else class="group-item" v-for="team in teamList" :key="team.teamId" @click="handleClick(team)">
         <Avatar :account="team.teamId" :avatar="team.avatar" />
         <span class="group-name">{{ team.name }}</span>
@@ -27,7 +27,7 @@ const teamList = ref<Team[]>([])
 const handleClick = async (team: Team) => {
   await store.uiStore.selectSession(`team-${team.teamId}`)
   customNavigateTo({
-    url: '/pages/Chat/index' 
+    url: '/pages/Chat/index'
   })
 }
 
@@ -42,12 +42,13 @@ autorun(() => {
 
 page {
   padding-top: var(--status-bar-height);
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .group-list-container {
-  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
 }
 
 .group-list-content {

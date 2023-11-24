@@ -1,16 +1,12 @@
 <template>
   <div class="wrapper">
-    <NavBar :title="$t('PersonalPageText')">
-      <template v-slot:left>
-        <Icon @click="back" type="icon-zuojiantou"></Icon>
-      </template>
-    </NavBar>
+    <NavBar :title="$t('PersonalPageText')" />
     <div class="userInfo-item-wrapper">
       <div class="userInfo-item" @click="onChangeAvatar">
         <div class="item-left">{{ $t('avatarText') }}</div>
         <div class="item-right">
           <Avatar :avatar="myUserInfo?.avatar" :account="myUserInfo?.account"></Avatar>
-          <Icon class="arrow" type="icon-jiantou"></Icon>
+          <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou"></Icon>
         </div>
       </div>
       <div class="box-shadow"></div>
@@ -20,7 +16,7 @@
           <div class="nick">
             {{ myUserInfo?.nick || myUserInfo?.account }}
           </div>
-          <Icon class="arrow" type="icon-jiantou">
+          <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou">
           </Icon>
         </div>
       </div>
@@ -28,7 +24,7 @@
       <div class="userInfo-item">
         <div class="item-left">{{ $t('accountText') }}</div>
         <div class="item-right">{{ myUserInfo?.account }} <div @click.stop="copyAccount" class="arrow">
-            <Icon type="icon-fuzhi1"></Icon>
+            <Icon :size="15" color="#A6ADB6" type="icon-fuzhi1"></Icon>
           </div>
         </div>
       </div>
@@ -39,7 +35,7 @@
           <div class="item-right">
             <view class="uni-input"> {{ myUserInfo?.gender === "unknown" ? $t('unknow') : myUserInfo?.gender === 'male' ?
               $t('man') : $t('woman') }}</view>
-            <Icon class="arrow" type="icon-jiantou"></Icon>
+            <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou"></Icon>
           </div>
         </div>
       </picker>
@@ -50,14 +46,15 @@
           <div class="item-left">{{ $t('birthText') }}</div>
           <div class="item-right">
             <view class="uni-input">{{ myUserInfo?.birth || $t('unknow') }}</view>
-            <Icon class="arrow" type="icon-jiantou"></Icon>
+            <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou"></Icon>
           </div>
         </div>
       </picker>
       <div class="box-shadow"></div>
       <div class="userInfo-item" @click="() => navigatorToUserItem('tel', myUserInfo?.tel || '')">
         <div class="item-left">{{ $t('tel') }}</div>
-        <div class="item-right">{{ myUserInfo?.tel || $t('unknow') }}<Icon class="arrow" type="icon-jiantou"></Icon>
+        <div class="item-right">{{ myUserInfo?.tel || $t('unknow') }}<Icon :size="15" color="#A6ADB6" class="arrow"
+            type="icon-jiantou"></Icon>
         </div>
       </div>
       <div class="box-shadow"></div>
@@ -65,7 +62,7 @@
         <div class="item-left">{{ $t('email') }}</div>
         <div class="item-right">
           <div class="email">{{ myUserInfo?.email || $t('unknow') }}</div>
-          <Icon class="arrow" type="icon-jiantou"></Icon>
+          <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou"></Icon>
         </div>
       </div>
     </div>
@@ -74,7 +71,7 @@
       <div class="signature-text">
         {{ myUserInfo?.signature || $t('unknow') }}
       </div>
-      <Icon class="arrow" type="icon-jiantou">
+      <Icon :size="15" color="#A6ADB6" class="arrow" type="icon-jiantou">
       </Icon>
     </div>
   </div>
@@ -98,7 +95,6 @@ autorun(() => {
 })
 
 const navigatorToUserItem = (key: string, value: string) => {
-  console.log(value);
   customNavigateTo({
     url: `/pages/user-card/detail-item/index?key=${key}&value=${value}`
   })
@@ -136,7 +132,7 @@ const onChangeGender = (e) => {
           icon: "error"
         })
       } else {
-        const gender = e.detail.value === 0 ? "male" : "female"
+        const gender = e.detail.value == 0 ? "male" : "female"
         myUserInfo.value.gender = gender
         store.saveMyUserInfoActive({ ...myUserInfo.value, gender }).then(res => {
           myUserInfo.value = res
@@ -200,12 +196,15 @@ const back = () => {
 @import "../../styles/common.scss";
 
 page {
-  height: 100%;
+  padding-top: var(--status-bar-height);
+  height: 100vh;
   overflow: hidden;
+  background-color: rgb(246, 248, 250);
 }
 
 .wrapper {
-  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
   background-color: rgb(246, 248, 250);
 
   .userInfo-item-wrapper {
@@ -252,6 +251,7 @@ page {
 
         .arrow {
           margin-left: 15px;
+          line-height: 0;
         }
       }
     }
@@ -295,4 +295,5 @@ page {
       font-size: 15px;
     }
   }
-}</style>
+}
+</style>

@@ -1,21 +1,32 @@
 <template>
-  <div class="nav-bar-wrapper" :style="{ backgroundColor: backgroundColor || '#ffffff' }">
+  <!-- 样式兼容微信小程序  -->
+  <div class="nav-bar-wrapper"
+    :style="{ backgroundColor: backgroundColor || '#ffffff', backgroundImage: `url(${title})`, height: isWeixinApp ? '55px' : '40px', alignItems: isWeixinApp ? 'flex-end' : 'center' }">
     <slot v-if="$slots.left" name="left"></slot>
-    <Icon v-else @click="back" type="icon-zuojiantou"></Icon>
-    <div class="title">{{ title }}</div>
+    <Icon v-else @tap="back" type="icon-zuojiantou" :size="22"></Icon>
+    <div class="title-container">
+      <div class="title">{{ title }}</div>
+      <div class="subTitle" v-if="subTitle">{{ subTitle }}</div>
+      <slot name="icon"></slot>
+    </div>
     <div>
       <slot name="right"></slot>
     </div>
   </div>
-  <div class="block"></div>
+  <div :class="isWeixinApp ? 'block-wx' : 'block'"></div>
 </template>
-  
+
 <script lang="ts" setup>
+import { getUniPlatform } from '../utils';
 import Icon from './Icon.vue'
+
 defineProps<{
   title: string
+  subTitle?: string
   backgroundColor?: string
 }>()
+
+const isWeixinApp = getUniPlatform() === 'mp-weixin'
 
 const back = () => {
   uni.navigateBack({
@@ -24,36 +35,49 @@ const back = () => {
 }
 
 </script>
-  
+
 <style lang="scss" scoped>
 @import "../pages/styles/common.scss";
+
 .nav-bar-wrapper {
   position: fixed;
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  height: 45px;
-  padding: 0 10px; 
+  padding: var(--status-bar-height) 10px 5px 10px;
   z-index: 9999;
   top: 0;
   left: 0;
   right: 0;
-  padding-top: var(--status-bar-height);
 
-  .title {
+  .title-container {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
+    width: 230px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .title {
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: center;
-    width: 230px;
     white-space: nowrap;
+    font-weight: 500;
+  }
+
+  .subTitle {
+    white-space: nowrap;
+    font-weight: 500;
   }
 }
 
 .block {
   height: calc(45px + var(--status-bar-height));
 }
+
+.block-wx {
+  height: calc(55px + var(--status-bar-height));
+}
 </style>
-  

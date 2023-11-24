@@ -1,24 +1,41 @@
 <template>
-  <div class="avatar" @click="(gotoUserCard ? handleAvatarClick() : null)"
-    :style="{ width: size + 'px', height: size + 'px' }">
-    <image :lazy-load="true" class="avatar-img" v-if="avatar" :src="avatar" mode="aspectFill" />
+  <div
+    class="avatar"
+    :style="{ width: size + 'px', height: size + 'px' }"
+    @tap="handleAvatarClick"
+    @longpress="longpress"
+    @touchend="touchend"
+  > 
+    <!-- 使用遮罩层避免android长按头像会出现保存图片的弹窗 -->
+    <div class="img-mask"></div>
+    <image
+      :lazy-load="true"
+      class="avatar-img"
+      v-if="avatar"
+      :src="avatar"
+      mode="aspectFill"
+    />
     <div class="avatar-name-wrapper" v-else :style="{ backgroundColor: color }">
-      <text class="avatar-name-text" :style="{ fontSize : fontSize + 'px' }" v-text="
-        store.uiStore
-          .getAppellation({
-            account: props.account,
-            teamId: props.teamId,
-          })
-          ?.slice(-2)
-      "></text>
+      <text
+        class="avatar-name-text"
+        :style="{ fontSize: fontSize + 'px' }"
+        v-text="
+          store.uiStore
+            .getAppellation({
+              account: props.account,
+              teamId: props.teamId,
+            })
+            ?.slice(-2)
+        "
+      ></text>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { customNavigateTo } from '../utils/customNavigate';
-import type { UserNameCard } from '@xkit-yx/im-store';
-import { autorun } from 'mobx';
+import { customNavigateTo } from '../utils/customNavigate'
+import type { UserNameCard } from '@xkit-yx/im-store'
+import { autorun } from 'mobx'
 import { computed, defineProps, ref, onMounted } from 'vue'
 
 const props = defineProps<{
@@ -29,10 +46,12 @@ const props = defineProps<{
   gotoUserCard?: boolean
   fontSize?: string
 }>()
+const $emit = defineEmits(["longpress"]);
 
 const size = props.size || 42
 const store = uni.$UIKitStore
 const user = ref<UserNameCard>()
+let isLongPress = false // uniapp 长按事件也会触发点击事件，此时需要处理
 
 autorun(async () => {
   const data = await store.userStore.getUserActive(props.account)
@@ -62,15 +81,28 @@ if (!color) {
 }
 
 const handleAvatarClick = () => {
-  if (props.account === store.userStore.myUserInfo.account) {
-    customNavigateTo({
-      url: `/pages/user-card/my-detail/index`
-    })
-  } else {
-    customNavigateTo({
-      url: `/pages/user-card/friend/index?account=${props.account}`
-    })
+  if (props.gotoUserCard && !isLongPress) {
+    if (props.account === store.userStore.myUserInfo.account) {
+      customNavigateTo({
+        url: `/pages/user-card/my-detail/index`,
+      })
+    } else {
+      customNavigateTo({
+        url: `/pages/user-card/friend/index?account=${props.account}`,
+      })
+    }
   }
+}
+
+const longpress = () => {
+  isLongPress = true
+  $emit("longpress");
+}
+
+const touchend = () => {
+  setTimeout(() => {
+    isLongPress = false
+  }, 200)
 }
 </script>
 
@@ -79,6 +111,17 @@ const handleAvatarClick = () => {
   overflow: hidden;
   border-radius: 50%;
   flex-shrink: 0;
+  position: relative;
+}
+
+.img-mask{
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
 }
 
 .avatar-img {

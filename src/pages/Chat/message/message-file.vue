@@ -1,7 +1,7 @@
 <template>
   <uni-link class="msg-file-wrapper" :href="downloadUrl" :download="name" :showUnderLine="false">
     <div :class="`msg-file msg-file-${msg.flow}`">
-      <Icon class="msg-file-icon" :type="iconType"></Icon>
+      <Icon :type="iconType" :size="32"></Icon>
       <div class="msg-file-content">
         <div class="msg-file-title">
           <text class="msg-file-name" v-text="name"></text>
@@ -63,10 +63,6 @@ const downloadUrl = url + ((url as string).includes('?') ? '&' : '?') + `downloa
 
   &-out {
     margin-right: 8px;
-  }
-
-  &-icon {
-    font-size: 32px;
   }
 
   &-content {

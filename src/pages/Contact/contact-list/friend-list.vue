@@ -1,6 +1,7 @@
 <template>
   <div class="friend-list-container">
     <div class="friend-group-list">
+      <Empty v-if="friendGroupList.length === 0" :text="$t('noFriendText')" />
       <div class="friend-group-item" v-for="friendGroup in friendGroupList" :key="friendGroup.key">
         <div class="friend-group-title">
           {{ friendGroup.key }}
@@ -8,7 +9,7 @@
         <div class="friend-item" v-for="friend in friendGroup.data" :key="friend.account"
           @click="handleFriendItemClick(friend)">
           <Avatar :account="friend.account" />
-          <div class="friend-name">{{ friend.alias || friend.nick || friend.account }}</div>
+          <div class="friend-name">{{ friend.appellation }}</div>
         </div>
       </div>
     </div>
@@ -17,28 +18,33 @@
 
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
-import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
 import { autorun } from 'mobx';
 import { ref } from 'vue';
 import { friendGroupByPy } from '../../../utils/friend'
 import { customNavigateTo } from '../../../utils/customNavigate';
+import type { IFriendInfo } from '@xkit-yx/core-kit/dist/types/nim-kit-core/types';
+import Empty from '../../../components/Empty.vue'
 
-const friendGroupList = ref<{ key: string, data: NimKitCoreTypes.IFriendInfo[] }[]>([])
+type FriendItem = IFriendInfo & { appellation: string }
+
+const friendGroupList = ref<{ key: string, data: FriendItem[] }[]>([])
 const store = uni.$UIKitStore
 
-function handleFriendItemClick(friend: NimKitCoreTypes.IFriendInfo) {
+function handleFriendItemClick(friend: FriendItem) {
   customNavigateTo({
     url: `/pages/user-card/friend/index?account=${friend.account}`
   })
 }
 
 autorun(() => {
-  friendGroupList.value = friendGroupByPy(store.uiStore.friendsWithoutBlacklist, {
-    firstKey: 'alias',
-    secondKey: 'nick',
-    thirdKey: 'account',
-  },
-    false)
+  const data = store.uiStore.friendsWithoutBlacklist.map(item => ({
+    ...item, appellation: store.uiStore.getAppellation({
+      account: item.account
+    })
+  }))
+  friendGroupList.value = friendGroupByPy(data, {
+    firstKey: 'appellation',
+  }, false)
 })
 
 

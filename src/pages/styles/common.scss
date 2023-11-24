@@ -50,3 +50,50 @@ a:hover {
     transform: rotate(360deg);
   }
 }
+
+.ok-btn {
+  color: #fff;
+  background-color: rgb(20, 146, 209);
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  left: calc(50% - 25vw);
+  width: 50vw;
+  border-radius: 3px;
+}
+
+.ok-btn-mp {
+  color: #fff;
+  background-color: rgb(20, 146, 209);
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  left: calc(50% - 25vw);
+  width: 50vw;
+  border-radius: 3px;
+}
+
+.button-box-mp {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+
+.button-box {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.button-box,
+.button-box-mp .button-icon {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+}

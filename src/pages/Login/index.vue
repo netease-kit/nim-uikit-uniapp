@@ -18,7 +18,7 @@ const step = ref(0) // 0: 欢迎页 1: 登录页
 @import '../styles/common.scss';
 
 page {
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 </style>

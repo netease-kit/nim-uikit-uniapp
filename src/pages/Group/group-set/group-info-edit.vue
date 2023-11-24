@@ -1,30 +1,23 @@
 <template>
   <div class="group-set-container">
-    <NavBar :title="$t('teamTitle')">
-      <template v-slot:left>
-        <Icon @click="back" type="icon-zuojiantou"></Icon>
-      </template>
-      <template v-slot:right>
-        <div @click="handleSave">{{ $t('saveText') }}</div>
-      </template>
-    </NavBar>
+    <NavBar :title="$t('teamTitle')" />
     <div class="group-name-input-container">
-      <Input :model-value="teamName" :allow-clear="true" :maxlength="maxlength" @input="handleInput" />
+      <FormInput :model-value="teamName" :allow-clear="true" :maxlength="maxlength" @input="handleInput" />
       <div class="input-length">{{ inputLengthTips }}</div>
     </div>
+    <div :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'" @tap="handleSave">{{ $t('saveText') }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import NavBar from '../../../components/NavBar.vue';
-import Input from '../../../components/FormInput.vue';
-import Icon from '../../../components/Icon.vue';
+import FormInput from '../../../components/FormInput.vue';
 
 import { onLoad } from '@dcloudio/uni-app'
 import { ref, computed } from 'vue';
-import { autorun } from 'mobx';
 
 import { t } from '../../../utils/i18n';
+import { getUniPlatform } from '../../../utils';
 
 const maxlength = 15
 const store = uni.$UIKitStore
@@ -50,11 +43,22 @@ const handleSave = () => {
       icon: 'success'
     })
     uni.navigateBack()
-  }).catch(() => {
-    uni.showToast({
-      title: t('updateTeamFailedText'),
-      icon: 'error'
-    })
+  }).catch((err) => {
+    switch (err?.code) {
+      case 802:
+        uni.showToast({
+          title: t('noPermission'),
+          icon: 'error'
+        })
+        break;
+      default:
+        uni.showToast({
+          title: t('updateTeamFailedText'),
+          icon: 'error'
+        })
+        break;
+
+    }
   })
 }
 
@@ -67,12 +71,6 @@ onLoad((option) => {
   const team = store.teamStore.teams.get(teamId)
   teamName.value = team ? team.name.substring(0, 15) : ''
 })
-
-const back = () => {
-  uni.navigateBack({
-    delta: 1
-  })
-}
 </script>
 
 <style lang="scss" scoped>
@@ -80,16 +78,15 @@ const back = () => {
 
 page {
   padding-top: var(--status-bar-height);
-  height: 100%;
+  height: 100vh;
   overflow: hidden;
 }
 
 .group-set-container {
-  height: 100%;
+  height: 100vh;
+  box-sizing: border-box;
   background-color: #eff1f4;
 }
-
-
 
 .group-name-input-container {
   background: #FFFFFF;

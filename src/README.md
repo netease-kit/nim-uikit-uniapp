@@ -84,7 +84,7 @@ move ${组件项目路径}/src .\pages\NEUIKit
 
 ```sh
 npm init -y
-npm i @xkit-yx/core-kit@0.10.2  @xkit-yx/im-store@0.0.7  @xkit-yx/utils@0.5.3 dayjs mobx pinyin vue-i18n --save
+npm i @xkit-yx/core-kit @xkit-yx/im-store @xkit-yx/utils dayjs mobx pinyin vue-i18n --save
 
 # 在自己的项目根目录下执行以下命令，将组件需要的图片复制到static目录下
 # macOS
@@ -439,7 +439,7 @@ iOS：<br>
     ├── msg.ts // 消息相关
     ├── permission.ts // 设备权限相关
     ├── reporter.ts // 埋点上报
-    ├── stringReplace.ts // 文本替换
+    ├── parseText.ts // 文本消息解析
     └── svgString.ts // iconfont Symbol 的 js 内容，注意从 symbol 标签开始替换，不要从 svg 标签开始替换
 ```
 

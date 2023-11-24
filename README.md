@@ -3,22 +3,31 @@
 im-uikit-uniapp 是基于网易云信 IM SDK 的一款 uniapp UI 组件库，它提供了一些通用的 UI 组件，包含会话、聊天、群组等功能。基于 UI 组件您可以像搭积木一样快速搭建起自己的业务逻辑。im-uikit-uniapp 本身基于 `UIKitStore` 开发，API 参考 [UIKitStore](https://doc.yunxin.163.com/docs/interface/messaging/web/typedoc/UIKit/Latest/zh/modules.html)。
 im-uikit-uniapp 界面效果如下图所示：
 
-<img src="https://yx-web-nosdn.netease.im/common/3d776209da6741a45cffa83bed579ecb/WechatIMG212.jpeg" width="300" height="700" /> <img src="https://yx-web-nosdn.netease.im/common/0093da7314856cb7e4679cb2d26f1dbe/WechatIMG213.jpeg" width="300" height="700" />
+
 <br>
-<img src="https://yx-web-nosdn.netease.im/common/f4ae4fa2df6966fe8215be65c6676fe0/8a51677b-bede-4955-aadb-665294fcf5c5.jpeg" width="300" height="700" /> <img src="https://yx-web-nosdn.netease.im/common/f52c0b5df528c7c9283dc83dcb0cac71/169914c4-64ea-4381-a9bf-e96adf6ed572.jpeg"  width="300" height="700">
+
+<img src="https://yx-web-nosdn.netease.im/common/7ffe6a8afe28b48405b41fb3313d1fa2/uniapp.png">
+<br>
+
+<img src="https://yx-web-nosdn.netease.im/common/895963a051a2ae1fae685cfd1682a6bf/%E9%80%9A%E8%AE%AF%E6%A8%A1%E5%9D%97%E4%B8%BB%E8%A6%81%E7%95%8C%E9%9D%A2.png"/>
+
 
 ## im-uikit-uniapp 支持平台
 
 - Android
 - iOS
-
+- 微信小程序
+- h5
 ## 产品体验
 
 - Android <br>
-  <img src="https://yx-web-nosdn.netease.im/common/642fb37550cdfade2892cb0462ba4648/POPO20230322-185537.webp" width="300" height="300" >
+  <img src="https://yx-web-nosdn.netease.im/common/823ebcbed18d3390cbe18a01b618965e/Androidapp.png" width="300" height="300" >
 
 - iOS <br>
-  <img src="https://yx-web-nosdn.netease.im/common/f479aecb78e0b9365d48476687a6f76d/POPO20230322-190238.webp" width="300" height="300" >
+  <img src="https://yx-web-nosdn.netease.im/common/a8c7ec47f13932087a4371e1b2894326/iOSapp.png" width="300" height="300" >
+
+- h5 <br>
+  https://yiyong.netease.im/yiyong-static/statics/uniapp-h5/index.html#/pages/Login/index
 
 ## 前提条件
 
@@ -78,63 +87,126 @@ move ${组件项目路径}/src .\pages\NEUIKit
 ```
 
 成功后目录结构如图所示：<br>
-<img src="https://yx-web-nosdn.netease.im/common/d6e55f2175e90d60d5e42408087553a8/WX20230807-172036.png" width="500" height="500" />
-
+<img src="https://yx-web-nosdn.netease.im/common/dbad6532f172811c30d6c621ffcb4111/WechatIMG216.png" width="500" height="500" />
 
 #### 步骤 3：在项目根目录下添加依赖和图片引入
 
 ```sh
 npm init -y
-npm i @xkit-yx/core-kit@0.10.2  @xkit-yx/im-store@0.0.7  @xkit-yx/utils@0.5.3 dayjs mobx pinyin vue-i18n --save
+npm i @xkit-yx/core-kit@0.10.8  @xkit-yx/im-store@0.0.14  @xkit-yx/utils@0.5.6 dayjs mobx pinyin vue-i18n --save
 
-# 在自己的项目根目录下执行以下命令，将组件需要的图片复制到static目录下
+# 在自己的项目根目录下执行以下命令，将组件需要的图片复制到static目录下，若命令执行不成功，请按照路径手动复制
+mkdir -p static
 # macOS
-mv pages/NEUIKit/src/static static/YX_IMG
+cp -r pages/NEUIKit/src/static static/YX_IMG
 # windows
-move pages/NEUIKit/src/static static/YX_IMG
+xcopy /E pages\NEUIKit\src\static static\YX_IMG
 ```
 
 #### 步骤 4：引入 NEUIKit 组件
 
-在 App.vue 文件引用 NEUIKit 组件
+在 App.vue 文件引用 NEUIKit 组件,并完成uikit初始化
 
 ```javascript
 <script>
-import RootStore from '@xkit-yx/im-store'
-import { NimKitCore } from '@xkit-yx/core-kit/dist/uniapp-nim-core'
-
-const nim = uni.$UIKitNIM = new NimKitCore({
-  initOptions: {
-    "appkey": "", //您在云信控制台注册的appkey
-    "account": "", //云信控制台上的account
-		"token": "", //云信控制台的账号token
-    "lbsUrls": [
-      "https://lbs.netease.im/lbs/webconf.jsp"
-    ],
-    "linkUrl": "weblink.netease.im",
-    "needReconnect": true,
-    // "reconnectionAttempts": 5,
-    debugLevel: 'debug'
-  },
-  platform: 'UniApp',
-})
-uni.$UIKitStore = new RootStore(nim, {
-  addFriendNeedVerify: false,
-  teamBeInviteMode: 'noVerify',
-  teamUpdateTeamMode: 'all',
-  teamInviteMode: 'all',
-})
-nim.connect()
-
-export default {
-  // ……
-}
-
+    import RootStore from '@xkit-yx/im-store'
+    import { NimKitCore } from '@xkit-yx/core-kit/dist/uniapp-nim-core'
+    import { getMsgContentTipByType } from './pages/NEUIKit/src/utils/msg'
+    export default {
+        onLaunch: function() {
+            const nim = uni.$UIKitNIM = new NimKitCore({
+              initOptions: {
+                "appkey": "", //您在云信控制台注册的appkey
+                 "account": "", //云信控制台上的account
+                 "token": "", //云信控制台的账号token
+                "lbsUrls": [
+                  "https://lbs.netease.im/lbs/webconf.jsp"
+                ],
+                "linkUrl": "weblink.netease.im",
+                "needReconnect": true,
+                // "reconnectionAttempts": 5,
+                debugLevel: 'debug'
+              },
+              platform: 'UniApp',
+            })
+            uni.$UIKitStore = new RootStore(nim, {
+              addFriendNeedVerify: false,
+              teamBeInviteMode: 'noVerify',
+              teamJoinMode: 'noVerify',
+              teamUpdateExtMode: 'all',
+              teamUpdateTeamMode: 'all',
+              teamInviteMode: 'all',
+              sendMsgBefore: async (options, type) => {
+                const pushContent = getMsgContentTipByType({ body: options.body, type })
+            
+                // 如果是 at 消息，需要走离线强推
+                const { forcePushIDsList, needForcePush } = options.ext?.yxAitMsg
+                  // @ts-ignore
+                  ? store.msgStore._formatExtAitToPushInfo(options.ext?.yxAitMsg, options.body)
+                  : { forcePushIDsList: '[]', needForcePush: false }
+            
+                console.log('forcePushIDsList: ', forcePushIDsList)
+            
+                // 不同产商的推送消息体
+                const { scene, to } = options
+                const pushPayload = JSON.stringify({
+                  // oppo
+                  oppoField: {
+                    "click_action_type": 4, // 参考 oppo 官网
+                    "click_action_activity": '', // 各端不一样 TODO
+                    "action_parameters": { "sessionId": scene, "sessionType": to } // 自定义
+                  },
+            
+                  // vivo
+                  vivoField: {
+                    "pushMode": 0 //推送模式 0：正式推送；1：测试推送，不填默认为0
+                  },
+            
+                  // huawei
+                  hwField: {
+                    click_action: {
+                      'type': 1,
+                      'action': '' // 各端不一样 TODO
+                    },
+                    androidConfig: {
+                      'category': 'IM',
+                      'data': JSON.stringify({ 'sessionId': to, 'sessionType': scene })
+                    }
+                  },
+            
+                  // 通用
+                  sessionId: to,
+                  sessionType: scene
+                })
+            
+                const pushInfo = {
+                  needPush: true,
+                  needPushBadge: true,
+                  pushPayload: '{}',
+                  pushContent,
+                  needForcePush,
+                  forcePushIDsList,
+                  forcePushContent: pushContent,
+                }
+                return { ...options, pushInfo }
+              },
+            })
+            nim.connect()
+            
+        },
+        onShow: function() {
+            console.log('App Show')
+        },
+        onHide: function() {
+            console.log('App Hide')
+        }
+    }
 </script>
 
 <style>
-/*每个页面公共css */
+    /*每个页面公共css */
 </style>
+
 ```
 
 ```sh
@@ -222,12 +294,6 @@ const preUrl = '/pages/NEUIKit/src'
       }
     },
     {
-      "path": "pages/NEUIKit/src/pages/Conversation/conversation-start/index",
-      "style": {
-        "navigationStyle": "custom"
-      }
-    },
-    {
       "path": "pages/NEUIKit/src/pages/user-card/friend/index",
       "style": {
         "navigationStyle": "custom"
@@ -292,166 +358,12 @@ const preUrl = '/pages/NEUIKit/src'
 
 ```
 
-#### 步骤 6：运行效果
+#### 步骤 6：运行demo
 
-Andriod：<br>
-
-<img src="https://yx-web-nosdn.netease.im/common/30c0079906c71d71c65e7e97a7817dce/WechatIMG1943.jpeg" width="300" height="700" />
-
-iOS：<br>
-<img src="https://yx-web-nosdn.netease.im/common/f87b51d52682338cc5427e84e8876695/WechatIMG215.jpeg" width="300" height="700" />
-
-## 目录结构详解
-
-```
-.
-├── components // 组件
-│   ├── Avatar.vue // 头像
-│   ├── Empty.vue // 空白页
-│   ├── FormInput.vue // 表单
-│   ├── FriendSelect.vue // 好友选择
-│   ├── Icon.vue // Icon 图标
-│   ├── NavBar.vue // 标题栏
-│   ├── NetworkAlert.vue // 网络横幅
-│   ├── Svg.vue // Icon 图标的 SVG，需要使用 iconfont 的模块必须要引入此组件
-│   └── UserCard.vue // 用户卡片
-├── env.d.ts
-├── locale // 国际化文案配置
-│   ├── en.json
-│   ├── en.ts
-│   ├── zh-Hans.json
-│   └── zh-Hans.ts
-├── pages
-│   ├── Chat // 聊天页
-│   │   ├── index.vue
-│   │   └── message
-│   │       ├── face.vue // 表情选择
-│   │       ├── index.vue
-│   │       ├── message-bubble.vue // 消息气泡
-│   │       ├── message-file.vue // 文件消息
-│   │       ├── message-input.vue // 消息输入框
-│   │       ├── message-item.vue // 单条消息
-│   │       ├── message-list.vue // 消息列表
-│   ├── Contact // 通讯录页
-│   │   ├── contact-list
-│   │   │   ├── friend-list.vue // 好友列表
-│   │   │   ├── group-list.vue // 群组列表
-│   │   │   └── index.vue
-│   │   └── index.vue
-│   ├── Conversation // 会话页
-│   │   ├── conversation-list // 会话列表
-│   │   │   ├── conversation-item.vue // 单条会话
-│   │   │   └── index.vue
-│   │   ├── conversation-start // 发起聊天
-│   │   │   └── index.vue
-│   │   └── index.vue
-│   ├── Group
-│   │   ├── group-add // 群聊拉人页
-│   │   │   └── index.vue
-│   │   ├── group-create // 创建群聊页
-│   │   │   └── index.vue
-│   │   ├── group-member // 群成员页
-│   │   │   └── index.vue
-│   │   └── group-set // 群设置页
-│   │       ├── group-info-edit.vue
-│   │       └── index.vue
-│   ├── Login // 云信登录页，请替换成自己的登录页或者删除
-│   │   ├── components
-│   │   │   ├── form-input.vue
-│   │   │   ├── login-form.vue
-│   │   │   └── welcome.vue
-│   │   ├── i18n
-│   │   │   └── zh-cn.ts
-│   │   ├── index.vue
-│   │   ├── static
-│   │   │   ├── welcome-bottom.png
-│   │   │   └── welcome.png
-│   │   └── utils
-│   │       └── api.ts
-│   ├── index
-│   │   └── index.vue // 空白首页
-│   ├── styles
-│   │   └── common.scss // 公共样式
-│   └── user-card
-│       ├── detail-item // 个人信息编辑页
-│       │   └── index.vue
-│       ├── friend // 好友卡片页
-│       │   └── index.vue
-│       ├── my // 我的页面
-│       │   ├── index.vue
-│       │   └── setting.vue
-│       └── my-detail // 我的详情页
-│           └── index.vue
-├── pages.json // 需要在根目录项目下添加这里的配置
-├── static // 静态图片资源
-│   ├── contact-selected.png
-│   ├── contact.png
-│   ├── conversation-selected.png
-│   ├── conversation.png
-│   ├── empty.png
-│   ├── logo.png
-│   ├── me-selected.png
-│   ├── me.png
-│   ├── welcome-bottom.png
-│   └── welcome.png
-├── uni.scss // uni 自带的样式，可以忽略或者使用项目中已有的
-├── uni_modules // NEUIKit 用到的三方库（对比应用市场下载的有改动）
-│   ├── uni-link
-│   │   ├── changelog.md
-│   │   ├── components
-│   │   │   └── uni-link
-│   │   │       └── uni-link.vue
-│   │   ├── package.json
-│   │   └── readme.md
-│   ├── uni-scss
-│   │   ├── changelog.md
-│   │   ├── index.scss
-│   │   ├── package.json
-│   │   ├── readme.md
-│   │   ├── styles
-│   │   │   ├── index.scss
-│   │   │   ├── setting
-│   │   │   │   ├── _border.scss
-│   │   │   │   ├── _color.scss
-│   │   │   │   ├── _radius.scss
-│   │   │   │   ├── _space.scss
-│   │   │   │   ├── _styles.scss
-│   │   │   │   ├── _text.scss
-│   │   │   │   └── _variables.scss
-│   │   │   └── tools
-│   │   │       └── functions.scss
-│   │   ├── theme.scss
-│   │   └── variables.scss
-│   └── zb-tooltip
-│       ├── changelog.md
-│       ├── components
-│       │   └── zb-tooltip
-│       │       └── zb-tooltip.vue
-│       ├── package.json
-│       └── readme.md
-└── utils // 工具函数
-    ├── constants.ts // 一些常量
-    ├── date.ts // 时间处理
-    ├── emoji.ts // 表情相关
-    ├── encodeText.ts // 文本编码，防 xss
-    ├── friend.ts // 好友相关
-    ├── i18n.ts // 国际化相关
-    ├── matrix.ts // 数组转矩阵
-    ├── msg.ts // 消息相关
-    ├── permission.ts // 设备权限相关
-    ├── reporter.ts // 埋点上报
-    ├── stringReplace.ts // 文本替换
-    └── svgString.ts // iconfont Symbol 的 js 内容，注意从 symbol 标签开始替换，不要从 svg 标签开始替换
-```
 
 ## 常见问题
 
 - 相册拒绝授权后再次开启授权，由于 uniapp api 兼容问题，部分 Android 机型无法正常打开相册，需要用户自行处理
-- 如何替换您自己的 iconfont
-  - 1. 进入到你的 iconfont 项目中，找到 symbol 的 js，点击打开 js
-       ![https://yx-web-nosdn.netease.im/common/cf17e1bea265ae60bebd7b57b5f6d5a8/WechatIMG209.png](https://yx-web-nosdn.netease.im/common/cf17e1bea265ae60bebd7b57b5f6d5a8/WechatIMG209.png)
-  - 2. 找到 symbol 标签，将内容 copy 下来，替换到 utils/svgString.ts 中相应的位置上
-       ![https://yx-web-nosdn.netease.im/common/5317df9885b852fbcdc4bfafd9f4b5f9/WechatIMG210.png](https://yx-web-nosdn.netease.im/common/5317df9885b852fbcdc4bfafd9f4b5f9/WechatIMG210.png)
-       ![https://yx-web-nosdn.netease.im/common/8248e72516ce6c4adb6f253d58a129d5/WechatIMG211.png](https://yx-web-nosdn.netease.im/common/8248e72516ce6c4adb6f253d58a129d5/WechatIMG211.png)
-  - 3. 引用 components/Icon 组件，填入 type 即可，例如 `<Icon type="icon-time" />`
 - 如果 iOS 低版本构建后无法运行，需要在构建出的资源 dist/build/app/app-service.js 文件最前面添加 `var globalThis = Function('return this')();`
+- 部分uniapp兼容问题，已在代码中说明
+- 由于uniapp uni.setNavigationBarTitle限制，chat页面的NavigationBarTitle，需要您自行调整page结构设置

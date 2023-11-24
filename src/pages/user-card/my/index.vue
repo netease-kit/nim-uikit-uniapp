@@ -24,7 +24,7 @@
     </div>
   </div>
 </template>
-    
+
 <script lang="ts" setup>
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import UserCard from '../../../components/UserCard.vue';
@@ -32,7 +32,7 @@ import { ref } from 'vue';
 import Icon from '../../../components/Icon.vue';
 import UniLink from '../../../uni_modules/uni-link/components/uni-link/uni-link.vue';
 import { autorun } from 'mobx';
-import { setTabUnread } from '../../../utils/msg';
+import { setContactTabUnread, setTabUnread } from '../../../utils/msg';
 import { customNavigateTo } from '../../../utils/customNavigate';
 const myUserInfo = ref()
 autorun(() => {
@@ -47,6 +47,7 @@ onLoad(() => {
 
 onShow(() => {
   setTabUnread()
+  setContactTabUnread()
 })
 
 const gotoSetting = () => {
@@ -57,27 +58,37 @@ const gotoSetting = () => {
 
 const navigatorToMydetail = () => {
   console.log('myUserInfo.value.account', myUserInfo.value.account);
-  
+
   customNavigateTo({
     url: `/pages/user-card/my-detail/index?account=${myUserInfo.value.account}`
   })
 }
 </script>
-   
+
 <style lang="scss" scoped>
 @import "../../styles/common.scss";
+
 page {
-  height: 100%;
+  padding-top: var(--status-bar-height);
+  height: 100vh;
   overflow: hidden;
 }
+
 .card-wrapper {
   background-color: rgb(255, 253, 253);
-  padding-right: 10px;
+  // #ifdef MP
+  padding-top: calc(var(--status-bar-height) + var(--status-bar-height));
+  // #endif
+  // #ifndef MP
   padding-top: var(--status-bar-height);
-  .arrow{
+  // #endif
+  padding-right: 10px;
+  position: relative;
+
+  .arrow {
     position: absolute;
     right: 10px;
-    top: 12%;
+    top: calc(50% - 8px);
   }
 }
 
@@ -103,6 +114,8 @@ page {
 
   .account {
     font-size: 14px;
+    display: flex;
+    align-items: center;
     color: #A6ADB6;
   }
 
@@ -131,6 +144,8 @@ page {
 
     .item-left {
       font-size: 16px;
+      display: flex;
+      align-items: center;
 
       .guanyu {
         margin-right: 5px;
@@ -147,5 +162,5 @@ page {
 
 .icon-arrow {
   font-size: 16px;
-}</style>
-  
+}
+</style>
