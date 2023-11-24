@@ -72,9 +72,9 @@ git clone https://github.com/netease-kit/nim-uikit-uniapp.git
 # 在自己的项目根目录下执行以下命令，将组件 copy 过来
 mkdir -p ./pages/NEUIKit
 # macOS
-mv ${组件项目路径}/src ./pages/NEUIKit
+mv ${NEUIKit组件项目路径}/src ./pages/NEUIKit
 # windows
-move ${组件项目路径}/src .\pages\NEUIKit
+move ${NEUIKit组件项目路径}/src .\pages\NEUIKit
 ```
 
 成功后目录结构如图所示：<br>
