@@ -158,13 +158,13 @@ export function createApp() {
 
 #### 步骤 5：配置 pages 路由
 
-在 NEUIKit/src/utils/customNavigate.ts 中，修改 preUrl
+在 pages/NEUIKit/src/utils/customNavigate.ts 中，修改 preUrl
 
 ```javascript
 const preUrl = '/pages/NEUIKit/src'
 ```
 
-在 pages.json 文件中的更新 pages 路由：
+在 你的项目的 pages.json 文件中的更新 pages 路由：
 
 ```javascript
    {
