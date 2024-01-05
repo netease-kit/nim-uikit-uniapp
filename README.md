@@ -11,6 +11,8 @@ im-uikit-uniapp 界面效果如下图所示：
 
 - Android
 - iOS
+- h5
+- 微信小程序
 
 ## 产品体验
 
@@ -20,6 +22,10 @@ im-uikit-uniapp 界面效果如下图所示：
 - iOS <br>
   <img src="https://yx-web-nosdn.netease.im/common/f479aecb78e0b9365d48476687a6f76d/POPO20230322-190238.webp" width="300" height="300" >
 
+- [h5](https://yiyong.netease.im/yiyong-static/statics/uniapp-h5/index.html#/)
+
+- 微信小程序<br>
+  <img src="https://yx-web-nosdn.netease.im/common/5596f399193b936920404827211691f3/微信小程序.png" width="300" height="300" >
 ## 前提条件
 
 ##### 创建应用并获取 App Key 和 App Secret
@@ -170,6 +176,18 @@ const preUrl = '/pages/NEUIKit/src'
       }
     },
     {
+      "path": "pages/NEUIKit/src/pages/Login/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/NEUIKit/src/pages/Chat/message/p2p-set",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/NEUIKit/src/pages/Group/group-set/index",
       "style": {
         "navigationStyle": "custom"
@@ -194,16 +212,30 @@ const preUrl = '/pages/NEUIKit/src'
       }
     },
     {
+      "path": "pages/NEUIKit/src/pages/Contact/contact-list/valid-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/NEUIKit/src/pages/Contact/contact-list/black-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/NEUIKit/src/pages/Chat/index",
       "style": {
-        "navigationStyle": "custom",
+        "navigationBarBackgroundColor": "#F6F8FA",
         "navigationBarTextStyle": "black",
         "enablePullDownRefresh": true,
         "app-plus": {
-          "softinputMode": "adjustResize"
+          "softinputMode": "adjustResize",
+          "softinputNavBar": "none"
         }
       }
     },
+
     {
       "path": "pages/NEUIKit/src/pages/Group/group-member/index",
       "style": {
@@ -223,7 +255,7 @@ const preUrl = '/pages/NEUIKit/src'
       }
     },
     {
-      "path": "pages/NEUIKit/src/pages/Conversation/conversation-start/index",
+      "path": "pages/NEUIKit/src/pages/Friend/add-friend/index",
       "style": {
         "navigationStyle": "custom"
       }
@@ -257,8 +289,14 @@ const preUrl = '/pages/NEUIKit/src'
       "style": {
         "navigationStyle": "custom"
       }
+    },
+    {
+      "path": "pages/NEUIKit/src/pages/Chat/forward",
+      "style": {
+        "navigationStyle": "custom"
+      }
     }
-  ],
+  ],,
   "globalStyle": {
     "navigationBarTextStyle": "black"
   },
