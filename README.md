@@ -51,11 +51,13 @@ im-uikit-uniapp 界面效果如下图所示：
 ### 开发环境要求
 
 - HBuilderX
-- Vue 3
+- Vue 2/ Vue3
 - TypeScript
 - sass（sass-loader 版本 <= 10.1.1）
 - node（12.13.0 <= node 版本 <= 17.0.0, 推荐使用 Node.js 官方 LTS 版本 16.17.0）
 - npm（版本请与 node 版本匹配）
+
+[vue2项目集成详见官网](https://doc.yunxin.163.com/messaging-enhanced/docs/TQyNDE5OTQ?platform=uniapp)
 
 ### NEUIKit 源码集成
 
