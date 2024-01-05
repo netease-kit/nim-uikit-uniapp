@@ -6,9 +6,9 @@
         onLaunch: function() {
             const nim = uni.$UIKitNIM = new NimKitCore({
               initOptions: {
-               "appkey": "", //您在云信控制台注册的appkey
-                "account": "", //云信控制台上的account
-                "token": "",
+                "appkey": "", //您在云信控制台注册的appkey
+               "account": "", //云信控制台上的account
+               "token": "",
                 "lbsUrls": [
                   "https://lbs.netease.im/lbs/webconf.jsp"
                 ],

@@ -30,12 +30,7 @@
     >
       <Avatar :account="member.account"/>
       <div class="member-name"> 
-        {{
-          store.uiStore.getAppellation({
-            account: member.account,
-            teamId: member.teamId,
-          })
-        }}
+        <Appellation :account="member.account" :teamId="member.teamId"></Appellation>
       </div>
       <div v-if="member.type === 'owner'" class="owner">{{ $t('teamOwner') }}</div>
       <div v-else-if="member.type === 'manager'" class="manager">{{ $t('teamManager') }}</div>
@@ -50,6 +45,7 @@ import { autorun } from 'mobx'
 import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
 import { AT_ALL_ACCOUNT } from '../../../utils/constants'
+import Appellation from '../../../components/Appellation.vue'
 const props = defineProps<{
   teamId: string
   handleItemClick: (member: TeamMember | { appellation: string }) => void
