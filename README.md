@@ -296,7 +296,7 @@ const preUrl = '/pages/NEUIKit/src'
         "navigationStyle": "custom"
       }
     }
-  ],,
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "black"
   },
