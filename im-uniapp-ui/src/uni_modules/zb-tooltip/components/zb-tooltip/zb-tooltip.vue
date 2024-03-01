@@ -106,11 +106,11 @@ export default {
     getPosition() {
       return new Promise((resolve) => {
         uni.createSelectorQuery().in(this).selectAll('.zb_tooltip_content,.zb_tooltip__popper').boundingClientRect(async (data) => {
-          let { left, bottom, right, top, width, height } = data[0]
-          let obj1 = data[1]
+          let { left, bottom, right, top, width, height } = data[0] || {}
+          let obj1 = data[1] || {}
           let objStyle = {}
           let objStyle1 = {}
-          if (top <= 100) {
+          if (top <= 300) {
             this.placement = 'bottom'
           } else {
             this.placement = 'top'

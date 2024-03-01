@@ -1,25 +1,11 @@
 <template>
-  <scroll-view
-    scroll-y="true"
-    :scroll-top="scrollTop"
-    class="message-scroll-list"
-  >
-    <div
-      @touchstart="handleTapMessageList"
-      id="msg-list"
-      class="msg-list"
-      ref="msgList"
-    >
+  <scroll-view scroll-y="true" :scroll-top="scrollTop" class="message-scroll-list">
+    <div @touchstart="handleTapMessageList" id="msg-list" class="msg-list" ref="msgList">
       <div v-show="!noMore" @click="onLoadMore" class="view-more-text">{{ t('viewMoreText') }}</div>
       <view class="msg-tip" v-show="noMore">{{ t('noMoreText') }}</view>
       <div v-for="(item, index) in finalMsgs" :key="item.renderKey">
-        <MessageItem
-          :scene="scene"
-          :to="to"
-          :msg="item"
-          :key="item.renderKey"
-          :reply-msg="replyMsgsMap && replyMsgsMap[item.idClient]"
-        >
+        <MessageItem :scene="scene" :to="to" :msg="item" :index="index" :key="item.renderKey"
+          :reply-msg="replyMsgsMap && replyMsgsMap[item.idClient]">
         </MessageItem>
       </div>
       <div v-if="isIosH5" class="block"></div>
@@ -29,7 +15,7 @@
 
 <script lang="ts" setup>
 import type { IMMessage } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
-import { ref, computed, getCurrentInstance, onBeforeMount, onUnmounted} from '../../../utils/transformVue';
+import { ref, computed, getCurrentInstance, onBeforeMount, onUnmounted } from '../../../utils/transformVue';
 import MessageItem from './message-item.vue'
 import { events, MSG_ID_FLAG } from '../../../utils/constants'
 import { caculateTimeago } from '../../../utils/date'
@@ -37,31 +23,31 @@ import { onPageScroll } from '@dcloudio/uni-app'
 import { getUniPlatform } from '../../../utils'
 import { t } from '../../../utils/i18n'
 const props = defineProps({
-    msgs: {
-      type: Array,
-      required: true
-    },
-    scene: {
-      type: String, // Assuming TMsgScene is a custom object type
-      required: true
-    },
-    to: {
-      type: String,
-      required: true
-    },
-    loadingMore: {
-      type: Boolean,
-      default: undefined
-    },
-    noMore: {
-      type: Boolean,
-      default: undefined
-    },
-    replyMsgsMap: {
-      type: Object,
-      default: undefined
-    }
-  })
+  msgs: {
+    type: Array,
+    required: true
+  },
+  scene: {
+    type: String, // Assuming TMsgScene is a custom object type
+    required: true
+  },
+  to: {
+    type: String,
+    required: true
+  },
+  loadingMore: {
+    type: Boolean,
+    default: undefined
+  },
+  noMore: {
+    type: Boolean,
+    default: undefined
+  },
+  replyMsgsMap: {
+    type: Object,
+    default: undefined
+  }
+})
 
 const isKeyboardUp = ref(false)
 const uniPlatform = getUniPlatform()
@@ -93,6 +79,8 @@ const finalMsgs = computed(() => {
       renderKey: `${item.time}`
     })
   })
+
+  console.log('finalMsgs: -----------', res)
   return res
 })
 
@@ -116,15 +104,15 @@ const scrollToBottom = () => {
 
 const onLoadMore = () => {
   const msg = finalMsgs.value.filter(
-      (item) =>
-        !(
-          item.type === 'custom' &&
-          ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
-        )
-    )[0]
-    if (msg) {
-      uni.$emit(events.GET_HISTORY_MSG, msg);
-    }
+    (item) =>
+      !(
+        item.type === 'custom' &&
+        ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
+      )
+  )[0]
+  if (msg) {
+    uni.$emit(events.GET_HISTORY_MSG, msg);
+  }
 }
 
 const handleTapMessageList = () => {
@@ -142,7 +130,7 @@ onBeforeMount(() => {
   })
 
   uni.$on(events.ON_CHAT_MOUNTED, (msg: IMMessage) => {
-    if(uniPlatform === 'mp-weixin') {
+    if (uniPlatform === 'mp-weixin') {
       scrollToBottom()
     } else {
       setTimeout(() => {
@@ -173,7 +161,7 @@ onBeforeMount(() => {
         )
     )[0]
     if (msg) {
-       uni.$emit(events.GET_HISTORY_MSG, msg);
+      uni.$emit(events.GET_HISTORY_MSG, msg);
     }
   })
 
@@ -182,14 +170,14 @@ onBeforeMount(() => {
   })
 
   // uni.$on(events.ON_REACH_BOTTOM, () => {
-    // if (end.value < props.msgs.length && !lock) {
-    //   lock = true
-    //   start.value += HISTORY_LIMIT
-    //   setTimeout(() => {
-    //     lock = false
-    //   }, 1500)
-    // }
-    // console.log('到底了！！！！', 'start: ', start.value, 'lock: ', lock, 'msg.lenght: ', props.msgs.length)
+  // if (end.value < props.msgs.length && !lock) {
+  //   lock = true
+  //   start.value += HISTORY_LIMIT
+  //   setTimeout(() => {
+  //     lock = false
+  //   }, 1500)
+  // }
+  // console.log('到底了！！！！', 'start: ', start.value, 'lock: ', lock, 'msg.lenght: ', props.msgs.length)
   // })
 
 })
@@ -235,22 +223,21 @@ onUnmounted(() => {
   margin-top: 10px;
 }
 
-.block{
+.block {
   width: 100%;
   height: 40px;
 }
 
-.message-scroll-list{
+.message-scroll-list {
   height: 90vh;
   box-sizing: border-box;
   padding-bottom: 1px;
 }
 
-.view-more-text{
+.view-more-text {
   text-align: center;
   color: #b3b7bc;
   font-size: 15px;
   margin-top: 20px;
 }
-
 </style>

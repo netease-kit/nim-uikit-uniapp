@@ -18,5 +18,9 @@ im-uikit-uniapp 界面效果如下图所示：
 
 [项目集成详见官网](https://doc.yunxin.163.com/messaging-enhanced/docs/TQyNDE5OTQ?platform=uniapp)
 
+## 运行demo
+- vue2或vue3工程下，npm i 安装依赖，在app.vue中填入appkey、account、token后运行项目即可。
+- [创建应用并获取 AppKey](https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console)
+- [注册云信账号](https://doc.yunxin.163.com/messaging/docs/DQ3Nzk1MTY?platform=server)
 
 

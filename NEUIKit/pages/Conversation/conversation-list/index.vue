@@ -1,22 +1,16 @@
 <template>
   <div class="conversation-wrapper">
-    <div
-      class="dropdown-mark"
-      v-if="addDropdownVisible"
-      @touchstart="hideAddDropdown"
-    ></div>
+    <div class="dropdown-mark" v-if="addDropdownVisible" @touchstart="hideAddDropdown"></div>
     <div class="navigation-bar">
       <div class="logo-box">
-        <image src="https://yx-web-nosdn.netease.im/common/bbcd9929e31bfee02663fc0bcdabe1c5/yx-logo.png" class="logo-img" />
+        <image src="https://yx-web-nosdn.netease.im/common/bbcd9929e31bfee02663fc0bcdabe1c5/yx-logo.png"
+          class="logo-img" />
         <div>{{ t('appText') }}</div>
       </div>
       <div :class="buttonClass">
         <!-- #ifdef MP -->
-        <image
-          src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
-          class="button-icon"
-          @tap="showAddDropdown"
-        />
+        <image src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
+          class="button-icon" @tap="showAddDropdown" />
         <!-- #endif -->
         <!-- #ifndef MP -->
         <div class="button-icon-add" @tap="showAddDropdown">
@@ -30,10 +24,7 @@
               {{ t('addFriendText') }}
             </div>
             <div class="add-menu-item" @tap="onDropdownClick('createGroup')">
-              <Icon
-                type="icon-chuangjianqunzu"
-                :style="{ marginRight: '5px' }"
-              />
+              <Icon type="icon-chuangjianqunzu" :style="{ marginRight: '5px' }" />
               {{ t('createTeamText') }}
             </div>
           </div>
@@ -43,19 +34,17 @@
     <div class="block"></div>
     <NetworkAlert />
     <!-- 页面初始化的过程中，sessionList编译到小程序和h5出现sessionList为undefined的情况，即使给了默认值为空数组，故在此处进行判断 -->
-    <Empty
-      v-if="!sessionList || sessionList.length === 0"
-      :text="t('conversationEmptyText')"
-    />
+    <Empty v-if="!sessionList || sessionList.length === 0" :text="t('conversationEmptyText')" />
     <div v-else class="conversation-list-wrapper">
       <!-- 此处的key如果用session.id，会在ios上渲染存在问题，会出现会话列表显示undefined -->
-      <div v-for="(session, index) in sessionList" :key="index">
+      <div v-for="(session, index) in sessionList" :key="session.renderKey">
         <ConversationItem
+          :key="session.renderKey"
           :showMoreActions="currentMoveSessionId === session.id"
           :session="session"
           @delete="handleSessionItemDeleteClick"
           @stickyToTop="handleSessionItemStickTopChange"
-          @click="handleSessionItemClick"
+          @click="handleSessionItemClick" 
           @leftSlide="handleSessionItemLeftSlide" 
         />
       </div>
@@ -206,7 +195,7 @@ const needShowBeMentioned = (msgs: IMMessage[]) => {
             }
           })
         }
-      } catch {}
+      } catch { }
     }
   })
   return flag
@@ -214,9 +203,10 @@ const needShowBeMentioned = (msgs: IMMessage[]) => {
 
 autorun(() => {
   //@ts-ignore
-  sessionList.value = deepClone(uni.$UIKitStore?.uiStore?.sessionList)?.map((session: NimKitCoreTypes.ISession )=> {
+  sessionList.value = deepClone(uni.$UIKitStore?.uiStore?.sessionList)?.map((session: NimKitCoreTypes.ISession) => {
     return {
       ...session,
+      renderKey: session?.id?.slice(-6),
       beMentioned: needShowBeMentioned(session.unreadMsgs || [])
     }
   })
@@ -237,7 +227,7 @@ autorun(() => {
 <style lang="scss" scoped>
 @import '../../styles/common.scss';
 
-.conversation-wrapper{
+.conversation-wrapper {
   height: 100vh;
   overflow: hidden;
 }
@@ -257,7 +247,7 @@ autorun(() => {
   z-index: 999;
 }
 
-.block{
+.block {
   height: 60px;
   width: 100%;
   display: block;
@@ -285,10 +275,11 @@ autorun(() => {
   }
 }
 
-.button-icon-add{
+.button-icon-add {
   position: relative;
   right: 20px;
 }
+
 .dropdown-mark {
   position: fixed;
   top: 0;
@@ -334,7 +325,8 @@ autorun(() => {
     }
   }
 }
-.conversation-block{
+
+.conversation-block {
   width: 100%;
   height: 72px;
 }

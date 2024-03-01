@@ -12,7 +12,7 @@
       <div class="conversation-item-right">
         <div class="conversation-item-top">
           <Appellation class="conversation-item-title" v-if="session.scene === 'p2p'" :account="session.to" />
-          <span class="conversation-item-title">{{ session.name || session.teamId }}</span>
+          <span class="conversation-item-title">{{ sessionName }}</span>
           <span class="conversation-item-time">{{ date }}</span>
         </div>
         <div class="conversation-item-desc">
@@ -86,6 +86,15 @@ const teamAvatar = computed(() => {
   if (session.scene === 'team') {
     const { avatar } = props.session as NimKitCoreTypes.TeamSession
     return avatar
+  }
+}) 
+
+const sessionName = computed(() => {
+  const { session } = props
+  if(session?.name){
+    return session?.name
+  }else{
+    return session?.teamId
   }
 })
 

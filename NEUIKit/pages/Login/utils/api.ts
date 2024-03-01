@@ -1,5 +1,5 @@
-const baseUrl = 'https://yiyong-user-center-qa.netease.im'
-// const baseUrl = 'https://yiyong-user-center.netease.im'
+// const baseUrl = 'https://yiyong-user-center-qa.netease.im'
+const baseUrl = 'https://yiyong-user-center.netease.im'
 // // @ts-ignore
 // BUILD_ENV === 'prod'
 //   ? 'https://yiyong-user-center.netease.im/'

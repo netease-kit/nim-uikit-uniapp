@@ -110,7 +110,7 @@ export default {
           let obj1 = data[1] || {}
           let objStyle = {}
           let objStyle1 = {}
-          if (top <= 100) {
+          if (top <= 300) {
             this.placement = 'bottom'
           } else {
             this.placement = 'top'

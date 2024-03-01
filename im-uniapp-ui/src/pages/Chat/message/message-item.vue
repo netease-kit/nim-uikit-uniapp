@@ -1,148 +1,77 @@
 <template>
   <div :id="MSG_ID_FLAG + msg.idClient" :key="msg.time">
-    <div
-      class="msg-time"
-      v-if="msg.type === 'custom' && msg.attach.type === 'time'"
-    >
+    <div class="msg-time" v-if="msg.type === 'custom' && msg.attach.type === 'time'">
       {{ msg.attach.value }}
     </div>
-    <div
-      class="msg-common"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-      v-else-if="
-        msg.type === 'custom' &&
-        msg.attach.type === 'reCallMsg' &&
-        msg.attach.canEdit
-      "
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }" v-else-if="msg.type === 'custom' &&
+  msg.attach.type === 'reCallMsg' &&
+  msg.attach.canEdit
+  ">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <MessageBubble :msg="msg" :bg-visible="true">
         {{ t('recall2') }}
-        <text
-          class="msg-recall-btn"
-          @tap="
-            () => {
-              handleReeditMsg(msg)
-            }
-          "
-        >
+        <text class="msg-recall-btn" @tap="() => {
+          handleReeditMsg(msg)
+        }
+          ">
           {{ t('reeditText') }}
         </text>
       </MessageBubble>
     </div>
-    <div
-      class="msg-common"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-      v-else-if="
-        msg.type === 'custom' &&
-        msg.attach.type === 'reCallMsg' &&
-        !msg.attach.canEdit
-      "
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }" v-else-if="msg.type === 'custom' &&
+  msg.attach.type === 'reCallMsg' &&
+  !msg.attach.canEdit
+  ">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <MessageBubble :msg="msg" :bg-visible="true">
         <div class="recall-text">{{ t('you') + t('recall') }}</div>
       </MessageBubble>
     </div>
-    <div
-      class="msg-common"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-      v-else-if="msg.type === 'custom' && msg.attach.type === 'beReCallMsg'"
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }" v-else-if="msg.type === 'custom' && msg.attach.type === 'beReCallMsg'">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <div :class="isSelf ? 'self-msg-recall' : 'msg-recall'">
           <text class="msg-recall2">
-            {{ !isSelf ? t('recall2') : `${t('you') + t('recall')}` }}</text
-          >
+            {{ !isSelf ? t('recall2') : `${t('you') + t('recall')}` }}</text>
         </div>
       </div>
     </div>
-    <div
-      class="msg-common"
-      v-else-if="msg.type === 'text'"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" v-else-if="msg.type === 'text'" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true">
-          <ReplyMessage
-            v-if="replyMsg.idClient"
-            :replyMsg="replyMsg"
-          ></ReplyMessage>
+          <ReplyMessage v-if="replyMsg.idClient" :replyMsg="replyMsg"></ReplyMessage>
           <MessageText :msg="msg"></MessageText>
         </MessageBubble>
       </div>
     </div>
-    <div
-      class="msg-common"
-      v-else-if="msg.type === 'image'"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" v-else-if="msg.type === 'image'" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
-        <MessageBubble
-          :msg="msg"
-          :tooltip-visible="true"
-          :bg-visible="true"
-          style="cursor: pointer"
-        >
+        <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true" style="cursor: pointer">
           <div @tap="() => { handleImageTouch(msg.attach.url) }">
-            <image
-              class="msg-image"
-              :lazy-load="true"
-              mode="aspectFill"
-              :src="msg.attach.url"
-            ></image>
+            <image class="msg-image" :lazy-load="true" mode="aspectFill" :src="msg.attach.url"></image>
           </div>
         </MessageBubble>
       </div>
     </div>
-    <div
-      class="msg-common"
-      v-else-if="msg.type === 'file'"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" v-else-if="msg.type === 'file'" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }">
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="false">
@@ -150,18 +79,10 @@
         </MessageBubble>
       </div>
     </div>
-    <div
-      class="msg-common"
-      :style="{
-        flexDirection: !isSelf ? 'row' : 'row-reverse',
-      }"
-      v-else
-    >
-      <Avatar
-        :account="msg.from"
-        :teamId="msg.scene === 'team' ? msg.to : ''"
-        :goto-user-card="true"
-      />
+    <div class="msg-common" :style="{
+      flexDirection: !isSelf ? 'row' : 'row-reverse',
+    }" v-else>
+      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true">
@@ -173,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from '../../../utils/transformVue'
+import { ref, computed } from '../../../utils/transformVue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
 import MessageText from './message-text.vue'
@@ -213,6 +134,10 @@ const props = defineProps({
     }),
     required: true,
   },
+  index: {
+    type: Number,
+    required: true,
+  },
   replyMsg: {
     type: Object,
     default: () => ({
@@ -231,7 +156,6 @@ const props = defineProps({
 })
 const appellation = ref('')
 const isSelf = ref(false)
-
 
 autorun(() => {
   isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
