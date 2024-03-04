@@ -1,8 +1,8 @@
 <script>
 import RootStore from '@xkit-yx/im-store'
 import { NimKitCore } from '@xkit-yx/core-kit/dist/uniapp-nim-core'
-import { getMsgContentTipByType } from './pages/NEUIKit/utils/msg'
-import { getUniPlatform } from './pages/NEUIKit/utils'
+import { getMsgContentTipByType } from './utils/msg'
+import { getUniPlatform } from './utils'
 // #ifdef APP-PLUS
 const nimPushPlugin = uni.requireNativePlugin('NIMUniPlugin-PluginModule')
 // #endif
