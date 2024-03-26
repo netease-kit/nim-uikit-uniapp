@@ -1,16 +1,25 @@
 <template>
   <div class="conversation-wrapper">
-    <div class="dropdown-mark" v-if="addDropdownVisible" @touchstart="hideAddDropdown"></div>
+    <div
+      class="dropdown-mark"
+      v-if="addDropdownVisible"
+      @touchstart="hideAddDropdown"
+    ></div>
     <div class="navigation-bar">
       <div class="logo-box">
-        <image src="https://yx-web-nosdn.netease.im/common/bbcd9929e31bfee02663fc0bcdabe1c5/yx-logo.png"
-          class="logo-img" />
+        <image
+          src="https://yx-web-nosdn.netease.im/common/bbcd9929e31bfee02663fc0bcdabe1c5/yx-logo.png"
+          class="logo-img"
+        />
         <div>{{ t('appText') }}</div>
       </div>
       <div :class="buttonClass">
         <!-- #ifdef MP -->
-        <image src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
-          class="button-icon" @tap="showAddDropdown" />
+        <image
+          src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
+          class="button-icon"
+          @tap="showAddDropdown"
+        />
         <!-- #endif -->
         <!-- #ifndef MP -->
         <div class="button-icon-add" @tap="showAddDropdown">
@@ -24,7 +33,10 @@
               {{ t('addFriendText') }}
             </div>
             <div class="add-menu-item" @tap="onDropdownClick('createGroup')">
-              <Icon type="icon-chuangjianqunzu" :style="{ marginRight: '5px' }" />
+              <Icon
+                type="icon-chuangjianqunzu"
+                :style="{ marginRight: '5px' }"
+              />
               {{ t('createTeamText') }}
             </div>
           </div>
@@ -34,7 +46,10 @@
     <div class="block"></div>
     <NetworkAlert />
     <!-- 页面初始化的过程中，sessionList编译到小程序和h5出现sessionList为undefined的情况，即使给了默认值为空数组，故在此处进行判断 -->
-    <Empty v-if="!sessionList || sessionList.length === 0" :text="t('conversationEmptyText')" />
+    <Empty
+      v-if="!sessionList || sessionList.length === 0"
+      :text="t('conversationEmptyText')"
+    />
     <div v-else class="conversation-list-wrapper">
       <!-- 此处的key如果用session.id，会在ios上渲染存在问题，会出现会话列表显示undefined -->
       <div v-for="(session, index) in sessionList" :key="session.renderKey">
@@ -44,8 +59,8 @@
           :session="session"
           @delete="handleSessionItemDeleteClick"
           @stickyToTop="handleSessionItemStickTopChange"
-          @click="handleSessionItemClick" 
-          @leftSlide="handleSessionItemLeftSlide" 
+          @click="handleSessionItemClick"
+          @leftSlide="handleSessionItemLeftSlide"
         />
       </div>
     </div>
@@ -55,7 +70,7 @@
 <script lang="ts" setup>
 import type { NimKitCoreTypes } from '@xkit-yx/core-kit'
 
-import { ref } from '../../../utils/transformVue'
+import { onMounted, ref } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { onHide } from '@dcloudio/uni-app'
 
@@ -68,7 +83,9 @@ import { setContactTabUnread, setTabUnread } from '../../../utils/msg'
 import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { deepClone } from '../../../utils'
+import { AT_ALL_ACCOUNT } from '../../../utils/constants'
 import type { IMMessage } from '@xkit-yx/im-store'
+import { on } from 'stream'
 const sessionList = ref<NimKitCoreTypes.ISession[]>([])
 const addDropdownVisible = ref(false)
 
@@ -109,6 +126,13 @@ const handleSessionItemClick = async (session: NimKitCoreTypes.ISession) => {
     })
   } finally {
     flag = false
+  }
+  // @ts-ignore
+  if (uni.$currentAudioContext) {
+    // @ts-ignore
+    uni.$currentAudioContext?.destroy()
+    // @ts-ignore
+    uni.$currentAudioContext = null
   }
 }
 // 删除会话
@@ -190,12 +214,12 @@ const needShowBeMentioned = (msgs: IMMessage[]) => {
         const account = uni.$UIKitStore?.userStore?.myUserInfo?.account
         if (yxAitMsg) {
           Object.keys(yxAitMsg).forEach((key) => {
-            if (key === account || key === 'ait_all') {
+            if (key === account || key === AT_ALL_ACCOUNT) {
               flag = true
             }
           })
         }
-      } catch { }
+      } catch {}
     }
   })
   return flag
@@ -203,13 +227,15 @@ const needShowBeMentioned = (msgs: IMMessage[]) => {
 
 autorun(() => {
   //@ts-ignore
-  sessionList.value = deepClone(uni.$UIKitStore?.uiStore?.sessionList)?.map((session: NimKitCoreTypes.ISession) => {
-    return {
-      ...session,
-      renderKey: session?.id?.slice(-6),
-      beMentioned: needShowBeMentioned(session.unreadMsgs || [])
+  sessionList.value = deepClone(uni.$UIKitStore?.uiStore?.sessionList)?.map(
+    (session: NimKitCoreTypes.ISession, index) => {
+      return {
+        ...session,
+        renderKey: session.id + index,
+        beMentioned: needShowBeMentioned(session.unreadMsgs || []),
+      }
     }
-  })
+  )
   setTabUnread()
 })
 

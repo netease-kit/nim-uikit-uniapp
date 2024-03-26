@@ -1,77 +1,180 @@
 <template>
-  <div :id="MSG_ID_FLAG + msg.idClient" :key="msg.time">
-    <div class="msg-time" v-if="msg.type === 'custom' && msg.attach.type === 'time'">
+  <div
+    class="msg-item-wrapper"
+    :id="MSG_ID_FLAG + msg.idClient"
+    :key="msg.time"
+  >
+    <div
+      class="msg-time"
+      v-if="msg.type === 'custom' && msg.attach.type === 'time'"
+    >
       {{ msg.attach.value }}
     </div>
-    <div class="msg-common" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }" v-else-if="msg.type === 'custom' &&
-  msg.attach.type === 'reCallMsg' &&
-  msg.attach.canEdit
-  ">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      :style="{
+        flexDirection: !isSelf ? 'row' : 'row-reverse',
+      }"
+      v-else-if="
+        msg.type === 'custom' &&
+        msg.attach.type === 'reCallMsg' &&
+        msg.attach.canEdit
+      "
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <MessageBubble :msg="msg" :bg-visible="true">
         {{ t('recall2') }}
-        <text class="msg-recall-btn" @tap="() => {
-          handleReeditMsg(msg)
-        }
-          ">
+        <text
+          class="msg-recall-btn"
+          @tap="
+            () => {
+              handleReeditMsg(msg)
+            }
+          "
+        >
           {{ t('reeditText') }}
         </text>
       </MessageBubble>
     </div>
-    <div class="msg-common" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }" v-else-if="msg.type === 'custom' &&
-  msg.attach.type === 'reCallMsg' &&
-  !msg.attach.canEdit
-  ">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+      v-else-if="
+        msg.type === 'custom' &&
+        msg.attach.type === 'reCallMsg' &&
+        !msg.attach.canEdit
+      "
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <MessageBubble :msg="msg" :bg-visible="true">
         <div class="recall-text">{{ t('you') + t('recall') }}</div>
       </MessageBubble>
     </div>
-    <div class="msg-common" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }" v-else-if="msg.type === 'custom' && msg.attach.type === 'beReCallMsg'">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+      v-else-if="msg.type === 'custom' && msg.attach.type === 'beReCallMsg'"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <div :class="isSelf ? 'self-msg-recall' : 'msg-recall'">
           <text class="msg-recall2">
-            {{ !isSelf ? t('recall2') : `${t('you') + t('recall')}` }}</text>
+            {{ !isSelf ? t('recall2') : `${t('you') + t('recall')}` }}</text
+          >
         </div>
       </div>
     </div>
-    <div class="msg-common" v-else-if="msg.type === 'text'" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'text'"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true">
-          <ReplyMessage v-if="replyMsg.idClient" :replyMsg="replyMsg"></ReplyMessage>
+          <ReplyMessage
+            v-if="replyMsg.idClient"
+            :replyMsg="replyMsg"
+          ></ReplyMessage>
           <MessageText :msg="msg"></MessageText>
         </MessageBubble>
       </div>
     </div>
-    <div class="msg-common" v-else-if="msg.type === 'image'" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'image'"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
-        <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true" style="cursor: pointer">
-          <div @tap="() => { handleImageTouch(msg.attach.url) }">
-            <image class="msg-image" :lazy-load="true" mode="aspectFill" :src="msg.attach.url"></image>
+        <MessageBubble
+          :msg="msg"
+          :tooltip-visible="true"
+          :bg-visible="true"
+          style="cursor: pointer"
+        >
+          <div
+            @tap="
+              () => {
+                handleImageTouch(msg.attach.url)
+              }
+            "
+          >
+            <image
+              class="msg-image"
+              :lazy-load="true"
+              mode="aspectFill"
+              :src="msg.attach.url"
+            ></image>
           </div>
         </MessageBubble>
       </div>
     </div>
-    <div class="msg-common" v-else-if="msg.type === 'file'" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }">
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'video'"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
+      <div class="msg-content">
+        <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
+        <MessageBubble
+          :msg="msg"
+          :tooltip-visible="true"
+          :bg-visible="true"
+          style="cursor: pointer"
+        >
+          <div class="video-msg-wrapper" @tap="() => handleVideoTouch(msg)">
+            <div class="video-play-button">
+              <div class="video-play-icon"></div>
+            </div>
+            <image
+              class="msg-image"
+              :lazy-load="true"
+              mode="aspectFill"
+              :src="videoFirstFrameDataUrl"
+            ></image>
+          </div>
+        </MessageBubble>
+      </div>
+    </div>
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'file'"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="false">
@@ -79,10 +182,41 @@
         </MessageBubble>
       </div>
     </div>
-    <div class="msg-common" :style="{
-      flexDirection: !isSelf ? 'row' : 'row-reverse',
-    }" v-else>
-      <Avatar :account="msg.from" :teamId="msg.scene === 'team' ? msg.to : ''" :goto-user-card="true" />
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'audio'"
+      :style="{
+        flexDirection: !isSelf ? 'row' : 'row-reverse',
+      }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
+      <div class="msg-content">
+        <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
+        <MessageBubble
+          :msg="msg"
+          :tooltip-visible="true"
+          :bg-visible="true"
+          style="cursor: pointer"
+        >
+          <MessageAudio :msg="msg" />
+        </MessageBubble>
+      </div>
+    </div>
+    <MessageNotification v-else-if="msg.type === 'notification'" :msg="msg" />
+    <div
+      class="msg-common"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+      v-else
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
       <div class="msg-content">
         <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
         <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true">
@@ -102,9 +236,12 @@ import { events, MSG_ID_FLAG } from '../../../utils/constants'
 import MessageFile from './message-file.vue'
 import ReplyMessage from './message-reply.vue'
 import { autorun } from 'mobx'
-import { deepClone } from '../../../utils'
+import { deepClone, stopAllAudio } from '../../../utils'
 import { t } from '../../../utils/i18n'
 import type { IMMessage } from '@xkit-yx/im-store'
+import MessageAudio from './message-audio.vue'
+import { customNavigateTo } from '../../../utils/customNavigate'
+import MessageNotification from './message-notification.vue'
 const props = defineProps({
   scene: {
     type: String, // Assuming TMsgScene is a custom object type
@@ -157,16 +294,31 @@ const props = defineProps({
 const appellation = ref('')
 const isSelf = ref(false)
 
-autorun(() => {
-  isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
+// 获取视频首帧
+const videoFirstFrameDataUrl = computed(() => {
+  const url = props.msg?.attach?.url
+  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
 })
 
-
+autorun(() => {
+  // @ts-ignore
+  isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
+})
 
 const handleImageTouch = (url: string) => {
   if (url) {
     uni.previewImage({
       urls: [url],
+    })
+  }
+}
+
+const handleVideoTouch = (msg: IMMessage) => {
+  stopAllAudio()
+  const url = msg?.attach?.url
+  if (url) {
+    customNavigateTo({
+      url: `/pages/Chat/video-play?videoUrl=${encodeURIComponent(url)}`,
     })
   }
 }
@@ -178,6 +330,7 @@ const handleReeditMsg = (msg: IMMessage) => {
 autorun(() => {
   // 昵称展示顺序 群昵称 > 备注 > 个人昵称 > 帐号
   appellation.value = deepClone(
+    // @ts-ignore
     uni.$UIKitStore.uiStore.getAppellation({
       account: props.msg.from,
       teamId: props.scene === 'team' ? props.to : '',
@@ -187,6 +340,10 @@ autorun(() => {
 </script>
 
 <style scoped lang="scss">
+.msg-item-wrapper {
+  padding: 0 15px 15px;
+}
+
 .msg-common {
   margin-top: 8px;
   display: flex;
@@ -253,5 +410,34 @@ autorun(() => {
 
 .recall-text {
   color: #666666;
+}
+
+.video-play-button {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 9;
+}
+
+.video-play-icon {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 18px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+}
+
+.video-msg-wrapper {
+  box-sizing: border-box;
+  max-width: 360rpx;
 }
 </style>

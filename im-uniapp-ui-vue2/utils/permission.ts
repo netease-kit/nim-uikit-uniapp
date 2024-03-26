@@ -7,14 +7,16 @@ export const handleNoPermission = (res: any): void => {
   ) {
     const appAuthorizeSetting = uni.getAppAuthorizeSetting()
     //点击取消时不出现弹窗
+    const isCameraDenied = appAuthorizeSetting.cameraAuthorized === 'denied'
+    const isUserCancelled =
+      res.errMsg === 'chooseImage:fail User cancelled' ||
+      res.errMsg === 'chooseImage:fail cancel' ||
+      res.errMsg === 'chooseVideo:fail cancel' ||
+      res.errMsg === 'chooseVideo:fail User cancelled'
     if (
-      (res.code == 11 &&
-        appAuthorizeSetting.cameraAuthorized === 'denied' &&
-        res.errMsg !== 'chooseImage:fail User cancelled') ||
-      (res.code == 12 &&
-        appAuthorizeSetting.cameraAuthorized === 'denied' &&
-        res.errMsg !== 'chooseImage:fail User cancelled') ||
-      (res.code == 2 && res.errMsg !== 'chooseImage:fail cancel')
+      (res.code === 11 && isCameraDenied && !isUserCancelled) ||
+      (res.code === 12 && isCameraDenied && !isUserCancelled) ||
+      (res.code === 2 && !isUserCancelled)
     ) {
       uni.showToast({
         icon: 'none',

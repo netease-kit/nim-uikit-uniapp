@@ -1,85 +1,240 @@
 <template>
   <div>
     <NavBar :title="t('teamMemberText')" />
-    <div class="group-item" v-for=" item in groupMembers" :key="item.account">
-      <Avatar 
-        :goto-user-card="true" 
-        :account="item.account" 
-        size="48" />
-      <div class="user-name">{{ item.name }}</div>
-      <div v-if="item.type === 'owner'" class="owner">{{ t('teamOwner') }}</div>
-      <div v-else-if="item.type === 'manager'" class="manager">{{ t('teamManager') }}</div>
+    <div v-if="isShowAddBtn" class="add-item" @tap="goAddMember">
+      <span class="add-item-label">{{ t('addMemberText') }}</span>
+      <Icon color="#999" type="icon-jiantou" />
     </div>
+    <div v-if="groupMembers.length">
+      <div class="group-item" v-for="item in groupMembers" :key="item.account">
+        <div class="group-member">
+          <Avatar
+            :goto-user-card="true"
+            :account="item.account"
+            :team-id="item.teamId"
+            size="32"
+          />
+          <Appellation
+            class="user-name"
+            :account="item.account"
+            :team-id="item.teamId"
+            :font-size="14"
+          />
+          <div v-if="item.type === 'owner'" class="user-tag">
+            {{ t('teamOwner') }}
+          </div>
+          <div v-else-if="item.type === 'manager'" class="user-tag">
+            {{ t('manager') }}
+          </div>
+        </div>
+        <div
+          v-if="isShowRemoveBtn(item)"
+          class="btn-remove"
+          @tap="
+            () => {
+              removeTeamMember(item.account)
+            }
+          "
+        >
+          {{ t('removeText') }}
+        </div>
+      </div>
+    </div>
+    <Empty v-else :text="t('noTeamMember')" />
   </div>
 </template>
 
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
-import { ref } from '../../../utils/transformVue'
-import NavBar from '../../../components/NavBar.vue';
-// @ts-ignore
-import { onLoad } from '@dcloudio/uni-app';
-import { autorun } from 'mobx';
-import { deepClone } from '../../../utils';
-import { t } from '../../../utils/i18n';
-const groupMembers = ref()
+import { ref, computed } from '../../../utils/transformVue'
+import NavBar from '../../../components/NavBar.vue'
+import { onLoad } from '@dcloudio/uni-app'
+import { autorun } from 'mobx'
+import { deepClone } from '../../../utils'
+import { t } from '../../../utils/i18n'
+import type { TeamMember, Team } from '@xkit-yx/im-store'
+import Appellation from '../../../components/Appellation.vue'
+import Icon from '../../../components/Icon.vue'
+import Empty from '../../../components/Empty.vue'
+import { customNavigateTo } from '../../../utils/customNavigate'
+
+const groupMembers = ref<TeamMember[]>([])
+const team = ref<Team>()
+let teamId = ''
+
+const goAddMember = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-add/index?teamId=${teamId}`,
+  })
+}
+
+const removeTeamMember = (account: string) => {
+  uni.showModal({
+    title: t('confirmRemoveText'),
+    content: t('removeMemberExplain'),
+    confirmText: t('removeText'),
+    success: (res) => {
+      if (res.cancel) return
+      // @ts-ignore
+      uni.$UIKitStore.teamMemberStore
+        .removeTeamMemberActive({
+          teamId,
+          accounts: [account],
+        })
+        .then(() => {
+          uni.showToast({
+            title: t('removeSuccessText'),
+            icon: 'success',
+          })
+        })
+        .catch((error: any) => {
+          switch (error?.code) {
+            // 操作的人不在群中
+            case 804:
+              uni.showToast({
+                title: t('userNotInTeam'),
+                icon: 'error',
+              })
+              break
+            // 没权限
+            case 802:
+              uni.showToast({
+                title: t('noPermission'),
+                icon: 'error',
+              })
+              break
+            default:
+              uni.showToast({
+                title: t('removeFailText'),
+                icon: 'error',
+              })
+              break
+          }
+        })
+    },
+  })
+}
+
+const isGroupOwner = computed(() => {
+  // @ts-ignore
+  const myUser = uni.$UIKitStore.userStore.myUserInfo
+  return (team.value ? team.value.owner : '') === (myUser ? myUser.account : '')
+})
+
+const isGroupManager = computed(() => {
+  // @ts-ignore
+  const myUser = uni.$UIKitStore.userStore.myUserInfo
+  return groupMembers.value
+    .filter((item) => item.type === 'manager')
+    .some((member) => member.account === (myUser ? myUser.account : ''))
+})
+
+const isShowAddBtn = computed(() => {
+  if (team.value?.inviteMode === 'all') {
+    return true
+  }
+  return isGroupOwner.value || isGroupManager.value
+})
+
+const isShowRemoveBtn = (target: TeamMember) => {
+  // @ts-ignore
+  if (target.account === uni.$UIKitStore.userStore.myUserInfo.account) {
+    return false
+  }
+  if (isGroupOwner.value) {
+    return true
+  }
+  if (isGroupManager.value) {
+    return target.type !== 'owner' && target.type !== 'manager'
+  }
+  return false
+}
 
 onLoad((props) => {
-  const teamId = props ? props.teamId : ''
+  teamId = props ? props.teamId : ''
 
   autorun(() => {
-    // 对群成员进行排序，群主在前，管理员在后，其他成员按加入时间排序
-    const sortGroupMembers = (members, teamId) => {
-      const owner = members.filter((item) => item.type === 'owner')
-      const manager = members.filter((item) => item.type === 'manager').sort((a, b) => a.joinTime - b.joinTime)
-      const other = members.filter(
-        (item) => !['owner', 'manager'].includes(item.type)
-      ).sort((a, b) => a.joinTime - b.joinTime)
-      const result = [...owner, ...manager, ...other].map(item => {
-        // @ts-ignore
-        return { ...item, name: uni.$UIKitStore.uiStore.getAppellation({ account: item.account, teamId }) }
-      })
-      return result
-    }
-     // @ts-ignore
-    groupMembers.value = deepClone(sortGroupMembers(uni.$UIKitStore.teamMemberStore.getTeamMember(teamId), teamId))
-  })
+    // @ts-ignore
+    team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
 
-  if(teamId) {
-     // @ts-ignore
-    uni.$UIKitStore.teamMemberStore.getTeamMemberActive(teamId)
-  }
+    // 对群成员进行排序，群主在前，管理员在后，其他成员按加入时间排序
+    const sortGroupMembers = (members) => {
+      const owner = members.filter((item) => item.type === 'owner')
+      const manager = members
+        .filter((item) => item.type === 'manager')
+        .sort((a, b) => a.joinTime - b.joinTime)
+      const other = members
+        .filter((item) => !['owner', 'manager'].includes(item.type))
+        .sort((a, b) => a.joinTime - b.joinTime)
+      return [...owner, ...manager, ...other]
+    }
+
+    // @ts-ignore
+    groupMembers.value = deepClone(
+      sortGroupMembers(uni.$UIKitStore.teamMemberStore.getTeamMember(teamId))
+    )
+  })
 })
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/common.scss";
+@import '../../styles/common.scss';
+
+.add-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-top: 1px solid #f5f8fc;
+
+  .add-item-label {
+    color: #333;
+    font-size: 16px;
+  }
+}
 
 .group-item {
   display: flex;
   align-items: center;
-  margin: 20px;
+  justify-content: space-between;
+  margin: 0 20px;
+  padding: 8px 0;
+  border-top: 1px solid #f5f8fc;
+
+  .user-tag {
+    padding: 4px 8px;
+    background: #f7f7f7;
+
+    border: 1px solid #d6d8db;
+    border-radius: 50px;
+    color: #656a72;
+    font-size: 12px;
+    margin-left: 8px;
+    white-space: nowrap;
+    word-break: keep-all;
+  }
+
+  .group-member {
+    display: flex;
+    align-items: center;
+    width: 70%;
+  }
 
   .user-name {
-    margin-left: 20px;
-    width: 70%;
+    margin-left: 12px;
+    max-width: 70%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .owner,
-  .manager {
-    color: rgb(6, 155, 235);
-    background-color: rgb(210, 229, 246);
-    height: 20px;
-    line-height: 20px;
+  .btn-remove {
+    padding: 4px 8px;
+    color: #e6605c;
     border-radius: 4px;
+    border: 1px solid #e6605c;
+    cursor: pointer;
     font-size: 14px;
-    text-align: center;
-    padding: 2px 4px;
-    position: absolute;
-    right: 10px;
   }
 }
 </style>

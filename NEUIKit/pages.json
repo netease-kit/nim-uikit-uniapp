@@ -1,6 +1,12 @@
 {
   "pages": [
     {
+      "path": "pages/index/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/Conversation/index",
       "style": {
         "navigationStyle": "custom"
@@ -10,7 +16,7 @@
       "path": "pages/Login/index",
       "style": {
         "navigationStyle": "custom"
-      } 
+      }
     },
     {
       "path": "pages/Chat/message/p2p-set",
@@ -62,11 +68,17 @@
         "navigationStyle": "custom",
         "enablePullDownRefresh": false,
         "app-plus": {
-          "softinputNavBar": "none"
+          "softinputNavBar": "none",
+          "bounce": "none"
         }
       }
     },
-
+    {
+      "path": "pages/Chat/video-play",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
     {
       "path": "pages/Group/group-member/index",
       "style": {
@@ -117,6 +129,36 @@
     },
     {
       "path": "pages/user-card/detail-item/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/nick-in-team",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/group-manage",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/transform-team",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/group-manager-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/add-group-manager",
       "style": {
         "navigationStyle": "custom"
       }

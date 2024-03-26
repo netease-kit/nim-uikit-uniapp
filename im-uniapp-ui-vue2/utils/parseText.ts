@@ -86,7 +86,7 @@ export function parseText(text: string, ext?: string): Match[] {
       .split(' ')
       .filter((item) => item.trim())
       .map((item) => {
-        const index = text.indexOf(item)
+        const index = text?.indexOf(item)
         matches.push({
           type: 'text',
           value: item,

@@ -1,5 +1,5 @@
 // en.js
-export default { 
+export default {
   appText: 'NIM',
   messageText: 'Message',
   contactText: 'Contacts',
@@ -124,7 +124,9 @@ export default {
   updateTeamSuccessText: 'Update Success',
   updateTeamFailedText: 'Update Failed',
   teamTitleConfirmText: 'Group name cannot be empty',
-  sendImageFailedText: 'Failed to send file',
+  sendImageFailedText: 'Failed to send Image',
+  sendVideoFailedText: 'Failed to send Video',
+  sendAudioFailedText: 'Failed to send Audio',
   weekText: 'Weeks ago',
   dayText: 'Days ago',
   hourText: 'Hours ago',
@@ -184,6 +186,10 @@ export default {
   teamMutePlaceholder: 'The current group owner has set the group to mute',
   viewMoreText: 'View More',
   resendMsgFailText: 'Resend Failed',
+  audioBtnText: 'Press and hold to speak',
+  audioRemindText: 'Release to send',
+  audioErrorText: 'Recording failed',
+  videoPlayText: 'Video Play',
   // emoji 不能随便填，要用固定 key
   Laugh: '[Laugh]',
   Happy: '[Happy]',

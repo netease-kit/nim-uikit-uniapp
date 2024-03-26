@@ -1,15 +1,44 @@
 <template>
   <div v-if="friendList.length > 0" class="friend-select-wrapper">
     <div class="member-wrapper">
-      <checkbox-group @change="checkboxChange">
+      <radio-group v-if="radio" @change="checkboxChange">
         <div class="member-item" v-for="item in friendList" :key="item.account">
-          <checkbox class="checkbox" :value="item.account" :checked="item.checked" :disabled="item.disable" />
-          <Avatar size="48" :account="item.account" />
+          <radio
+            class="checkbox"
+            :value="item.account"
+            :checked="item.checked"
+            :disabled="
+              item.disabled ||
+              (selectAccount.length >= max &&
+                !selectAccount.includes(item.account))
+            "
+          />
+          <Avatar class="user-avatar" size="36" :account="item.account" />
+          <div class="user-name">{{ item.nick }}</div>
+        </div>
+      </radio-group>
+      <checkbox-group v-else @change="checkboxChange">
+        <div class="member-item" v-for="item in friendList" :key="item.account">
+          <checkbox
+            class="checkbox"
+            :value="item.account"
+            :checked="item.checked"
+            :disabled="
+              item.disabled ||
+              (selectAccount.length >= max &&
+                !selectAccount.includes(item.account))
+            "
+          />
+          <Avatar class="user-avatar" size="36" :account="item.account" />
           <div class="user-name">{{ item.nick }}</div>
         </div>
       </checkbox-group>
     </div>
-    <div v-if="!!showBtn" @tap="onBtnClick" :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'">
+    <div
+      v-if="!!showBtn"
+      @tap="onBtnClick"
+      :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'"
+    >
       {{ btnText || t('okText') }}
     </div>
   </div>
@@ -17,36 +46,60 @@
 </template>
 
 <script lang="ts" setup>
-import type { IFriendInfo } from '@xkit-yx/core-kit/dist/types/nim-kit-core/types';
-import Avatar from './Avatar.vue';
-import Empty from './Empty.vue';
-import { getUniPlatform } from '../utils';
-import { t } from '../utils/i18n';
-import { events } from '../utils/constants';
-export type FriendSelectItem = IFriendInfo & { disable?: boolean; checked?: boolean }
+import type { IFriendInfo } from '@xkit-yx/core-kit/dist/types/nim-kit-core/types'
+import Avatar from './Avatar.vue'
+import Empty from './Empty.vue'
+import { getUniPlatform } from '../utils'
+import { t } from '../utils/i18n'
+import { events } from '../utils/constants'
+import { ref, onMounted } from '../utils/transformVue'
+
+export type FriendSelectItem = IFriendInfo & {
+  disabled?: boolean
+  checked?: boolean
+}
 
 const props = defineProps({
   friendList: {
     type: Array,
     required: true,
-    default: () => []
+    default: () => [],
   },
   showBtn: {
     type: Boolean,
-    default: true
+    default: true,
   },
   btnText: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
+  radio: {
+    type: Boolean,
+    default: false,
+  },
+  max: {
+    type: Number,
+    default: Number.MAX_SAFE_INTEGER,
+  },
+})
+
+const selectAccount = ref<string[]>([])
+
+onMounted(() => {
+  selectAccount.value = props.friendList
+    .filter((item: FriendSelectItem) => item.checked)
+    .map((item: FriendSelectItem) => item.account)
 })
 
 const $emit = defineEmits<{
-  (event: 'checkboxChange', selectList: string[]): void,
+  (event: 'checkboxChange', selectList: string | string[]): void
 }>()
+
 const checkboxChange = (event) => {
-  const _selectList = event.detail.value
-  $emit('checkboxChange', _selectList)
+  const value = event.detail.value
+  selectAccount.value = value
+
+  $emit('checkboxChange', value)
 }
 
 const onBtnClick = () => {
@@ -55,7 +108,7 @@ const onBtnClick = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../pages/styles/common.scss";
+@import '../pages/styles/common.scss';
 
 .friend-select-wrapper {
   display: flex;
@@ -64,7 +117,7 @@ const onBtnClick = () => {
 }
 
 .member-wrapper {
-  padding: 10px 8px 0;
+  padding-top: 10px;
   display: flex;
   max-height: 80vh;
   overflow-y: auto;
@@ -73,15 +126,20 @@ const onBtnClick = () => {
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 10px 0;
+    padding: 8px 20px;
+    width: 100vw;
+
+    .user-avatar {
+      margin: 0 14px;
+    }
 
     .user-name {
-      margin: 10px;
-      width: 70%;
+      max-width: 70%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      color: rgb(111, 110, 110);
+      color: #333;
+      font-size: 16px;
     }
 
     .checkbox {

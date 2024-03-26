@@ -1,5 +1,5 @@
-<template>
-  <div class="msg-wrapper">
+<!-- <template>
+  <div :class="isWeb ? 'msg-wrapper-h5' :  'msg-wrapper'">
     <MessageList :scene="scene" :to="to" :msgs="msgs" :loading-more="loadingMore" :no-more="noMore"
       :reply-msgs-map="replyMsgsMap" />
     <MessageInput :reply-msgs-map="replyMsgsMap" :scene="scene" :to="to" />
@@ -20,13 +20,16 @@ import { t } from '../../../utils/i18n'
 import { storeUtils } from '@xkit-yx/im-store'
 import { customSwitchTab } from '../../../utils/customNavigate'
 import { parseSessionId } from '../../../utils/msg'
-import { deepClone } from '../../../utils'
+import { deepClone, getUniPlatform } from '../../../utils'
+const isWeb = getUniPlatform() === 'web'
 
 let isMounted = false
 
 const loadingMore = ref(false)
 const noMore = ref(false)
+// @ts-ignore
 const sessionId = uni.$UIKitStore.uiStore.selectedSession
+// @ts-ignore
 const myAccount = uni.$UIKitStore.userStore.myUserInfo.account
 
 const { scene, to }: { scene: TMsgScene, to: string } = parseSessionId(sessionId);
@@ -69,8 +72,11 @@ const handleMsg = (msg: IMMessage) => {
 }
 
 onMounted(function () {
+  // @ts-ignore
   uni.$UIKitNIM.on('msg', handleMsg)
+  // @ts-ignore
   uni.$UIKitNIM.on('dismissTeam', handleDismissTeam)
+  // @ts-ignore
   uni.$UIKitNIM.on('removeTeamMembers', handleRemoveTeamMembers)
 
   uni.$on(events.GET_HISTORY_MSG, (msg: IMMessage) => {
@@ -95,8 +101,11 @@ onMounted(function () {
 })
 
 onUnmounted(() => {
+  // @ts-ignore
   uni.$UIKitNIM.off('dismissTeam', handleDismissTeam)
+  // @ts-ignore
   uni.$UIKitNIM.off('removeTeamMembers', handleRemoveTeamMembers)
+  // @ts-ignore
   uni.$UIKitNIM.off('msg', handleMsg)
 
   uni.$off(events.GET_HISTORY_MSG)
@@ -114,6 +123,7 @@ const getHistroy = async (endTime: number, lastMsgId?: string) => {
     }
     loadingMore.value = true
     if (sessionId) {
+      // @ts-ignore
       const historyMsgs = await uni.$UIKitStore.msgStore.getHistoryMsgActive({
         sessionId,
         endTime,
@@ -142,6 +152,7 @@ const backToConversation = () => {
 }
 
 autorun(() => {
+  // @ts-ignore
   if (uni.$UIKitStore.connectStore.connectState === 'connected') {
     getHistroy(Date.now()).then((msgs) => {
       if (!isMounted) {
@@ -154,6 +165,7 @@ autorun(() => {
 
 autorun(() => {
   msgs.value = deepClone(storeUtils.getFilterMsgs(
+    // @ts-ignore
     uni.$UIKitStore.msgStore.getMsg(sessionId),
     (item) => item.type !== 'notification'
   ))
@@ -198,9 +210,10 @@ autorun(() => {
 
     if (reqMsgs.length > 0) {
       // 从服务器拉取被回复消息, 但是有频率控制
+      // @ts-ignore
       uni.$UIKitStore.msgStore.getMsgByIdServerActive({ reqMsgs }).then((res) => {
         if (res?.length > 0) {
-          res.forEach((item) => {
+          res.forEach((item: IMMessage) => {
             if (item.idServer) {
               _replyMsgsMap[idClients[item.idServer]] = item
             }
@@ -227,9 +240,25 @@ autorun(() => {
 @import '../../styles/common.scss';
 
 .msg-wrapper {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  position: relative;
+  flex: 1;
 }
 
+.msg-wrapper-h5{
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
 
-</style>
+</style> -->

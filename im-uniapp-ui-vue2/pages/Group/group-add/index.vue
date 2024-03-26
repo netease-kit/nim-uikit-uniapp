@@ -1,11 +1,12 @@
 <template>
   <div>
     <NavBar :title="t('friendSelectText')" />
-    <FriendSelect 
-      :friendList="friendList" 
-      @checkboxChange="checkboxChange" 
-      :showBtn="true" 
-      :onBtnClick="addTeamMember">
+    <FriendSelect
+      :friendList="friendList"
+      @checkboxChange="checkboxChange"
+      :showBtn="true"
+      :onBtnClick="addTeamMember"
+    >
     </FriendSelect>
   </div>
 </template>
@@ -32,25 +33,27 @@ onLoad((props) => {
   const _friendList = uni.$UIKitStore.uiStore.friendsWithoutBlacklist
   teamId = props ? props.teamId : ''
   // @ts-ignore
-  uni.$UIKitStore.teamMemberStore.getTeamMemberActive(teamId).then(res => {
-    const _teamMembers = res.map(item => {
-      return item.account
-    })
-    friendList.value = deepClone(
-      _friendList.map((item) => {
-        item = {
-          ...item,
-          // @ts-ignore
-          nick: uni.$UIKitStore.uiStore.getAppellation({ account: item.account }),
-        }
-        if (_teamMembers.includes(item.account)) {
-          return { ...item, disable: true }
-        } else {
-          return item
-        }
-      })
-    )
+  const res = uni.$UIKitStore.teamMemberStore.getTeamMember(teamId)
+  const _teamMembers = res.map((item) => {
+    return item.account
   })
+  friendList.value = deepClone(
+    _friendList.map((item) => {
+      item = {
+        ...item,
+        // @ts-ignore
+        nick: uni.$UIKitStore.uiStore.getAppellation({
+          account: item.account,
+          teamId,
+        }),
+      }
+      if (_teamMembers.includes(item.account)) {
+        return { ...item, disabled: true }
+      } else {
+        return item
+      }
+    })
+  )
   uni.$on(events.FRIEND_SELECT, () => {
     addTeamMember()
   })
@@ -77,24 +80,29 @@ const addTeamMember = debounce(() => {
     return
   }
   // @ts-ignore
-  uni.$UIKitStore?.teamMemberStore.addTeamMemberActive({ teamId, accounts: newTeamMember }).then(async res => {
-    uni.navigateBack()
-  }).catch((err) => {
-    switch (err ? err.code : '') {
-      case 802:
-        uni.showToast({
-          title: t('noPermission'),
-          icon: 'error'
-        })
-        break;
-      default:
-        uni.showToast({
-          title: t('addTeamMemberFailText'),
-          icon: "none"
-        })
-        break
-    }
-  })
+  uni.$UIKitStore?.teamMemberStore
+    .addTeamMemberActive({ teamId, accounts: newTeamMember })
+    .then(async (res) => {
+      uni.navigateBack({
+        delta: 1,
+      })
+    })
+    .catch((err) => {
+      switch (err ? err.code : '') {
+        case 802:
+          uni.showToast({
+            title: t('noPermission'),
+            icon: 'error',
+          })
+          break
+        default:
+          uni.showToast({
+            title: t('addTeamMemberFailText'),
+            icon: 'none',
+          })
+          break
+      }
+    })
 }, 800)
 
 onUnload(() => {

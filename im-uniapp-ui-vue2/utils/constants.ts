@@ -28,8 +28,6 @@ export const events = {
   ON_SCROLL_BOTTOM: 'onScrollBottom',
   // @群成员
   AIT_TEAM_MEMBER: 'aitTeamMember',
-  // 关闭表情框
-  CLOSE_EMOJI: 'closeEmoji',
   // 表情框弹起与收起变化
   EMOJI_AREA_CHANGE: 'emojiAreaChange',
   // 获取历史消息
@@ -52,6 +50,8 @@ export const events = {
   FRIEND_SELECT: 'friendSelect',
   // 处理滚动穿透
   HANDLE_MOVE_THROUGH: 'handleMoveThrough',
+  // 关闭表情、语音面板
+  CLOSE_PANEL: 'closePanel',
 }
 
 export const HISTORY_LIMIT = 15
@@ -59,6 +59,8 @@ export const HISTORY_LIMIT = 15
 export const MSG_ID_FLAG = 'message-item-'
 
 export const AT_ALL_ACCOUNT = 'ait_all'
+
+export const ALLOW_AT = 'yxAllowAt'
 
 export const REPLY_MSG_TYPE_MAP = {
   image: t('imgMsgText'),
