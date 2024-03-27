@@ -1,12 +1,19 @@
 <template>
   <div>
     <div class="card-wrapper" @tap="navigatorToMydetail">
-      <UserCard :account="myUserInfo.account" :nick="myUserInfo.nick"></UserCard>
+      <UserCard
+        :account="myUserInfo.account"
+        :nick="myUserInfo.nick"
+      ></UserCard>
       <Icon iconClassName="arrow" type="icon-jiantou"></Icon>
     </div>
     <div class="box-shadow"></div>
     <div class="userInfo-item-wrapper">
-      <uni-link href="https://yunxin.163.com/" :showUnderLine="false" color="#000000">
+      <uni-link
+        href="https://yunxin.163.com/"
+        :showUnderLine="false"
+        color="#000000"
+      >
         <div class="userInfo-item">
           <div class="item-left">
             <Icon iconClassName="guanyu" type="icon-guanyu"></Icon>
@@ -28,17 +35,17 @@
 </template>
 
 <script lang="ts" setup>
-import { onLoad, onShow } from '@dcloudio/uni-app';
-import UserCard from '../../../components/UserCard.vue';
-import { ref } from '../../../utils/transformVue';
-import Icon from '../../../components/Icon.vue';
+import { onLoad, onShow } from '@dcloudio/uni-app'
+import UserCard from '../../../components/UserCard.vue'
+import { ref } from '../../../utils/transformVue'
+import Icon from '../../../components/Icon.vue'
 // @ts-ignore
-import UniLink from '../../../uni_modules/uni-link/components/uni-link/uni-link.vue';
-import { autorun } from 'mobx';
-import { setContactTabUnread, setTabUnread } from '../../../utils/msg';
-import { customNavigateTo } from '../../../utils/customNavigate';
-import { deepClone } from '../../../utils';
-import { t } from '../../../utils/i18n';
+import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
+import { autorun } from 'mobx'
+import { setContactTabUnread, setTabUnread } from '../../../utils/msg'
+import { customNavigateTo } from '../../../utils/customNavigate'
+import { deepClone } from '../../../utils'
+import { t } from '../../../utils/i18n'
 
 const myUserInfo = ref()
 
@@ -59,19 +66,19 @@ onShow(() => {
 
 const gotoSetting = () => {
   customNavigateTo({
-    url: '/pages/user-card/my/setting'
+    url: '/pages/user-card/my/setting',
   })
 }
 
 const navigatorToMydetail = () => {
   customNavigateTo({
-    url: `/pages/user-card/my-detail/index?account=${myUserInfo.value.account}`
+    url: `/pages/user-card/my-detail/index?account=${myUserInfo.value.account}`,
   })
 }
 </script>
 
 <style lang="scss">
-@import "../../styles/common.scss";
+@import '../../styles/common.scss';
 
 page {
   padding-top: var(--status-bar-height);
@@ -117,11 +124,11 @@ page {
     font-size: 14px;
     display: flex;
     align-items: center;
-    color: #A6ADB6;
+    color: #a6adb6;
   }
 
   .copy-icon {
-    color: #A6ADB6;
+    color: #a6adb6;
     font-family: iconfont;
     background-size: 100% 100%;
     width: 60rpx;

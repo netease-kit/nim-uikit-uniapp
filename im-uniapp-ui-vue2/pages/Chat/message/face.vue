@@ -1,23 +1,41 @@
 <template>
   <div class="msg-face-wrapper">
     <div class="msg-face">
-      <div class="msg-face-row" v-for="emojiRow, rowIndex in emojiMatrix">
+      <div class="msg-face-row" v-for="(emojiRow, rowIndex) in emojiMatrix">
         <div
-          @tap.stop="() => { handleEmojiClick({ key, type: emojiMap[key] }) }"
+          @tap.stop="
+            () => {
+              handleEmojiClick({ key, type: emojiMap[key] })
+            }
+          "
           v-for="key in emojiRow"
           :key="key"
-          class="msg-face-item" >
+          class="msg-face-item"
+        >
           <Icon :size="27" :type="emojiMap[key]"></Icon>
         </div>
         <!-- 下面放三个看不到的 Icon 占个位 -->
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
-          type="icon-tuigejian"></Icon>
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
-          type="icon-tuigejian"></Icon>
-        <Icon v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)" class="msg-face-delete" :size="27"
-          type="icon-tuigejian"></Icon>
+        <Icon
+          v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)"
+          class="msg-face-delete"
+          :size="27"
+          type="icon-tuigejian"
+        ></Icon>
+        <Icon
+          v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)"
+          class="msg-face-delete"
+          :size="27"
+          type="icon-tuigejian"
+        ></Icon>
+        <Icon
+          v-if="rowIndex + 1 === Math.ceil(emojiArr.length / emojiColNum)"
+          class="msg-face-delete"
+          :size="27"
+          type="icon-tuigejian"
+        ></Icon>
       </div>
     </div>
+    <div class="emoji-block"></div>
     <div class="msg-face-control">
       <div @tap="handleEmojiDelete" class="msg-delete-btn">
         <Icon type="icon-tuigejian" :size="25" :color="'#333'" />
@@ -30,31 +48,32 @@
 <script lang="ts" setup>
 import { emojiMap } from '../../../utils/emoji'
 import { culculateMatrix } from '../../../utils/matrix'
-import Icon from '../../../components/Icon.vue';
-import { t } from '../../../utils/i18n';
-import { events } from '../../../utils/constants';
+import Icon from '../../../components/Icon.vue'
+import { t } from '../../../utils/i18n'
 // 七个一行
 const emojiArr = Object.keys(emojiMap)
 const emojiColNum = 7
 const emojiMatrix = culculateMatrix(emojiArr, emojiColNum)
 
-const emit = defineEmits(["emojiClick", "emojiSend", "emojiDelete"])
+const emit = defineEmits(['emojiClick', 'emojiSend', 'emojiDelete'])
 
 const handleEmojiClick = (emoji: any) => {
-  emit("emojiClick", emoji)
+  emit('emojiClick', emoji)
 }
 
 const handleEmojiDelete = () => {
-  emit("emojiDelete")
+  emit('emojiDelete')
 }
 
 const handleEmojiSend = () => {
-  emit("emojiSend")
+  emit('emojiSend')
 }
-
 </script>
 
 <style scoped lang="scss">
+.msg-face-wrapper {
+  box-sizing: border-box;
+}
 .msg-face-control {
   position: fixed;
   bottom: 8px;
@@ -62,9 +81,16 @@ const handleEmojiSend = () => {
   z-index: 8;
 }
 
+.emoji-block {
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+}
+
 .msg-face {
   display: flex;
   flex-direction: column;
+  padding-bottom: 10px;
   // flex-wrap: wrap;
 
   &-row {
@@ -98,7 +124,7 @@ const handleEmojiSend = () => {
 .msg-send-btn {
   padding: 6px 16px;
   color: #fff;
-  background-color: #337EFF;
+  background-color: #337eff;
 }
 
 .msg-delete-btn {

@@ -1,6 +1,8 @@
 <template>
   <!-- 处理滚动穿透  此为官方推荐做法 https://uniapp.dcloud.net.cn/component/uniui/uni-popup.html#%E4%BB%8B%E7%BB%8D -->
-  <page-meta :page-style="'overflow:'+( moveThrough ? 'hidden' : 'visible')"></page-meta>
+  <page-meta
+    :page-style="'overflow:' + (moveThrough ? 'hidden' : 'visible')"
+  ></page-meta>
   <div>
     <NavBar
       :title="forwardScene === 'team' ? t('teamChooseText') : t('chooseText')"
@@ -17,40 +19,40 @@
         <Empty v-if="teamList.length === 0" :text="t('TeamEmptyText')" />
         <div v-else>
           <div
-          class="group-item"
-          v-for="team in teamList"
-          :key="team.teamId"
-          @click="() => handleItemClick(team.teamId)"
-        >
-          <Avatar :account="team.teamId" :avatar="team.avatar" />
-          <span class="group-name">{{ team.name }}</span>
-        </div>
+            class="group-item"
+            v-for="team in teamList"
+            :key="team.teamId"
+            @click="() => handleItemClick(team.teamId)"
+          >
+            <Avatar :account="team.teamId" :avatar="team.avatar" />
+            <span class="group-name">{{ team.name }}</span>
+          </div>
         </div>
       </div>
     </div>
     <div v-else>
       <div v-if="friendGroupList.length > 0" class="friend-list-container">
         <div class="friend-group-list">
+          <div
+            class="friend-group-item"
+            v-for="friendGroup in friendGroupList"
+            :key="friendGroup.key"
+          >
+            <div class="friend-group-title">
+              {{ friendGroup.key }}
+            </div>
             <div
-              class="friend-group-item"
-              v-for="friendGroup in friendGroupList"
-              :key="friendGroup.key"
+              class="friend-item"
+              v-for="friend in friendGroup.data"
+              :key="friend.account"
+              @click="() => handleItemClick(friend.account)"
             >
-              <div class="friend-group-title">
-                {{ friendGroup.key }}
-              </div>
-              <div
-                class="friend-item"
-                v-for="friend in friendGroup.data"
-                :key="friend.account"
-                @click="() => handleItemClick(friend.account)"
-              >
-                <Avatar :account="friend.account" size="36" />
-                <div class="friend-name">
-                  <Appellation :account="friend.account"></Appellation>
-                </div>
+              <Avatar :account="friend.account" size="36" />
+              <div class="friend-name">
+                <Appellation :account="friend.account"></Appellation>
               </div>
             </div>
+          </div>
         </div>
       </div>
       <Empty v-else :text="t('noFriendText')" />
@@ -69,25 +71,28 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from '../../utils/transformVue';
+import { ref, computed } from '../../utils/transformVue'
 import NavBar from '../../components/NavBar.vue'
 import { t } from '../../utils/i18n'
 import { onLoad } from '@dcloudio/uni-app'
 import Avatar from '../../components/Avatar.vue'
-import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
-import type { TMsgScene, IMMessage } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
+import type { NimKitCoreTypes } from '@xkit-yx/core-kit'
+import type {
+  TMsgScene,
+  IMMessage,
+} from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
 import type { Team } from '@xkit-yx/im-store'
 import { friendGroupByPy } from '../../utils/friend'
 import { autorun } from 'mobx'
 import Empty from '../../components/Empty.vue'
 import Icon from '../../components/Icon.vue'
-import { deepClone } from '../../utils';
-import Appellation from '../../components/Appellation.vue';
+import { deepClone } from '../../utils'
+import Appellation from '../../components/Appellation.vue'
 import ForwardModal from './message/message-forward-modal.vue'
 
 const friendGroupList = ref<
   { key: string; data: NimKitCoreTypes.IFriendInfo[] }[]
-  >([])
+>([])
 const forwardScene = ref<TMsgScene>('p2p')
 const teamList = ref<Team[]>([])
 const sessionId = uni.$UIKitStore?.uiStore.selectedSession
@@ -103,15 +108,18 @@ const moveThrough = computed(() => {
   return forwardModalVisible.value
 })
 const handleForwardConfirm = (forwardComment: string) => {
-    forwardModalVisible.value = false
-    uni.$UIKitStore.msgStore.forwardMsgActive(
+  forwardModalVisible.value = false
+  // @ts-ignore
+  uni.$UIKitStore.msgStore
+    .forwardMsgActive(
       {
         msg: forwardMsg.value as IMMessage,
         scene: forwardScene.value,
         to: forwardTo.value,
       },
       forwardComment
-    ).then(() => {
+    )
+    .then(() => {
       uni.showToast({
         title: t('forwardSuccessText'),
         icon: 'success',
@@ -120,7 +128,8 @@ const handleForwardConfirm = (forwardComment: string) => {
       setTimeout(() => {
         backToChat()
       }, 1000)
-    }).catch(() =>{
+    })
+    .catch(() => {
       uni.showToast({
         title: t('forwardFailedText'),
         icon: 'error',
@@ -146,15 +155,17 @@ autorun(() => {
   const _friendList = uni.$UIKitStore.uiStore.friendsWithoutBlacklist.filter(
     (item) => !(item.account == to || item.account == myAccount)
   )
-  friendGroupList.value = deepClone(friendGroupByPy(
-    _friendList,
-    {
-      firstKey: 'alias',
-      secondKey: 'nick',
-      thirdKey: 'account',
-    },
-    false
-  ))
+  friendGroupList.value = deepClone(
+    friendGroupByPy(
+      _friendList,
+      {
+        firstKey: 'alias',
+        secondKey: 'nick',
+        thirdKey: 'account',
+      },
+      false
+    )
+  )
 })
 
 const backToChat = () => {
@@ -166,10 +177,14 @@ const backToChat = () => {
 const handleItemClick = (_forwardTo: string) => {
   if (_forwardTo && msgIdClient) {
     forwardTo.value = _forwardTo
-    forwardMsg.value = deepClone(uni.$UIKitStore.msgStore.getMsg(sessionId, [msgIdClient])?.[0])
+    forwardMsg.value = deepClone(
+      uni.$UIKitStore.msgStore.getMsg(sessionId, [msgIdClient])?.[0]
+    )
     forwardModalVisible.value = true
     if (forwardScene.value === 'team') {
-      forwardToTeamInfo.value = deepClone(uni.$UIKitStore.teamStore.teams.get(_forwardTo))
+      forwardToTeamInfo.value = deepClone(
+        uni.$UIKitStore.teamStore.teams.get(_forwardTo)
+      )
     }
   }
 }

@@ -1,82 +1,82 @@
 // const baseUrl = 'https://yiyong-user-center-qa.netease.im'
-const baseUrl = 'https://yiyong-user-center.netease.im'
+const baseUrl = "https://yiyong-user-center.netease.im";
 // // @ts-ignore
 // BUILD_ENV === 'prod'
 //   ? 'https://yiyong-user-center.netease.im/'
 //   : 'https://yiyong-user-center-qa.netease.im'
 
 const loginByCodeHeader = {
-  appKey: '',
+  appKey: "",
   parentScope: 2,
-  scope: 7, 
-}
+  scope: 7,
+};
 const urlMap = {
-  getLoginSmsCode: '/userCenter/v1/auth/sendLoginSmsCode',
-  loginRegisterByCode: '/userCenter/v1/auth/loginRegisterByCode',
-  loginRegisterByToken: '/userCenter/v1/auth/loginByToken',
-  logout: '/userCenter/v1/auth/logout',
-}
+  getLoginSmsCode: "/userCenter/v1/auth/sendLoginSmsCode",
+  loginRegisterByCode: "/userCenter/v1/auth/loginRegisterByCode",
+  loginRegisterByToken: "/userCenter/v1/auth/loginByToken",
+  logout: "/userCenter/v1/auth/logout",
+};
 type LoginSmsCodeRes = {
-  isFirstRegister: boolean
-}
+  isFirstRegister: boolean;
+};
 export const getLoginSmsCode = (data: {
-  mobile: string
+  mobile: string;
 }): Promise<LoginSmsCodeRes> => {
-  const url = baseUrl + urlMap.getLoginSmsCode
-  
+  const url = baseUrl + urlMap.getLoginSmsCode;
+
   return new Promise((resolve, reject) => {
     // @ts-ignore
     uni.request({
       url,
       header: loginByCodeHeader,
-      method: 'POST',
+      method: "POST",
       data,
       success: (res) => {
         // @ts-ignore
-        const responseData = res.data as AnyObject
+        const responseData = res.data as AnyObject;
         if (responseData.code !== 200) {
-          reject(responseData)
+          reject(responseData);
         }
-        resolve(responseData.data as LoginSmsCodeRes)
+        resolve(responseData.data as LoginSmsCodeRes);
       },
       fail: (err) => {
-        reject(err)
+        reject(err);
       },
-    })
-  })
-}
+    });
+  });
+};
 
 type LoginRegisterByCodeRes = {
-  accessToken: string
-  imAccid: string
-  imToken: string
-}
+  accessToken: string;
+  imAccid: string;
+  imToken: string;
+};
 export const loginRegisterByCode = (data: {
-  mobile: string
-  smsCode: string
+  mobile: string;
+  smsCode: string;
 }): Promise<LoginRegisterByCodeRes> => {
-  const url = baseUrl + urlMap.loginRegisterByCode
+  const url = baseUrl + urlMap.loginRegisterByCode;
   return new Promise((resolve, reject) => {
     // @ts-ignore
     uni.request({
       url,
       header: loginByCodeHeader,
-      method: 'POST',
+      method: "POST",
       data,
       success: (res) => {
         // @ts-ignore
-        const responseData = res.data as AnyObject
+        const responseData = res.data as AnyObject;
         if (responseData.code !== 200) {
-          reject(responseData)
+          reject(responseData);
         }
-        resolve(responseData.data as LoginRegisterByCodeRes)
+        resolve(responseData.data as LoginRegisterByCodeRes);
       },
       fail: (err) => {
-        reject(err)
+        reject(err);
       },
-    })
-  })
-}
+    });
+  });
+};
 
 /*
 export const loginRegisterByToken = (data: { accessToken: string }) => {

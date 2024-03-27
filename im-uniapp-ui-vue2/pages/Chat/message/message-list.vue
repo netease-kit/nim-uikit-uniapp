@@ -1,23 +1,40 @@
 <template>
-  <scroll-view scroll-y="true" :scroll-top="scrollTop" class="message-scroll-list">
-    <div @touchstart="handleTapMessageList" id="msg-list" class="msg-list" ref="msgList">
-      <div v-show="!noMore" @click="onLoadMore" class="view-more-text">{{ t('viewMoreText') }}</div>
+  <div class="msg-list-wrapper" @touchstart="handleTapMessageList">
+    <scroll-view
+      scroll-y="true"
+      :scroll-top="scrollTop"
+      class="message-scroll-list"
+    >
+      <div v-show="!noMore" @click="onLoadMore" class="view-more-text">
+        {{ t('viewMoreText') }}
+      </div>
       <view class="msg-tip" v-show="noMore">{{ t('noMoreText') }}</view>
       <div v-for="(item, index) in finalMsgs" :key="item.renderKey">
-        <MessageItem :scene="scene" :to="to" :msg="item" :index="index" :key="item.renderKey"
-          :reply-msg="replyMsgsMap && replyMsgsMap[item.idClient]">
+        <MessageItem
+          :scene="scene"
+          :to="to"
+          :msg="item"
+          :index="index"
+          :key="item.renderKey"
+          :reply-msg="replyMsgsMap && replyMsgsMap[item.idClient]"
+        >
         </MessageItem>
       </div>
-      <div v-if="isIosH5" class="block"></div>
-    </div>
-  </scroll-view>
+      <!-- <div v-if="isIosH5" class="block"></div> -->
+    </scroll-view>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import type { IMMessage } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
-import { ref, computed, getCurrentInstance, onBeforeMount, onUnmounted } from '../../../utils/transformVue';
+import {
+  ref,
+  computed,
+  onBeforeMount,
+  onUnmounted,
+} from '../../../utils/transformVue'
 import MessageItem from './message-item.vue'
-import { events, MSG_ID_FLAG } from '../../../utils/constants'
+import { events } from '../../../utils/constants'
 import { caculateTimeago } from '../../../utils/date'
 import { onPageScroll } from '@dcloudio/uni-app'
 import { getUniPlatform } from '../../../utils'
@@ -25,34 +42,35 @@ import { t } from '../../../utils/i18n'
 const props = defineProps({
   msgs: {
     type: Array,
-    required: true
+    required: true,
   },
   scene: {
     type: String, // Assuming TMsgScene is a custom object type
-    required: true
+    required: true,
   },
   to: {
     type: String,
-    required: true
+    required: true,
   },
   loadingMore: {
     type: Boolean,
-    default: undefined
+    default: undefined,
   },
   noMore: {
     type: Boolean,
-    default: undefined
+    default: undefined,
   },
   replyMsgsMap: {
     type: Object,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 
 const isKeyboardUp = ref(false)
 const uniPlatform = getUniPlatform()
-const isIosH5 = uniPlatform == 'web' && uni.getSystemInfoSync().platform == 'ios'
-const scrollTop = ref(9999);
+const isIosH5 =
+  uniPlatform == 'web' && uni.getSystemInfoSync().platform == 'ios'
+const scrollTop = ref(9999)
 const finalMsgs = computed(() => {
   const res: IMMessage[] = []
   props.msgs.forEach((item: IMMessage, index) => {
@@ -70,17 +88,15 @@ const finalMsgs = computed(() => {
         status: 'sent',
         time: item.time,
         // @ts-ignore
-        renderKey: `${item.time + 1}`
+        renderKey: `${item.time + 1}`,
       })
     }
     res.push({
       ...item,
       // @ts-ignore
-      renderKey: `${item.time}`
+      renderKey: `${item.time}`,
     })
   })
-
-  console.log('finalMsgs: -----------', res)
   return res
 })
 
@@ -95,12 +111,12 @@ onPageScroll(() => {
 
 // 消息滑动到底部，建议搭配 nextTick 使用
 const scrollToBottom = () => {
-  scrollTop.value += 3000;
+  scrollTop.value += 3000
   const timer = setTimeout(() => {
-    scrollTop.value += 1;
-    clearTimeout(timer);
-  }, 300);
-};
+    scrollTop.value += 1
+    clearTimeout(timer)
+  }, 300)
+}
 
 const onLoadMore = () => {
   const msg = finalMsgs.value.filter(
@@ -111,18 +127,21 @@ const onLoadMore = () => {
       )
   )[0]
   if (msg) {
-    uni.$emit(events.GET_HISTORY_MSG, msg);
+    uni.$emit(events.GET_HISTORY_MSG, msg)
   }
 }
 
 const handleTapMessageList = () => {
-  // 处理滚动穿透
-  uni.$emit(events.CLOSE_EMOJI, false)
-  uni.hideKeyboard()
+  uni.$emit(events.CLOSE_PANEL)
+  setTimeout(() => {
+    uni.$emit(events.CLOSE_PANEL)
+  }, 300)
 }
+const moveThrough = ref(false)
 
 onBeforeMount(() => {
   if (props.scene === 'team') {
+    // @ts-ignore
     uni.$UIKitStore.teamMemberStore.getTeamMemberActive(props.to)
   }
   uni.$on(events.SEND_MSG, () => {
@@ -135,21 +154,20 @@ onBeforeMount(() => {
     } else {
       setTimeout(() => {
         scrollToBottom()
-      }, 100);
+      }, 100)
     }
   })
-
 
   uni.$on(events.ON_MSG, () => {
     setTimeout(() => {
       scrollToBottom()
-    }, 300);
+    }, 300)
   })
 
   uni.$on(events.ON_SCROLL_BOTTOM, () => {
     setTimeout(() => {
       scrollToBottom()
-    }, 0);
+    }, 0)
   })
 
   uni.$on(events.ON_LOAD_MORE, () => {
@@ -161,7 +179,7 @@ onBeforeMount(() => {
         )
     )[0]
     if (msg) {
-      uni.$emit(events.GET_HISTORY_MSG, msg);
+      uni.$emit(events.GET_HISTORY_MSG, msg)
     }
   })
 
@@ -179,7 +197,6 @@ onBeforeMount(() => {
   // }
   // console.log('到底了！！！！', 'start: ', start.value, 'lock: ', lock, 'msg.lenght: ', props.msgs.length)
   // })
-
 })
 
 // uni.$on(events.ON_REACH_TOP, () => {
@@ -209,12 +226,23 @@ onUnmounted(() => {
 </script>
 
 <style scoped lang="scss">
-.msg-list {
-  padding: 0 16px 120px;
+.msg-list-wrapper {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
   box-sizing: border-box;
+  padding: 16px 0;
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-  overflow-x: hidden;
 }
+
+// .msg-list {
+//   padding: 0 16px 20px 16px;
+//   box-sizing: border-box;
+//   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+//   overflow-x: hidden;
+//   // height: 100%;
+// }
 
 .msg-tip {
   text-align: center;
@@ -229,7 +257,7 @@ onUnmounted(() => {
 }
 
 .message-scroll-list {
-  height: 90vh;
+  height: 100%;
   box-sizing: border-box;
   padding-bottom: 1px;
 }
@@ -239,5 +267,8 @@ onUnmounted(() => {
   color: #b3b7bc;
   font-size: 15px;
   margin-top: 20px;
+}
+page > view > message > view > message-list {
+  height: 100%;
 }
 </style>

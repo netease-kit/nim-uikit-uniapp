@@ -1,12 +1,12 @@
 <template>
-  <div class="msg-text" :style="{fontSize: (fontSize || 16) + 'px'}">
+  <div class="msg-text" :style="{ fontSize: (fontSize || 16) + 'px' }">
     <template v-for="item in textArr">
       <template v-if="item.type === 'text'">
         <text class="msg-text" v-text="item.value"></text>
       </template>
       <template v-else-if="item.type === 'Ait'">
         <text class="msg-text" :style="{ color: '#1861df' }">
-          {{' ' +  item.value }}
+          {{ ' ' + item.value }}
         </text>
       </template>
       <template v-else-if="item.type === 'emoji'">
@@ -32,7 +32,7 @@
 <script lang="ts" setup>
 import Icon from '../../../components/Icon.vue'
 // @ts-ignore
-import UniLink from '../../../uni_modules/uni-link/components/uni-link/uni-link.vue'
+import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import { parseText } from '../../../utils/parseText'
 import { emojiMap } from '../../../utils/emoji'
 const props = defineProps({
@@ -41,13 +41,13 @@ const props = defineProps({
     required: true,
     default: () => ({
       body: '',
-      ext: ''
-    })
+      ext: '',
+    }),
   },
   fontSize: {
     type: Number,
-    default: undefined
-  }
+    default: undefined,
+  },
 })
 const textArr = parseText(props?.msg?.body, props?.msg?.ext)
 </script>

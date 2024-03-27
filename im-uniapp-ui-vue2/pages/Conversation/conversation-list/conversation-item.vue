@@ -1,31 +1,52 @@
 <template>
-  <div :class="['conversation-item-container', { 'show-action-list': showMoreActions, 'stick-on-top': isStickOnTop }]"
-    @touchstart="handleTouchStart" @touchmove="handleTouchMove" @click="handleConversationItemClick()">
+  <div
+    :class="[
+      'conversation-item-container',
+      { 'show-action-list': showMoreActions, 'stick-on-top': isStickOnTop },
+    ]"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @click="handleConversationItemClick()"
+  >
     <div class="conversation-item-content">
       <div class="conversation-item-left">
         <div class="unread" v-if="unread">
-           <div class="dot" v-if="isMute" ></div>
-           <div class="badge" v-else>{{ unread }}</div>
+          <div class="dot" v-if="isMute"></div>
+          <div class="badge" v-else>{{ unread }}</div>
         </div>
-        <Avatar :account="avatarId" :avatar="teamAvatar" /> 
+        <Avatar :account="avatarId" :avatar="teamAvatar" />
       </div>
       <div class="conversation-item-right">
         <div class="conversation-item-top">
-          <Appellation class="conversation-item-title" v-if="session.scene === 'p2p'" :account="session.to" />
-          <span class="conversation-item-title">{{ sessionName }}</span>
+          <Appellation
+            class="conversation-item-title"
+            v-if="session.scene === 'p2p'"
+            :account="session.to"
+          />
+          <span v-else class="conversation-item-title">{{ sessionName }}</span>
           <span class="conversation-item-time">{{ date }}</span>
         </div>
         <div class="conversation-item-desc">
-          <span v-if="beMentioned" class="beMentioned">{{ '[' + t('someoneText') + '@' + t('meText') + ']'
+          <span v-if="beMentioned" class="beMentioned">{{
+            '[' + t('someoneText') + '@' + t('meText') + ']'
           }}</span>
           <span class="conversation-item-desc-content">{{ content }}</span>
-          <Icon v-if="isMute" iconClassName="conversation-item-desc-state"
-            type="icon-xiaoximiandarao" color="#ccc" />
+          <Icon
+            v-if="isMute"
+            iconClassName="conversation-item-desc-state"
+            type="icon-xiaoximiandarao"
+            color="#ccc"
+          />
         </div>
       </div>
     </div>
     <div class="right-action-list">
-      <div v-for="action in moreActions" :class="['right-action-item', action.class]" @click="() => handleClick(action.type)">
+      <div
+        v-for="action in moreActions"
+        :key="action.type"
+        :class="['right-action-item', action.class]"
+        @click="() => handleClick(action.type)"
+      >
         {{ action.name }}
       </div>
     </div>
@@ -38,30 +59,49 @@ import Appellation from '../../../components/Appellation.vue'
 import Icon from '../../../components/Icon.vue'
 import { getMsgContentTipByType } from '../../../utils/msg'
 import { computed, onUpdated } from '../../../utils/transformVue'
-import type { NimKitCoreTypes } from '@xkit-yx/core-kit';
+import type { NimKitCoreTypes } from '@xkit-yx/core-kit'
 import dayjs from 'dayjs'
-import { t } from '../../../utils/i18n';
+import { t } from '../../../utils/i18n'
 
 const props = defineProps({
   session: {
     type: Object,
-    default: () => {},
+    default: () => {
+      return {
+        ack: 0,
+        scene: '',
+        id: '',
+        to: '',
+        lastMsg: {
+          time: 0,
+          type: '',
+          body: '',
+          status: '',
+        },
+        unread: 0,
+        isMute: false,
+        beMentioned: false,
+      }
+    },
   },
   showMoreActions: {
     type: Boolean,
     default: () => false,
   },
-});
-const emit = defineEmits(["click", "delete", "stickyToTop", "leftSlide"])
+})
+
+const emit = defineEmits(['click', 'delete', 'stickyToTop', 'leftSlide'])
 
 const isStickOnTop = computed(() => {
   return props.session.stickTopInfo?.isStickOnTop
-}) 
+})
 
 const moreActions = computed(() => {
   return [
     {
-      name: props.session.stickTopInfo?.isStickOnTop ? t('deleteStickTopText') : t('addStickTopText'),
+      name: props.session.stickTopInfo?.isStickOnTop
+        ? t('deleteStickTopText')
+        : t('addStickTopText'),
       class: 'action-top',
       type: 'action-top',
     },
@@ -69,7 +109,7 @@ const moreActions = computed(() => {
       name: t('deleteSessionText'),
       class: 'action-delete',
       type: 'action-delete',
-    }
+    },
   ]
 })
 
@@ -79,7 +119,7 @@ const handleClick = (type: string) => {
   } else {
     emit('delete', props.session)
   }
-} 
+}
 
 const teamAvatar = computed(() => {
   const { session } = props
@@ -87,14 +127,14 @@ const teamAvatar = computed(() => {
     const { avatar } = props.session as NimKitCoreTypes.TeamSession
     return avatar
   }
-}) 
+})
 
 const sessionName = computed(() => {
   const { session } = props
-  if(session?.name){
-    return session?.name
-  }else{
-    return session?.teamId
+  if (session.name) {
+    return session.name
+  } else {
+    return session.teamId
   }
 })
 
@@ -127,7 +167,7 @@ const content = computed(() => {
 const date = computed(() => {
   const time = props.session.lastMsg?.time || props.session.updateTime
   // 如果最后一条消息时间戳不存在，则会话列表不显示
-  if(!time){
+  if (!time) {
     return ''
   }
   const _d = dayjs(time)
@@ -141,7 +181,11 @@ const date = computed(() => {
 const max = 99
 
 const unread = computed(() => {
-  return props.session.unread > 0 ? props.session.unread > max ? `${max}+` : props.session.unread + '' : ''
+  return props.session.unread > 0
+    ? props.session.unread > max
+      ? `${max}+`
+      : props.session.unread + ''
+    : ''
 })
 
 const isMute = computed(() => {
@@ -153,7 +197,8 @@ const beMentioned = computed(() => {
 })
 
 // 左滑显示 action 动画
-let startX = 0, startY = 0
+let startX = 0,
+  startY = 0
 // 开始左滑
 function handleTouchStart(event: TouchEvent) {
   startX = event.changedTouches[0].pageX
@@ -167,8 +212,7 @@ function handleTouchMove(event: TouchEvent) {
   const Y = moveEndY - startY
   if (Math.abs(X) > Math.abs(Y) && X > 0) {
     emit('leftSlide', null)
-  }
-  else if (Math.abs(X) > Math.abs(Y) && X < 0) {
+  } else if (Math.abs(X) > Math.abs(Y) && X < 0) {
     emit('leftSlide', props.session)
   }
 }
@@ -182,9 +226,8 @@ function handleConversationItemClick() {
 }
 
 onUpdated(() => {
-  console.log('onUpdated', props.session.unread);
+  console.log('onUpdated', props.session.unread)
 })
-
 </script>
 
 <style lang="scss" scoped>
@@ -199,11 +242,11 @@ $cellHeight: 72px;
   }
 
   &.stick-on-top {
-    background: #F3F5F7;
+    background: #f3f5f7;
   }
 
   .beMentioned {
-    color: #FF4D4F;
+    color: #ff4d4f;
   }
 
   .content {
@@ -227,15 +270,14 @@ $cellHeight: 72px;
     text-align: center;
     height: $cellHeight;
     line-height: $cellHeight;
-
   }
 
   .action-top {
-    background: #337EFF;
+    background: #337eff;
   }
 
   .action-delete {
-    background: #A8ABB6;
+    background: #a8abb6;
   }
 }
 
@@ -258,7 +300,6 @@ $cellHeight: 72px;
   }
 }
 
-
 .conversation-item-right {
   flex: 1;
   width: 0;
@@ -279,7 +320,7 @@ $cellHeight: 72px;
 
   .conversation-item-time {
     font-size: 12px;
-    color: #CCCCCC;
+    color: #cccccc;
     text-align: right;
     width: 90px;
     flex-shrink: 0;
@@ -307,7 +348,7 @@ $cellHeight: 72px;
 }
 
 .dot {
-  background-color: #FF4D4F;
+  background-color: #ff4d4f;
   color: #fff;
   width: 10px;
   height: 10px;
@@ -317,7 +358,7 @@ $cellHeight: 72px;
 }
 
 .badge {
-  background-color: #FF4D4F;
+  background-color: #ff4d4f;
   color: #fff;
   font-size: 12px;
   min-width: 20px;

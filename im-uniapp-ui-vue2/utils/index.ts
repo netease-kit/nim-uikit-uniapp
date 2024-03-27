@@ -53,3 +53,47 @@ export function deepClone(source, visited = new WeakMap()) {
 
   return clone
 }
+
+export function stopAllAudio() {
+  try {
+    // @ts-ignore
+    if (uni.$currentAudioContext) {
+      // @ts-ignore
+      uni.$currentAudioContext?.stop()
+    }
+  } catch (error) {
+    console.log('stopAllAudio error', error)
+  }
+}
+
+// 暂停并销毁音频
+export function pauseAndDestroyAudio() {
+  return new Promise((resolve, reject) => {
+    // @ts-ignore
+    if (uni.$currentAudioContext) {
+      // @ts-ignore
+      uni.$currentAudioContext.pause()
+      setTimeout(() => {
+        // @ts-ignore
+        uni.$currentAudioContext.destroy()
+        console.log('======stopAllAudio destroy success========')
+        resolve(0)
+      }, 300) // 比如1秒后执行
+    } else {
+      resolve(0)
+    }
+  })
+}
+
+export function destoryAllAudio() {
+  try {
+    // @ts-ignore
+    if (uni.$currentAudioContext) {
+      // @ts-ignore
+      uni.$currentAudioContext?.destroy()
+      console.log('======destoryAllAudio success========')
+    }
+  } catch (error) {
+    console.log('destoryAllAudio error', error)
+  }
+}
