@@ -14,7 +14,7 @@
     "@dcloudio/uni-app": "^3.0.0-3070320230222002",
     "@vue/composition-api": "^1.7.2",
     "@xkit-yx/core-kit": "^0.13.0",
-    "@xkit-yx/im-store": "^0.2.0",
+    "@xkit-yx/im-store": "^0.3.0",
     "@xkit-yx/utils": "^0.5.6",
     "dayjs": "^1.11.0",
     "mobx": "^6.11.0",
