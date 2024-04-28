@@ -220,8 +220,8 @@ export default {
         nimCallKit.initConfig(
           {
             appKey: "", // 请填写你的appkey
-            account: "",
-            token: "",
+            account: "", // 请填写你的account
+            token: "", // 请填写你的token
             // account: opts.account, // 请填写你的account
             // token: opts.token, // 请填写你的token
             apnsCername: "",
@@ -229,14 +229,14 @@ export default {
           },
           (ret: any) => {
             if (ret.code != 200) {
-              console.log("-------------callkit init失败\n错误码：");
+              console.log("-------------callkit init失败\n错误码：", ret);
             } else {
               console.log("-------------callkit 开始登录------------");
               //@ts-ignore
               nimCallKit.login(
                 {
-                  account: "",
-                  token: "",
+                  account: "", // 请填写你的account
+                  token: "", // 请填写你的token
                 },
                 function (ret: any) {
                   if (ret.code != 200) {

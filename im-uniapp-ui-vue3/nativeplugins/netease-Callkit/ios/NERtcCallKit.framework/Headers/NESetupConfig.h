@@ -26,6 +26,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// 当前用户rtcUid
 @property(nonatomic, assign) uint64_t currentUserUid;
 
+/// 组件平台信息，开发者无需关心
+@property(nonatomic, copy) NSString *framework;
+
+/// 组件平台信息，开发者无需关心
+@property(nonatomic, copy) NSString *channel;
+
 - (instancetype)initWithAppkey:(NSString *)appkey;
 
 @end

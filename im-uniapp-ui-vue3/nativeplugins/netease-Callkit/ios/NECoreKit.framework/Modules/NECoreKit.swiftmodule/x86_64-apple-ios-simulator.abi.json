@@ -5572,263 +5572,795 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/CoreLoader.swift",
+      "kind": "StringLiteral",
+      "offset": 402,
+      "length": 13,
+      "value": "\"Localizable\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 260,
       "length": 2,
-      "value": "1"
+      "value": "-1"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 284,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 303,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 260,
       "length": 1,
-      "value": "1"
+      "value": "-1"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 284,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Define.swift",
       "kind": "IntegerLiteral",
       "offset": 303,
       "length": 1,
       "value": "1"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "StringLiteral",
+      "offset": 1840,
+      "length": 9,
+      "value": "\"[^\\?]+\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1897,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1983,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2012,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2048,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2196,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2504,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "StringLiteral",
+      "offset": 2579,
+      "length": 3,
+      "value": "\"&\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "StringLiteral",
+      "offset": 2697,
+      "length": 3,
+      "value": "\"=\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2726,
+      "length": 1,
+      "value": "2"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2754,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2808,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2897,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2925,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Matcher.swift",
+      "kind": "StringLiteral",
+      "offset": 2977,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 239,
       "length": 28,
       "value": "\"imkit:\/\/search\/search.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 326,
       "length": 40,
       "value": "\"imkit:\/\/conversation\/conversation.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 421,
       "length": 34,
       "value": "\"imkit:\/\/contact\/contactList.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 510,
       "length": 31,
       "value": "\"imkit:\/\/contact\/selector.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 601,
       "length": 32,
       "value": "\"imkit:\/\/contact\/addFriend.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 690,
       "length": 24,
       "value": "\"imkit:\/\/chat\/addFriend\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 751,
       "length": 27,
       "value": "\"imkit:\/\/contact\/team\/data\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 836,
       "length": 28,
       "value": "\"imkit:\/\/mine\/userInfo.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 926,
       "length": 31,
       "value": "\"imkit:\/\/contact\/userInfo.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1020,
       "length": 33,
       "value": "\"imkit:\/\/chat\/searchMessage.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1125,
       "length": 33,
       "value": "\"imkit:\/\/contact\/verifyList.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1215,
       "length": 32,
       "value": "\"imkit:\/\/contact\/blackList.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1299,
       "length": 31,
       "value": "\"imkit:\/\/contact\/teamList.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1431,
       "length": 29,
       "value": "\"imkit:\/\/contact\/person.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1567,
       "length": 31,
       "value": "\"imkit:\/\/contact\/computer.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1640,
       "length": 33,
       "value": "\"imkit:\/\/contact.selectUser.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1713,
       "length": 29,
       "value": "\"imkit:\/\/team.create.discuss\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1773,
       "length": 28,
       "value": "\"imkit:\/\/team.create.senior\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1839,
       "length": 36,
       "value": "\"imkit:\/\/team.create.discuss.result\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 1912,
       "length": 35,
       "value": "\"imkit:\/\/team.create.senior.result\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 2002,
       "length": 31,
       "value": "\"imkit:\/\/team\/teamSetting.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 2085,
       "length": 28,
       "value": "\"imkit:\/\/chat\/teamChat.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 2163,
       "length": 27,
       "value": "\"imkit:\/\/chat\/p2pChat.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 2243,
       "length": 30,
       "value": "\"imkit:\/\/chat\/pinMessage.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/NERouterUrl.swift",
       "kind": "StringLiteral",
       "offset": 2314,
       "length": 22,
       "value": "\"imkit:\/\/callkit.page\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/PathUtils.swift",
+      "kind": "StringLiteral",
+      "offset": 649,
+      "length": 3,
+      "value": "\"\/\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/PathUtils.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1070,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/PathUtils.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1342,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/PathUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1369,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
       "kind": "BooleanLiteral",
       "offset": 269,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
       "kind": "StringLiteral",
       "offset": 431,
       "length": 21,
       "value": "\":[a-z0-9A-Z-_][^\/]+\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
       "kind": "StringLiteral",
       "offset": 504,
       "length": 17,
       "value": "\":[a-z0-9A-Z-_]+\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
       "kind": "StringLiteral",
       "offset": 574,
       "length": 9,
       "value": "\"([^\/]+)\""
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
       "kind": "Array",
       "offset": 772,
       "length": 2,
       "value": "[]"
     },
     {
-      "filePath": "\/Users\/yunxin\/workspace\/App-XKit-iOS-Publish-Framework\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 1051,
+      "length": 39,
+      "value": "\"init(coder:) has not been implemented\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1596,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1651,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1741,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1818,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1839,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1964,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 2030,
+      "length": 5,
+      "value": "\":\/\/\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2201,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 2571,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "Array",
+      "offset": 2722,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 2904,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3480,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 3687,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3808,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 3995,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4029,
+      "length": 3,
+      "value": "\"\/\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4045,
+      "length": 3,
+      "value": "\"^\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4078,
+      "length": 3,
+      "value": "\"$\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4130,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "Array",
+      "offset": 4249,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 4638,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4846,
+      "length": 3,
+      "value": "\":\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4857,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "StringLiteral",
+      "offset": 4885,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "Array",
+      "offset": 4925,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "Array",
+      "offset": 5046,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 5313,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "Array",
+      "offset": 5450,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 5708,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Regular.swift",
+      "kind": "IntegerLiteral",
+      "offset": 5711,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "IntegerLiteral",
+      "offset": 493,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "StringLiteral",
+      "offset": 519,
+      "length": 44,
+      "value": "\"⚠️   Please register a valid route !!!\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1133,
+      "length": 1,
+      "value": "0"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "StringLiteral",
+      "offset": 1178,
+      "length": 39,
+      "value": "\"Please enter a valid routing address.\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "StringLiteral",
+      "offset": 1589,
+      "length": 9,
+      "value": "\"success\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Router\/Router.swift",
+      "kind": "StringLiteral",
+      "offset": 1661,
+      "length": 50,
+      "value": "\"The route is not registered or regular mismatch.\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "IntegerLiteral",
+      "offset": 734,
+      "length": 6,
+      "value": "0x4E00"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "IntegerLiteral",
+      "offset": 753,
+      "length": 6,
+      "value": "0x9FFF"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "BooleanLiteral",
+      "offset": 777,
+      "length": 4,
+      "value": "true"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "BooleanLiteral",
+      "offset": 807,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "BooleanLiteral",
+      "offset": 990,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1074,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "StringLiteral",
+      "offset": 1362,
+      "length": 26,
+      "value": "\"字符：\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "StringLiteral",
+      "offset": 1377,
+      "length": 1,
+      "value": "\" \""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "StringLiteral",
+      "offset": 1387,
+      "length": 2,
+      "value": "\"\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
       "kind": "Array",
       "offset": 2629,
       "length": 2,
       "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Extension\/StringExtension.swift",
+      "kind": "Array",
+      "offset": 2704,
+      "length": 2,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 599,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "StringLiteral",
+      "offset": 665,
+      "length": 5,
+      "value": "\"***\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 712,
+      "length": 2,
+      "value": "11"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 717,
+      "length": 1,
+      "value": "4"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 730,
+      "length": 1,
+      "value": "3"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "StringLiteral",
+      "offset": 816,
+      "length": 3,
+      "value": "\"*\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1369,
+      "length": 1,
+      "value": "1"
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "StringLiteral",
+      "offset": 1430,
+      "length": 28,
+      "value": "\"(?<=\\w{%d})\\w(?=\\w{%d})\""
+    },
+    {
+      "filePath": "\/Users\/jinjie03\/Documents\/Workspace\/xkit-ios\/CoreKit\/NECoreKit\/NECoreKit\/Classes\/Common\/StringUtils.swift",
+      "kind": "IntegerLiteral",
+      "offset": 1679,
+      "length": 1,
+      "value": "0"
     }
   ]
 }

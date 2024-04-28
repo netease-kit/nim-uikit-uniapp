@@ -24,8 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 // 上报类型，可根据需要统计的特性填写，便于统计检索
 @property(nonatomic, strong) NSString *reportType;
 // 上报渠道
-@property(nonatomic, readonly, strong) NSString *channel;
-//// 上报的内容
+@property(nonatomic, strong) NSString *channel;
+// 上报渠道
+@property(nonatomic, strong) NSString *framework;
+// 上报的内容
 @property(nonatomic, strong) id data;
 
 - (instancetype)init;

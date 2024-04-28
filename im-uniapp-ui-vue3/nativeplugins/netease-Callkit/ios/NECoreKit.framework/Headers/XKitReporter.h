@@ -18,10 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)shared;
 
-/// 设置配置
-/// - Parameter config: 配置信息
-- (void)reportConfig:(ReportConfig *)config;
-
 /// 注册模块
 /// - Parameters:
 ///   - serviceName: 模块名称
@@ -30,6 +26,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)registerModule:(NSString *)serviceName
            withVersion:(NSString *)versionName
           moduleAppKey:(NSString *)moduleAppKey;
+
+/// 注册模块
+/// - Parameters:
+///   - serviceName: 模块名称
+///   - versionName: 版本
+///   - moduleAppKey: appKey
+///   - channel: 渠道信息
+///   - framework: 渠道信息
+- (void)registerModule:(NSString *)serviceName
+           withVersion:(NSString *)versionName
+          moduleAppKey:(NSString *)moduleAppKey
+               channel:(NSString *__nullable)channel
+             framework:(NSString *__nullable)framework;
 
 /// 上报 (通过模块信息)
 /// - Parameters:

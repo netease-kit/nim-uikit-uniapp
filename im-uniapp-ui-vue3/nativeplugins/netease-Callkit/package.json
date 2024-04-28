@@ -1,87 +1,87 @@
 {
-  "name": "netease-CallKit",
-  "id": "netease-CallKit",
-  "version": "1.5.1",
-  "description": "网易云信音视频通话插件",
-  "_dp_type": "nativeplugin",
-  "_dp_nativeplugin": {
-    "android": {
-      "plugins": [
-        {
-          "type": "module",
-          "name": "netease-CallKit",
-          "class": "com.netease.yunxin.kit.call.dcloud.CallKitAPIModule"
+    "name": "netease-CallKit",
+    "id": "netease-CallKit",
+    "version": "1.7.0",
+    "description": "网易云信音视频通话插件",
+    "_dp_type": "nativeplugin",
+    "_dp_nativeplugin": {
+        "android": {
+            "plugins": [
+                {
+                    "type": "module",
+                    "name": "netease-CallKit",
+                    "class": "com.netease.yunxin.kit.call.dcloud.CallKitAPIModule"
+                }
+            ],
+            "hooksClass": "",
+            "integrateType": "aar",
+            "dependencies": [
+                "com.netease.yunxin.kit.call:call-ui:2.4.0"
+            ],
+            "excludeDependencies": [
+              "com.netease.nimlib:basesdk",
+              "com.netease.nimlib:push"
+            ],
+            "compileOptions": {
+                "sourceCompatibility": "1.8",
+                "targetCompatibility": "1.8"
+            },
+            "abis": [
+                "armeabi-v7a",
+                "arm64-v8a",
+                "x86"
+            ],
+            "minSdkVersion": "21",
+            "useAndroidX": true,
+            "permissions": [],
+            "parameters": {}
+        },
+        "ios": {
+            "plugins": [
+                {
+                    "type": "module",
+                    "name": "netease-CallKit",
+                    "class": "CallKitAPIModule"
+                }
+            ],
+            "frameworks": [
+                "CocoaLumberjack.framework",
+                "libwebp.framework",
+                "NECommonKit.framework",
+                "NECommonUIKit.framework",
+                "NECoreKit.framework",
+                "NERtcSDK.framework",
+                "NERtcCallKit.framework",
+                "NERtcCallUIKit.framework",
+                "NIMNOS.framework",
+                "NIMSDK.framework",
+                "SDWebImage.framework",
+                "SDWebImageSVGKitPlugin.framework",
+                "SDWebImageWebPCoder.framework",
+                "SVGKit.framework",
+                "YXArtemis.framework",
+                "YXAlog_iOS.framework"
+            ],
+            "embedFrameworks": [
+                "CocoaLumberjack.framework",
+                "libwebp.framework",
+                "NECommonKit.framework",
+                "NECommonUIKit.framework",
+                "NECoreKit.framework",
+                "NERtcSDK.framework",
+                "NERtcCallKit.framework",
+                "NERtcCallUIKit.framework",
+                "NIMNOS.framework",
+                "NIMSDK.framework",
+                "SDWebImage.framework",
+                "SDWebImageSVGKitPlugin.framework",
+                "SDWebImageWebPCoder.framework",
+                "SVGKit.framework",
+                "YXArtemis.framework",
+                "YXAlog_iOS.framework"
+            ],
+            "integrateType": "framework",
+            "deploymentTarget": "11.0"
         }
-      ],
-      "hooksClass": "",
-      "integrateType": "aar",
-      "dependencies": [
-        "com.netease.yunxin.kit.call:call-ui:2.3.0"
-      ],
-      "excludeDependencies": [
-        "com.netease.nimlib:basesdk",
-        "com.netease.nimlib:push"
-      ],
-      "compileOptions": {
-        "sourceCompatibility": "1.8",
-        "targetCompatibility": "1.8"
-      },
-      "abis": [
-        "armeabi-v7a",
-        "arm64-v8a",
-        "x86"
-      ],
-      "minSdkVersion": "21",
-      "useAndroidX": true,
-      "permissions": [],
-      "parameters": {}
-    },
-    "ios": {
-      "plugins": [
-        {
-          "type": "module",
-          "name": "netease-CallKit",
-          "class": "CallKitAPIModule"
-        }
-      ],
-      "frameworks": [
-        "CocoaLumberjack.framework",
-        "libwebp.framework",
-        "NECommonKit.framework",
-        "NECommonUIKit.framework",
-        "NECoreKit.framework",
-        "NERtcSDK.framework",
-        "NERtcCallKit.framework",
-        "NERtcCallUIKit.framework",
-        "NIMNOS.framework",
-        "NIMSDK.framework",
-        "SDWebImage.framework",
-        "SDWebImageSVGKitPlugin.framework",
-        "SDWebImageWebPCoder.framework",
-        "SVGKit.framework",
-        "YXArtemis.framework",
-        "YXAlog_iOS.framework"
-      ],
-      "embedFrameworks": [
-        "CocoaLumberjack.framework",
-        "libwebp.framework",
-        "NECommonKit.framework",
-        "NECommonUIKit.framework",
-        "NECoreKit.framework",
-        "NERtcSDK.framework",
-        "NERtcCallKit.framework",
-        "NERtcCallUIKit.framework",
-        "NIMNOS.framework",
-        "NIMSDK.framework",
-        "SDWebImage.framework",
-        "SDWebImageSVGKitPlugin.framework",
-        "SDWebImageWebPCoder.framework",
-        "SVGKit.framework",
-        "YXArtemis.framework",
-        "YXAlog_iOS.framework"
-      ],
-      "integrateType": "framework",
-      "deploymentTarget": "11.0"
     }
-  }
 }

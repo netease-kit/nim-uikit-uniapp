@@ -6,9 +6,9 @@
       class="message-scroll-list"
     >
       <div v-show="!noMore" @click="onLoadMore" class="view-more-text">
-        {{ t('viewMoreText') }}
+        {{ t("viewMoreText") }}
       </div>
-      <view class="msg-tip" v-show="noMore">{{ t('noMoreText') }}</view>
+      <view class="msg-tip" v-show="noMore">{{ t("noMoreText") }}</view>
       <div v-for="(item, index) in finalMsgs" :key="item.renderKey">
         <MessageItem
           :scene="scene"
@@ -26,17 +26,17 @@
 </template>
 
 <script lang="ts" setup>
-import type { IMMessage } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
+import type { IMMessage } from "nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface";
 import {
   ref,
   computed,
   onBeforeMount,
   onUnmounted,
-} from '../../../utils/transformVue'
-import MessageItem from './message-item.vue'
-import { events } from '../../../utils/constants'
-import { caculateTimeago } from '../../../utils/date'
-import { t } from '../../../utils/i18n'
+} from "../../../utils/transformVue";
+import MessageItem from "./message-item.vue";
+import { events } from "../../../utils/constants";
+import { caculateTimeago } from "../../../utils/date";
+import { t } from "../../../utils/i18n";
 const props = defineProps({
   msgs: {
     type: Array,
@@ -62,104 +62,104 @@ const props = defineProps({
     type: Object,
     default: undefined,
   },
-})
+});
 
 onBeforeMount(() => {
-  if (props.scene === 'team') {
+  if (props.scene === "team") {
     // @ts-ignore
-    uni.$UIKitStore.teamMemberStore.getTeamMemberActive(props.to)
+    uni.$UIKitStore.teamMemberStore.getTeamMemberActive(props.to);
   }
 
   uni.$on(events.AUDIO_URL_CHANGE, (url) => {
-    broadcastNewAudioSrc.value = url
-  })
+    broadcastNewAudioSrc.value = url;
+  });
 
   uni.$on(events.ON_SCROLL_BOTTOM, () => {
-    scrollToBottom()
-  })
+    scrollToBottom();
+  });
 
   uni.$on(events.ON_LOAD_MORE, () => {
     const msg = finalMsgs.value.filter(
       (item) =>
         !(
-          item.type === 'custom' &&
-          ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
+          item.type === "custom" &&
+          ["beReCallMsg", "reCallMsg"].includes(item.attach?.type || "")
         )
-    )[0]
+    )[0];
     if (msg) {
-      uni.$emit(events.GET_HISTORY_MSG, msg)
+      uni.$emit(events.GET_HISTORY_MSG, msg);
     }
-  })
-})
+  });
+});
 
 onUnmounted(() => {
-  uni.$off(events.ON_SCROLL_BOTTOM)
+  uni.$off(events.ON_SCROLL_BOTTOM);
 
-  uni.$off(events.ON_LOAD_MORE)
+  uni.$off(events.ON_LOAD_MORE);
 
-  uni.$off(events.AUDIO_URL_CHANGE)
-})
+  uni.$off(events.AUDIO_URL_CHANGE);
+});
 
-const scrollTop = ref(9999)
+const scrollTop = ref(99999);
 const finalMsgs = computed(() => {
-  const res: IMMessage[] = []
+  const res: IMMessage[] = [];
   props.msgs.forEach((item: IMMessage, index) => {
     // 如果两条消息间隔超过5分钟，插入一条自定义时间消息
     // @ts-ignore
     if (index > 0 && item.time - props.msgs[index - 1].time > 5 * 60 * 1000) {
       // @ts-ignore
       res.push({
-        idClient: 'time-' + item.time,
-        type: 'custom',
+        idClient: "time-" + item.time,
+        type: "custom",
         attach: {
-          type: 'time',
+          type: "time",
           value: caculateTimeago(item.time),
         },
-        status: 'sent',
+        status: "sent",
         time: item.time,
         // @ts-ignore
         renderKey: `${item.time + 1}`,
-      })
+      });
     }
     res.push({
       ...item,
       // @ts-ignore
       renderKey: `${item.time}`,
-    })
-  })
-  return res
-})
+    });
+  });
+  return res;
+});
 
-const broadcastNewAudioSrc = ref<string>('')
+const broadcastNewAudioSrc = ref<string>("");
 
 // 消息滑动到底部，建议搭配 nextTick 使用
 const scrollToBottom = () => {
-  scrollTop.value += 3000
+  scrollTop.value += 3000;
   const timer = setTimeout(() => {
-    scrollTop.value += 1
-    clearTimeout(timer)
-  }, 300)
-}
+    scrollTop.value += 1;
+    clearTimeout(timer);
+  }, 300);
+};
 
 const onLoadMore = () => {
   const msg = finalMsgs.value.filter(
     (item) =>
       !(
-        item.type === 'custom' &&
-        ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
+        item.type === "custom" &&
+        ["beReCallMsg", "reCallMsg"].includes(item.attach?.type || "")
       )
-  )[0]
+  )[0];
   if (msg) {
-    uni.$emit(events.GET_HISTORY_MSG, msg)
+    uni.$emit(events.GET_HISTORY_MSG, msg);
   }
-}
+};
 
 const handleTapMessageList = () => {
-  uni.$emit(events.CLOSE_PANEL)
+  uni.$emit(events.CLOSE_PANEL);
   setTimeout(() => {
-    uni.$emit(events.CLOSE_PANEL)
-  }, 300)
-}
+    uni.$emit(events.CLOSE_PANEL);
+  }, 300);
+};
 </script>
 
 <style scoped lang="scss">

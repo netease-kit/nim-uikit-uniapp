@@ -15,6 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, strong) NSString *imVersion;
 
 @property(nonatomic, assign) NSInteger cacheCount;
+// 组件平台信息，开发者无需关心
+@property(nonatomic, strong) NSString *framework;
+// 组件平台信息，开发者无需关心
+@property(nonatomic, strong) NSString *channel;
 
 @end
 

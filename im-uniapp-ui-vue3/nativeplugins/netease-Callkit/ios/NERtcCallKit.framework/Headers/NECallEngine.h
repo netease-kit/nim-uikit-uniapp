@@ -91,6 +91,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// 中转NERtcEngine统计回调
 @property(nonatomic, weak) id<NERtcEngineMediaStatsObserver> observer;
 
+/// 初始化设置
+@property(nonatomic, readonly, strong) NESetupConfig *config;
+
 /// 单例
 + (instancetype)sharedInstance;
 
