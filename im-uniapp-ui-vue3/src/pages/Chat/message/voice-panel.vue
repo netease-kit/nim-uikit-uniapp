@@ -27,9 +27,7 @@
 import { ref } from '../../../utils/transformVue'
 import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
-import { getUniPlatform, stopAllAudio } from '../../../utils'
-
-const isWeixinApp = getUniPlatform() === 'mp-weixin'
+import { isWxApp, stopAllAudio } from '../../../utils'
 
 const $emit = defineEmits(['handleSendAudioMsg'])
 
@@ -80,7 +78,7 @@ recorderManager.onStop((res) => {
 recorderManager.onError((res) => {
   console.log('=======recorder error======', res)
   recordState.value = 'stop'
-  if (!isWeixinApp) {
+  if (!isWxApp) {
     uni.showToast({
       title: t('audioErrorText'),
       icon: 'none',

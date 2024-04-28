@@ -20,12 +20,12 @@
     <div v-else class="avatar-wrapper">
       <Avatar :account="forwardTo" size="36" />
       <div class="name">
-        <span>{{forwardToNick}}</span>
+        <span>{{ forwardToNick }}</span>
       </div>
     </div>
     <div class="description">
       {{ '[' + t('forwardText') + ']' }}
-      {{forwardFromNick}}
+      {{ forwardFromNick }}
       {{ t('sessionRecordText') }}
     </div>
     <input
@@ -38,40 +38,39 @@
 
 <script lang="ts" setup>
 import { t } from '../../../utils/i18n'
-import { ref, onMounted, computed } from '../../../utils/transformVue';
+import { ref, computed } from '../../../utils/transformVue'
 import Modal from '../../../components/Modal.vue'
 import Avatar from '../../../components/Avatar.vue'
-import { deepClone } from '../../../utils';
-import { events } from '../../../utils/constants'
+import { deepClone } from '../../../utils'
 const props = defineProps({
-    forwardModalVisible: {
-      type: Boolean,
-      required: true
-    },
-    forwardTo: {
-      type: String,
-      required: true
-    },
-    forwardMsg: {
-      type: Object, // Assuming IMMessage is an object type
-      required: false
-    },
-    forwardScene: {
-      type: String, // Assuming TMsgScene is a string type
-      required: true
-    },
-    forwardToTeamInfo: {
-      type: Object, // Assuming Team is an object type
-      default:() => ({
-        teamId: '',
-        name: '',
-        avatar: '',
-      }),
-      required: false
-    }
-  })
+  forwardModalVisible: {
+    type: Boolean,
+    required: true,
+  },
+  forwardTo: {
+    type: String,
+    required: true,
+  },
+  forwardMsg: {
+    type: Object, // Assuming IMMessage is an object type
+    required: false,
+  },
+  forwardScene: {
+    type: String, // Assuming TMsgScene is a string type
+    required: true,
+  },
+  forwardToTeamInfo: {
+    type: Object, // Assuming Team is an object type
+    default: () => ({
+      teamId: '',
+      name: '',
+      avatar: '',
+    }),
+    required: false,
+  },
+})
 
-const emit = defineEmits(["confirm", "cancel"])
+const emit = defineEmits(['confirm', 'cancel'])
 
 const forwardComment = ref('')
 
@@ -88,18 +87,22 @@ const handleConfirm = () => {
 }
 
 const forwardToNick = computed(() => {
-  return deepClone(uni.$UIKitStore.uiStore.getAppellation({
-    account: props.forwardTo,
-  }))
+  return deepClone(
+    // @ts-ignore
+    uni.$UIKitStore.uiStore.getAppellation({
+      account: props.forwardTo,
+    })
+  )
 })
 
 const forwardFromNick = computed(() => {
-  return deepClone(uni.$UIKitStore.uiStore.getAppellation({
-    account: props.forwardMsg?.from,
-  }))
+  return deepClone(
+    // @ts-ignore
+    uni.$UIKitStore.uiStore.getAppellation({
+      account: props.forwardMsg?.from,
+    })
+  )
 })
-
-
 </script>
 
 <style lang="scss" scoped>
@@ -125,7 +128,6 @@ const forwardFromNick = computed(() => {
   padding: 5px 8px;
   box-sizing: border-box;
 }
-
 
 .avatar-wrapper {
   display: flex;

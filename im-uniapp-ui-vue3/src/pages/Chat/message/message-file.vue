@@ -1,6 +1,6 @@
 <template>
   <uni-link
-    v-if="!isWeixinApp"
+    v-if="!isWxApp"
     class="msg-file-wrapper"
     :href="downloadUrl"
     :download="name"
@@ -42,15 +42,14 @@ import { getFileType, parseFileSize } from '@xkit-yx/utils'
 import Icon from '../../../components/Icon.vue'
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
-import { getUniPlatform } from '../../../utils'
+import { isWxApp } from '../../../utils'
+import { t } from '../../../utils/i18n'
 const props = defineProps({
   msg: {
     type: Object,
     required: true,
   },
 })
-
-const isWeixinApp = getUniPlatform() === 'mp-weixin'
 
 const fileIconMap = {
   pdf: 'icon-PPT',
@@ -72,12 +71,13 @@ const iconType = fileIconMap[getFileType(ext)] || 'icon-weizhiwenjian'
 const downloadUrl =
   url + ((url as string).includes('?') ? '&' : '?') + `download=${name}`
 
+// 小程序不支持直接下载文件，复制链接到剪切板，浏览器打开
 const mpDownload = () => {
   uni.setClipboardData({
     data: downloadUrl,
   })
   uni.showModal({
-    content: '已自动复制网址，请在手机浏览器里粘贴该网址',
+    content: t('wxAppFileCopyText'),
     showCancel: false,
   })
 }

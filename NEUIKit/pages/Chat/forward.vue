@@ -71,7 +71,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from '../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../utils/transformVue'
 import NavBar from '../../components/NavBar.vue'
 import { t } from '../../utils/i18n'
 import { onLoad } from '@dcloudio/uni-app'
@@ -95,8 +95,11 @@ const friendGroupList = ref<
 >([])
 const forwardScene = ref<TMsgScene>('p2p')
 const teamList = ref<Team[]>([])
+// @ts-ignore
 const sessionId = uni.$UIKitStore?.uiStore.selectedSession
+// @ts-ignore
 const [scene, to] = uni.$UIKitStore?.uiStore.selectedSession.split('-')
+// @ts-ignore
 const myAccount = uni.$UIKitStore?.userStore.myUserInfo.account
 let msgIdClient = ''
 // 转发相关
@@ -107,6 +110,7 @@ const forwardToTeamInfo = ref<Team>()
 const moveThrough = computed(() => {
   return forwardModalVisible.value
 })
+// 转发消息确认
 const handleForwardConfirm = (forwardComment: string) => {
   forwardModalVisible.value = false
   // @ts-ignore
@@ -147,13 +151,15 @@ onLoad((props) => {
   msgIdClient = props?.msgIdClient
 })
 
-autorun(() => {
+const uninstallTeamListWatch = autorun(() => {
+  // @ts-ignore
   teamList.value = deepClone(uni.$UIKitStore.uiStore.teamList)
 })
 
-autorun(() => {
+const uninstallFriendsWatch = autorun(() => {
+  // @ts-ignore
   const _friendList = uni.$UIKitStore.uiStore.friendsWithoutBlacklist.filter(
-    (item) => !(item.account == to || item.account == myAccount)
+    (item: any) => !(item.account == to || item.account == myAccount)
   )
   friendGroupList.value = deepClone(
     friendGroupByPy(
@@ -178,16 +184,23 @@ const handleItemClick = (_forwardTo: string) => {
   if (_forwardTo && msgIdClient) {
     forwardTo.value = _forwardTo
     forwardMsg.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.msgStore.getMsg(sessionId, [msgIdClient])?.[0]
     )
     forwardModalVisible.value = true
     if (forwardScene.value === 'team') {
       forwardToTeamInfo.value = deepClone(
+        // @ts-ignore
         uni.$UIKitStore.teamStore.teams.get(_forwardTo)
       )
     }
   }
 }
+
+onUnmounted(() => {
+  uninstallTeamListWatch()
+  uninstallFriendsWatch()
+})
 </script>
 
 <style lang="scss" scoped>

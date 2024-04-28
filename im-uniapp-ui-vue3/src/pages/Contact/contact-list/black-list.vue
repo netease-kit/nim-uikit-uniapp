@@ -9,22 +9,24 @@
           <Avatar :account="item" :gotoUserCard="true" />
           <Appellation class="black-name" :account="item" />
         </div>
-        <div class="black-button" @click="() => handleClick(item)">{{ t('removeBlacklist') }}</div>
+        <div class="black-button" @click="() => handleClick(item)">
+          {{ t('removeBlacklist') }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { autorun } from 'mobx';
-import { ref } from '../../../utils/transformVue';
+import { autorun } from 'mobx'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 // @ts-ignore
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import Appellation from '../../../components/Appellation.vue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
-import { deepClone } from '../../../utils';
+import { deepClone } from '../../../utils'
 
 const blacklist = ref<string[]>([])
 
@@ -33,30 +35,37 @@ const handleClick = async (account: string) => {
   try {
     // @ts-ignore
     // 通过isAdd来判断是添加还是移除黑名单
-    await uni.$UIKitStore.relationStore.setBlackActive({ account, isAdd: false })
+    await uni.$UIKitStore.relationStore.setBlackActive({
+      account,
+      isAdd: false,
+    })
     uni.showToast({
       title: t('removeBlackSuccessText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('removeBlackFailText'),
-      icon: 'error'
+      icon: 'error',
     })
   }
 }
 
-autorun(() => {
+const uninstallBlacklistWatch = autorun(() => {
   // @ts-ignore
   blacklist.value = deepClone(uni.$UIKitStore.relationStore.blacklist)
 })
 
-autorun(() => {
+const uninstallUsersWatch = autorun(() => {
   // 加一个监听
   // @ts-ignore
   console.log('users: ', uni.$UIKitStore.userStore.users)
 })
 
+onUnmounted(() => {
+  uninstallBlacklistWatch()
+  uninstallUsersWatch()
+})
 </script>
 
 <style lang="scss" scoped>

@@ -52,6 +52,8 @@ export const events = {
   HANDLE_MOVE_THROUGH: 'handleMoveThrough',
   // 关闭表情、语音面板
   CLOSE_PANEL: 'closePanel',
+  // 语音消息url改变
+  AUDIO_URL_CHANGE: 'audioUrlChange',
 }
 
 export const HISTORY_LIMIT = 15
@@ -62,7 +64,7 @@ export const AT_ALL_ACCOUNT = 'ait_all'
 
 export const ALLOW_AT = 'yxAllowAt'
 
-export const REPLY_MSG_TYPE_MAP = {
+export const REPLY_MSG_TYPE_MAP: any = {
   image: t('imgMsgText'),
   audio: t('audioMsgText'),
   video: t('videoMsgText'),
@@ -71,4 +73,15 @@ export const REPLY_MSG_TYPE_MAP = {
 
 export const STORAGE_KEY = '__yx_im_options__'
 
-export const H5_HAS_LOGIN_KEY = 'h5_has_login'
+export const callTypeMap = {
+  audio: '1',
+  video: '2',
+}
+
+export const g2StatusMap: any = {
+  1: t('callDurationText'),
+  2: t('callCancelText'),
+  3: t('callRejectedText'),
+  4: t('callTimeoutText'),
+  5: t('callBusyText'),
+}

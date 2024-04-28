@@ -18,9 +18,9 @@ im-uikit-uniapp 界面效果如下图所示：
 
 [项目集成详见官网](https://doc.yunxin.163.com/messaging-enhanced/docs/TQyNDE5OTQ?platform=uniapp)
 
-## 运行demo
-- vue2或vue3工程下，npm i 安装依赖，在app.vue中填入appkey、account、token后运行项目即可。
+## 运行 demo
+
+- 进入 im-uniapp-ui-vue2（vue2 版本） 或 im-uniapp-ui-vue3（vue3 版本） 工程下，npm i 安装依赖，在 app.vue 中的 new NimKitCore、nimCallKit.initConfig、nimCallKit.login 方法中填入 appkey、account、token 后,使用 HBuilderX 运行项目即可（demo 体验音视频功能，需要使用 HBuilderX 制定自定义基座后运行项目）。
+- NEUIKit 为 demo 源码
 - [创建应用并获取 AppKey](https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console)
-- [注册云信账号](https://doc.yunxin.163.com/messaging/docs/DQ3Nzk1MTY?platform=server)
-
-
+- [注册云信账号，获取 account、token](https://doc.yunxin.163.com/messaging/docs/DQ3Nzk1MTY?platform=server)

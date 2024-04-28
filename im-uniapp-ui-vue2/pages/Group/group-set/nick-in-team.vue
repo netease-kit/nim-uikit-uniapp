@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
-import { ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 import Icon from '../../../components/Icon.vue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
@@ -47,13 +47,14 @@ const inputValue = ref('')
 const showClearIcon = ref(false)
 const myMemberInfo = ref<TeamMember>()
 let teamId = ''
-
+let uninstallTeamMemberWatch = () => {}
 onLoad((option) => {
   teamId = option ? option.id : ''
-  autorun(() => {
-    // @ts-ignore
+  uninstallTeamMemberWatch = autorun(() => {
     myMemberInfo.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.teamMemberStore.getTeamMember(teamId, [
+        // @ts-ignore
         uni.$UIKitStore.userStore.myUserInfo.account,
       ])[0]
     )
@@ -98,6 +99,10 @@ const back = () => {
     delta: 1,
   })
 }
+
+onUnmounted(() => {
+  uninstallTeamMemberWatch()
+})
 </script>
 
 <style lang="scss" scoped>

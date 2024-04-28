@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 import FriendSelect from '../../../components/FriendSelect.vue'
-import { ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
@@ -23,7 +23,6 @@ import { deepClone } from '../../../utils'
 import { events } from '../../../utils/constants'
 import { TeamMember } from '@xkit-yx/im-store'
 import { autorun } from 'mobx'
-import { customRedirectTo } from '../../../utils/customNavigate'
 
 const teamMemberList = ref<TeamMember[]>([])
 let selectManager: string[] = []
@@ -82,19 +81,19 @@ const onOk = debounce(() => {
     })
 }, 800)
 
+let uninstallTeamMemberListWatch = () => {}
 onLoad((props) => {
   teamId = props ? props.id : ''
-
   autorun(() => {
-    // @ts-ignore
-    teamMemberList.value = deepClone(
+    uninstallTeamMemberListWatch = teamMemberList.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.teamMemberStore
         .getTeamMember(teamId)
-        .filter((item) => {
+        .filter((item: any) => {
           // @ts-ignore
           return item.account !== uni.$UIKitStore.userStore.myUserInfo.account
         })
-        .map((item) => {
+        .map((item: any) => {
           if (item.type === 'manager') {
             selectManager.push(item.account)
           }
@@ -109,12 +108,16 @@ onLoad((props) => {
             disabled: item.type === 'manager',
           }
         })
-        .sort((a, b) => a.joinTime - b.joinTime)
+        .sort((a: any, b: any) => a.joinTime - b.joinTime)
     )
   })
   uni.$on(events.FRIEND_SELECT, () => {
     onOk()
   })
+})
+
+onUnmounted(() => {
+  uninstallTeamMemberListWatch()
 })
 
 onUnload(() => {

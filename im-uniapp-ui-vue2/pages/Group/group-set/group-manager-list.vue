@@ -40,7 +40,7 @@
 
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
@@ -114,21 +114,25 @@ const isGroupOwner = computed(() => {
   const myUser = uni.$UIKitStore.userStore.myUserInfo
   return (team.value ? team.value.owner : '') === (myUser ? myUser.account : '')
 })
-
+let uninstallGroupMembersWatch = () => {}
 onLoad((props) => {
   teamId = props ? props.id : ''
 
-  autorun(() => {
+  uninstallGroupMembersWatch = autorun(() => {
     // @ts-ignore
     team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
-    // @ts-ignore
     groupMembers.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.teamMemberStore
         .getTeamMember(teamId)
-        .filter((item) => item.type === 'manager')
-        .sort((a, b) => a.joinTime - b.joinTime)
+        .filter((item: any) => item.type === 'manager')
+        .sort((a: any, b: any) => a.joinTime - b.joinTime)
     )
   })
+})
+
+onUnmounted(() => {
+  uninstallGroupMembersWatch()
 })
 </script>
 

@@ -3,7 +3,13 @@
     <NavBar :title="t('teamMenuText')" />
     <div class="group-list-content">
       <Empty v-if="teamList.length === 0" :text="t('teamEmptyText')" />
-      <div v-else class="group-item" v-for="team in teamList" :key="team.teamId" @click="handleClick(team)">
+      <div
+        v-else
+        class="group-item"
+        v-for="team in teamList"
+        :key="team.teamId"
+        @click="handleClick(team)"
+      >
         <Avatar :account="team.teamId" :avatar="team.avatar" />
         <span class="group-name">{{ team.name }}</span>
       </div>
@@ -12,15 +18,15 @@
 </template>
 
 <script lang="ts" setup>
-import type { Team } from '@xkit-yx/im-store';
-import { autorun } from 'mobx';
-import { ref } from '../../../utils/transformVue';
+import type { Team } from '@xkit-yx/im-store'
+import { autorun } from 'mobx'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import NavBar from '../../../components/NavBar.vue'
-import { customNavigateTo } from '../../../utils/customNavigate';
-import { deepClone } from '../../../utils';
+import { customNavigateTo } from '../../../utils/customNavigate'
+import { deepClone } from '../../../utils'
 import { t } from '../../../utils/i18n'
 
 const teamList = ref<Team[]>([])
@@ -29,15 +35,18 @@ const handleClick = async (team: Team) => {
   // @ts-ignore
   await uni.$UIKitStore.uiStore.selectSession(`team-${team.teamId}`)
   customNavigateTo({
-    url: '/pages/Chat/index'
+    url: '/pages/Chat/index',
   })
 }
 
-autorun(() => {
+const uninstallTeamListWatch = autorun(() => {
   // @ts-ignore
   teamList.value = deepClone(uni.$UIKitStore.uiStore.teamList)
 })
 
+onUnmounted(() => {
+  uninstallTeamListWatch()
+})
 </script>
 
 <style lang="scss" scoped>

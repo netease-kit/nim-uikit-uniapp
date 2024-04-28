@@ -8,7 +8,7 @@ export const trackInit = (
     const eventTracking = new EventTracking({
       // @ts-ignore
       appKey: uni.$UIKitNIM?.initOptions?.appkey,
-      version: '1.4.0',
+      version: '1.5.0',
       component,
       // @ts-ignore
       imVersion: uni.$UIKitNIM.version,

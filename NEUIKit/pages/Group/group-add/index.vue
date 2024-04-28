@@ -34,11 +34,11 @@ onLoad((props) => {
   teamId = props ? props.teamId : ''
   // @ts-ignore
   const res = uni.$UIKitStore.teamMemberStore.getTeamMember(teamId)
-  const _teamMembers = res.map((item) => {
+  const _teamMembers = res.map((item: any) => {
     return item.account
   })
   friendList.value = deepClone(
-    _friendList.map((item) => {
+    _friendList.map((item: any) => {
       item = {
         ...item,
         // @ts-ignore
@@ -82,12 +82,12 @@ const addTeamMember = debounce(() => {
   // @ts-ignore
   uni.$UIKitStore?.teamMemberStore
     .addTeamMemberActive({ teamId, accounts: newTeamMember })
-    .then(async (res) => {
+    .then(async () => {
       uni.navigateBack({
         delta: 1,
       })
     })
-    .catch((err) => {
+    .catch((err: any) => {
       switch (err ? err.code : '') {
         case 802:
           uni.showToast({

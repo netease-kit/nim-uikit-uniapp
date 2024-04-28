@@ -68,9 +68,9 @@
         </div>
       </div>
       <div v-if="inputVisible" class="msg-input">
-        <!-- 当从表情面板切换到文字输入时，直接唤起键盘，ios 会存在input框消失的情况，故此处需要用EmojiInput兼容下 -->
+        <!-- 当从表情面板切换到文字输入时，直接唤起键盘，会导致input框滚动消失，故此处需要用EmojiInput兼容下，保证先隐藏表情面板，再弹出键盘 -->
         <div
-          v-if="showEmojiInput && !isIOSWeb"
+          v-show="showEmojiInput"
           @click="onClickEmojiInput"
           class="input-emoji"
         >
@@ -82,7 +82,7 @@
           </div>
         </div>
         <input
-          v-else
+          v-show="!showEmojiInput"
           :focus="isFocus"
           class="msg-input-input"
           :maxlength="-1"
@@ -98,7 +98,6 @@
           confirm-type="send"
           @confirm="handleSendTextMsg"
           @blur="handleInputBlur"
-          @focus="handleInputFocus"
           @input="handleInput"
           id="msg-input"
         />
@@ -125,20 +124,55 @@
         class="send-more-panel"
         @click.stop="() => {}"
       >
-        <div
-          class="send-more-panel-item"
-          @tap="(event) => handleSendVideoMsg('camera', event)"
-        >
-          <Icon type="icon-paishe" :size="30"></Icon>
+        <div class="send-more-panel-item-wrapper">
+          <div
+            class="send-more-panel-item"
+            @tap="
+              (
+                // @ts-ignore
+                event
+              ) => handleSendVideoMsg('camera', event)
+            "
+          >
+            <Icon type="icon-paishe" :size="30"></Icon>
+          </div>
+          <div class="icon-text">{{ t('shootText') }}</div>
+        </div>
+        <div class="send-more-panel-item-wrapper">
+          <div
+            class="send-more-panel-item"
+            @tap="
+              (
+                // @ts-ignore
+                event
+              ) => handleSendVideoMsg('album', event)
+            "
+          >
+            <Icon type="icon-shipin2" :size="30"></Icon>
+          </div>
+          <div class="icon-text">{{ t('albumText') }}</div>
         </div>
         <div
-          class="send-more-panel-item"
-          @tap="(event) => handleSendVideoMsg('album', event)"
+          class="send-more-panel-item-wrapper"
+          v-if="isApp && scene !== 'team'"
         >
-          <Icon type="icon-shipin2" :size="30"></Icon>
+          <div class="send-more-panel-item" @tap="handleCall(1)">
+            <Icon type="icon-audio-call" :size="30"></Icon>
+          </div>
+          <div class="icon-text">{{ t('voiceCallText') }}</div>
+        </div>
+        <div
+          class="send-more-panel-item-wrapper"
+          v-if="isApp && scene !== 'team'"
+        >
+          <div class="send-more-panel-item" @tap="() => handleCall(2)">
+            <Icon type="icon-video-call" :size="30"></Icon>
+          </div>
+          <div class="icon-text">{{ t('videoCallText') }}</div>
         </div>
       </div>
     </div>
+    <!-- @消息相关 popup -->
     <UniPopup
       ref="popupRef"
       background-color="#ffffff"
@@ -153,7 +187,6 @@
 
 <script lang="ts" setup>
 import type { TMsgScene } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
-// @ts-ignore
 import Face from './face.vue'
 import VoicePanel from './voice-panel.vue'
 import Icon from '../../../components/Icon.vue'
@@ -165,14 +198,27 @@ import {
   onMounted,
   defineProps,
 } from '../../../utils/transformVue'
-import { ALLOW_AT, events, REPLY_MSG_TYPE_MAP } from '../../../utils/constants'
+import {
+  ALLOW_AT,
+  events,
+  REPLY_MSG_TYPE_MAP,
+  STORAGE_KEY,
+} from '../../../utils/constants'
 import { emojiMap } from '../../../utils/emoji'
 import { t } from '../../../utils/i18n'
 import { handleNoPermission } from '../../../utils/permission'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import type { IMMessage } from '@xkit-yx/im-store'
 import MessageOneLine from '../../../components/MessageOneLine.vue'
-import { getUniPlatform, stopAllAudio } from '../../../utils'
+import {
+  isAndroidApp,
+  stopAllAudio,
+  isIosWeb,
+  isWeb,
+  isWxApp,
+  startCall,
+  isApp,
+} from '../../../utils'
 // @ts-ignore
 import UniPopup from '../../../components/uni-components/uni-popup/components/uni-popup/uni-popup.vue'
 import MentionMemberList from './mention-member-list.vue'
@@ -185,7 +231,7 @@ import { deepClone } from '../../../utils'
 type MentionedMember = { account: string; appellation: string }
 const props = defineProps({
   scene: {
-    type: String, // Assuming TMsgScene is a custom object type
+    type: String,
     required: true,
   },
   to: {
@@ -213,13 +259,33 @@ const inputVisible = computed(() => {
     return true
   }
 })
-const uniPlatform = getUniPlatform()
-const isAndroidApp =
-  uni.getSystemInfoSync().platform == 'android' && uniPlatform == 'app'
+
+// 发起呼叫，type: 1 音频呼叫，2 视频呼叫
+const handleCall = (type: number) => {
+  // @ts-ignore
+  const myAccount = uni.$UIKitStore.userStore.myUserInfo.account
+  // @ts-ignore
+  const remoteShowName = uni.$UIKitStore.uiStore.getAppellation({
+    account: props.to,
+  })
+  if (myAccount) {
+    // @ts-ignore
+    startCall({
+      remoteUserAccid: props.to,
+      currentUserAccid: myAccount,
+      type: type,
+      remoteShowName: remoteShowName,
+    })
+  } else {
+    uni.showToast({
+      title: t('callFailedText'),
+      icon: 'none',
+    })
+  }
+}
+// 用于解决表情面板和键盘冲突，导致输入框滚动消失问题
 const showEmojiInput = ref(false)
-const isIOSWeb =
-  uniPlatform === 'web' && uni.getSystemInfoSync().platform === 'ios'
-const isWeb = uniPlatform === 'web'
+
 // 回复消息相关
 const isReplyMsg = ref(false)
 const isFocus = ref(false)
@@ -242,20 +308,10 @@ const team = ref<Team>()
 const teamMembers = ref<TeamMember[]>([])
 const teamMute = ref(false)
 
-const isGroupOwner = computed(() => {
-  // @ts-ignore
-  const myUser = uni.$UIKitStore.userStore.myUserInfo
-  return (team.value ? team.value.owner : '') === (myUser ? myUser.account : '')
-})
+const isGroupOwner = ref(false)
+const isGroupManager = ref(false)
 
-const isGroupManager = computed(() => {
-  // @ts-ignore
-  const myUser = uni.$UIKitStore.userStore.myUserInfo
-  return teamMembers.value
-    .filter((item) => item.type === 'manager')
-    .some((member) => member.account === (myUser ? myUser.account : ''))
-})
-
+// 是否允许@所有人
 const allowAtAll = computed(() => {
   let ext: any = {}
   try {
@@ -269,21 +325,45 @@ const allowAtAll = computed(() => {
   return true
 })
 
-const isTeamMute = computed(() => {
+// 是否是群禁言
+// const isTeamMute = computed(() => {
+//   console.log(
+//     'isGroupOwner, isGroupManager',
+//     isGroupOwner.value,
+//     isGroupManager.value
+//   )
+
+//   if (!teamMute.value) {
+//     return false
+//   }
+//   // 群主或者群管理员在群禁言时，可以发送消息
+//   if (isGroupOwner.value || isGroupManager.value) {
+//     return false
+//   }
+//   return true
+// })
+
+const isTeamMute = ref(false)
+
+const updateTeamMute = () => {
   if (!teamMute.value) {
-    return false
+    isTeamMute.value = false
+    return
   }
   // 群主或者群管理员在群禁言时，可以发送消息
   if (isGroupOwner.value || isGroupManager.value) {
-    return false
+    isTeamMute.value = false
+    return
   }
-  return true
-})
+  isTeamMute.value = true
+  return
+}
 
 const onPopupChange = (e: any) => {
   uni.$emit(events.HANDLE_MOVE_THROUGH, e.value)
 }
 
+// 点击@群成员
 const handleMentionItemClick = (member: MentionedMember) => {
   // @ts-ignore
   ctx.refs.popupRef.close()
@@ -305,27 +385,52 @@ const closePopup = () => {
   ctx.refs.popupRef.close()
 }
 
+// 点击表情输入框，隐藏表情面板，显示键盘
 const onClickEmojiInput = () => {
   showEmojiInput.value = false
   extVisible.value = false
   emojiVisible.value = false
-  setTimeout(() => {
+  if (isIosWeb) {
     isFocus.value = true
-  }, 300)
+  } else {
+    setTimeout(() => {
+      isFocus.value = true
+    }, 500)
+  }
 }
 
 const handleInputFocus = () => {
-  uni.$emit(events.ON_INPUT_FOCUS_CHANGE, true)
+  emojiVisible.value = false
+  isFocus.value = true
+  if (isAndroidApp) {
+    setTimeout(() => {
+      isFocus.value = true
+    }, 300)
+  }
+  if (isIosWeb) {
+    const inputRoot = document.getElementById('msg-input')
+    setTimeout(() => {
+      inputRoot?.scrollIntoView()
+    }, 300)
+  }
 }
 
 const handleInputBlur = () => {
   isFocus.value = false
-  // setTimeout(() => {
-  //   uni.$emit(events.ON_SCROLL_BOTTOM)
-  // }, 300)
-  uni.$emit(events.ON_INPUT_FOCUS_CHANGE, false)
 }
 
+// 滚动到底部
+const scrollBottom = () => {
+  if (isAndroidApp || isWxApp) {
+    setTimeout(() => {
+      uni.$emit(events.ON_SCROLL_BOTTOM)
+    }, 300)
+  } else {
+    uni.$emit(events.ON_SCROLL_BOTTOM)
+  }
+}
+
+// 输入框输入事件
 const handleInput = (event: any) => {
   const text = event?.detail?.value
   const isAit = text.endsWith('@') || text.endsWith('@\n')
@@ -353,17 +458,18 @@ const handleSendTextMsg = () => {
       body: inputText.value,
       ext: selectedAtMembers.value.length && ext,
     })
-    .then(() => {
-      // if (extVisible.value) {
-      //   emojiVisible.value = false
-      //   extVisible.value = false
-      //   uni.hideKeyboard()
-      // }
+    .finally(() => {
+      if (isAndroidApp) {
+        setTimeout(() => {
+          uni.$emit(events.ON_SCROLL_BOTTOM)
+        }, 300)
+      } else {
+        uni.$emit(events.ON_SCROLL_BOTTOM)
+      }
     })
   inputText.value = ''
   isReplyMsg.value = false
   selectedAtMembers.value = []
-  uni.$emit(events.ON_SCROLL_BOTTOM)
 }
 
 // 移除回复消息
@@ -378,7 +484,7 @@ const removeReplyMsg = () => {
 // 显示表情面板
 const handleEmojiVisible = () => {
   if (isTeamMute.value) return
-  if (uniPlatform == 'mp-weixin' || isAndroidApp) {
+  if (isWxApp || isAndroidApp) {
     setTimeout(() => {
       emojiVisible.value = true
       extVisible.value = true
@@ -405,9 +511,11 @@ const handleSendMoreVisible = () => {
   }, 300)
 }
 
+// 点击表情
 const handleEmoji = (emoji: { key: string; type: string }) => {
   inputText.value += emoji.key
 }
+
 // 删除表情
 const handleEmojiDelete = () => {
   let target = ''
@@ -450,16 +558,15 @@ const handleSendImageMsg = () => {
           to: props.to,
           filePath: res.tempFilePaths[0],
         })
+        .then(() => {
+          scrollBottom()
+        })
         .catch(() => {
+          scrollBottom()
           uni.showToast({
             icon: 'error',
             title: t('sendImageFailedText'),
           })
-        })
-        .finally(() => {
-          setTimeout(() => {
-            uni.$emit(events.ON_SCROLL_BOTTOM)
-          }, 100)
         })
     },
     //没有开启权限时，提示开启权限
@@ -472,7 +579,7 @@ const handleSendVideoMsg = (type: string, event: any) => {
   if (isTeamMute.value) return
   stopAllAudio()
   // 这里做一层拦截的原因是，微信小程序在input聚焦的时候点击+号按钮，会触发此函数执行，阻止冒泡也无法解决该问题，疑为uniapp编译问题
-  if (uniPlatform == 'mp-weixin' && event?.type == 'blur') {
+  if (isWxApp && event?.type == 'blur') {
     return
   }
 
@@ -488,21 +595,18 @@ const handleSendVideoMsg = (type: string, event: any) => {
           to: props.to,
           filePath: res.tempFilePath,
           onUploadStart: () => {
-            setTimeout(() => {
-              uni.$emit(events.ON_SCROLL_BOTTOM)
-            }, 100)
+            scrollBottom()
           },
         })
+        .then(() => {
+          scrollBottom()
+        })
         .catch(() => {
+          scrollBottom()
           uni.showToast({
             icon: 'error',
             title: t('sendVideoFailedText'),
           })
-        })
-        .finally(() => {
-          setTimeout(() => {
-            uni.$emit(events.ON_SCROLL_BOTTOM)
-          }, 100)
         })
     },
     //没有开启权限时，提示开启权限
@@ -520,39 +624,16 @@ const handleSendAudioMsg = (filePath: string, duration: number) => {
       filePath,
       duration,
       onUploadStart: () => {
-        setTimeout(() => {
-          uni.$emit(events.ON_SCROLL_BOTTOM)
-        }, 100)
+        scrollBottom()
       },
-    })
-    .then(() => {
-      uni.$emit(events.ON_SCROLL_BOTTOM)
     })
     .catch(() => {
       uni.showToast({
         icon: 'error',
         title: t('sendAudioFailedText'),
       })
+      scrollBottom()
     })
-    .finally(() => {
-      setTimeout(() => {
-        uni.$emit(events.ON_SCROLL_BOTTOM)
-      }, 100)
-    })
-}
-
-const handleSendFileMsg = () => {
-  uni.chooseFile({
-    count: 1,
-    success: (res) => {
-      // @ts-ignore
-      uni.$UIKitStore.msgStore.sendFileMsgActive({
-        scene: props.scene as TMsgScene,
-        to: props.to,
-        filePath: res.tempFilePaths[0],
-      })
-    },
-  })
 }
 
 // 跳转设置页
@@ -568,18 +649,26 @@ const handleSetting = () => {
   }
 }
 
+let uninstallTeamWatch = () => {}
+
 onMounted(() => {
-  autorun(() => {
+  uninstallTeamWatch = autorun(() => {
     if (props.scene === 'team') {
       // @ts-ignore
       const team = deepClone(uni.$UIKitStore.teamStore.teams.get(props.to))
-      team.value = team
-      teamMute.value = team.mute
-
       teamMembers.value = deepClone(
         // @ts-ignore
         uni.$UIKitStore.teamMemberStore.getTeamMember(props.to)
       )
+      // @ts-ignore
+      const myUser = uni.$UIKitStore.userStore.myUserInfo
+      isGroupOwner.value = team?.owner == myUser.account
+      isGroupManager.value = teamMembers.value
+        .filter((item) => item.type === 'manager')
+        .some((member) => member.account === (myUser ? myUser.account : ''))
+      team.value = team
+      teamMute.value = team.mute
+      updateTeamMute()
     }
   })
 
@@ -679,11 +768,8 @@ onMounted(() => {
 
   if (uni.onKeyboardHeightChange) {
     uni.onKeyboardHeightChange((res) => {
-      const isAndroidApp =
-        uni.getSystemInfoSync().platform == 'android' && uniPlatform == 'app'
       const isAndroidWxapp =
-        uni.getSystemInfoSync().platform == 'android' &&
-        uniPlatform == 'mp-weixin'
+        uni.getSystemInfoSync().platform == 'android' && isWxApp
       // 此处是为了点击安卓键盘上的收起按钮时，表情面板需要隐藏
       if (
         (res.height === 0 && isAndroidApp) ||
@@ -763,6 +849,7 @@ onUnmounted(() => {
   // 表情发送
   uni.$off(events.EMOJI_SEND)
   removeReplyMsg()
+  uninstallTeamWatch()
 })
 </script>
 
@@ -792,6 +879,7 @@ onUnmounted(() => {
 }
 
 .msg-input {
+  overflow-x: hidden;
   padding: 7px;
   background-color: #eff1f3;
 
@@ -937,14 +1025,24 @@ onUnmounted(() => {
   color: gray;
 }
 
-.send-more-panel-item {
-  background-color: #fff;
-  border-radius: 8px;
-  width: 56px;
-  height: 56px;
+.send-more-panel-item-wrapper {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  margin: 0 10px;
-  justify-content: center;
+  .send-more-panel-item {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin: 0 12px;
+    justify-content: center;
+  }
+  .icon-text {
+    font-size: 12px;
+    color: #747475;
+    margin-top: 8px;
+  }
 }
 </style>

@@ -1,5 +1,4 @@
 <template>
-  <!-- 回复消息时，被回复的消息需要在一行展示，超出显示省略号, 需要适配表情和文字 -->
   <div>
     <div class="wrapper">
       <template v-for="item in textArr">

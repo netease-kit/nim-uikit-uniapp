@@ -17,10 +17,10 @@
           :index="index"
           :key="item.renderKey"
           :reply-msg="replyMsgsMap && replyMsgsMap[item.idClient]"
+          :broadcastNewAudioSrc="broadcastNewAudioSrc"
         >
         </MessageItem>
       </div>
-      <!-- <div v-if="isIosH5" class="block"></div> -->
     </scroll-view>
   </div>
 </template>
@@ -36,8 +36,6 @@ import {
 import MessageItem from './message-item.vue'
 import { events } from '../../../utils/constants'
 import { caculateTimeago } from '../../../utils/date'
-import { onPageScroll } from '@dcloudio/uni-app'
-import { getUniPlatform } from '../../../utils'
 import { t } from '../../../utils/i18n'
 const props = defineProps({
   msgs: {
@@ -66,10 +64,42 @@ const props = defineProps({
   },
 })
 
-const isKeyboardUp = ref(false)
-const uniPlatform = getUniPlatform()
-const isIosH5 =
-  uniPlatform == 'web' && uni.getSystemInfoSync().platform == 'ios'
+onBeforeMount(() => {
+  if (props.scene === 'team') {
+    // @ts-ignore
+    uni.$UIKitStore.teamMemberStore.getTeamMemberActive(props.to)
+  }
+
+  uni.$on(events.AUDIO_URL_CHANGE, (url) => {
+    broadcastNewAudioSrc.value = url
+  })
+
+  uni.$on(events.ON_SCROLL_BOTTOM, () => {
+    scrollToBottom()
+  })
+
+  uni.$on(events.ON_LOAD_MORE, () => {
+    const msg = finalMsgs.value.filter(
+      (item) =>
+        !(
+          item.type === 'custom' &&
+          ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
+        )
+    )[0]
+    if (msg) {
+      uni.$emit(events.GET_HISTORY_MSG, msg)
+    }
+  })
+})
+
+onUnmounted(() => {
+  uni.$off(events.ON_SCROLL_BOTTOM)
+
+  uni.$off(events.ON_LOAD_MORE)
+
+  uni.$off(events.AUDIO_URL_CHANGE)
+})
+
 const scrollTop = ref(9999)
 const finalMsgs = computed(() => {
   const res: IMMessage[] = []
@@ -100,14 +130,7 @@ const finalMsgs = computed(() => {
   return res
 })
 
-// const start = ref(0)
-// const end = computed(() => start.value + HISTORY_LIMIT)
-
-// let lock = false
-
-onPageScroll(() => {
-  isKeyboardUp.value = false
-})
+const broadcastNewAudioSrc = ref<string>('')
 
 // 消息滑动到底部，建议搭配 nextTick 使用
 const scrollToBottom = () => {
@@ -137,92 +160,6 @@ const handleTapMessageList = () => {
     uni.$emit(events.CLOSE_PANEL)
   }, 300)
 }
-const moveThrough = ref(false)
-
-onBeforeMount(() => {
-  if (props.scene === 'team') {
-    // @ts-ignore
-    uni.$UIKitStore.teamMemberStore.getTeamMemberActive(props.to)
-  }
-  uni.$on(events.SEND_MSG, () => {
-    scrollToBottom()
-  })
-
-  uni.$on(events.ON_CHAT_MOUNTED, (msg: IMMessage) => {
-    if (uniPlatform === 'mp-weixin') {
-      scrollToBottom()
-    } else {
-      setTimeout(() => {
-        scrollToBottom()
-      }, 100)
-    }
-  })
-
-  uni.$on(events.ON_MSG, () => {
-    setTimeout(() => {
-      scrollToBottom()
-    }, 300)
-  })
-
-  uni.$on(events.ON_SCROLL_BOTTOM, () => {
-    setTimeout(() => {
-      scrollToBottom()
-    }, 0)
-  })
-
-  uni.$on(events.ON_LOAD_MORE, () => {
-    const msg = finalMsgs.value.filter(
-      (item) =>
-        !(
-          item.type === 'custom' &&
-          ['beReCallMsg', 'reCallMsg'].includes(item.attach?.type || '')
-        )
-    )[0]
-    if (msg) {
-      uni.$emit(events.GET_HISTORY_MSG, msg)
-    }
-  })
-
-  uni.$on(events.ON_INPUT_FOCUS_CHANGE, (flag) => {
-    isKeyboardUp.value = flag
-  })
-
-  // uni.$on(events.ON_REACH_BOTTOM, () => {
-  // if (end.value < props.msgs.length && !lock) {
-  //   lock = true
-  //   start.value += HISTORY_LIMIT
-  //   setTimeout(() => {
-  //     lock = false
-  //   }, 1500)
-  // }
-  // console.log('到底了！！！！', 'start: ', start.value, 'lock: ', lock, 'msg.lenght: ', props.msgs.length)
-  // })
-})
-
-// uni.$on(events.ON_REACH_TOP, () => {
-//   if (start.value > 0 && !lock) {
-//     lock = true
-//     start.value -= HISTORY_LIMIT
-//     setTimeout(() => {
-//       lock = false
-//     }, 1500)
-//   }
-//   console.log('到顶了！！！！', 'start: ', start.value, 'lock: ', lock, 'msg.lenght: ', props.msgs.length)
-// })
-
-onUnmounted(() => {
-  uni.$off(events.SEND_MSG)
-
-  uni.$off(events.ON_CHAT_MOUNTED)
-
-  uni.$off(events.ON_MSG)
-
-  uni.$off(events.ON_SCROLL_BOTTOM)
-
-  uni.$off(events.ON_LOAD_MORE)
-
-  uni.$off(events.ON_INPUT_FOCUS_CHANGE)
-})
 </script>
 
 <style scoped lang="scss">

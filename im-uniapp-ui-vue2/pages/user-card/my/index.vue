@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card-wrapper" @tap="navigatorToMydetail">
+    <div class="card-wrapper" @tap="navigatorToMyDetail">
       <UserCard
         :account="myUserInfo.account"
         :nick="myUserInfo.nick"
@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { onLoad, onShow } from '@dcloudio/uni-app'
 import UserCard from '../../../components/UserCard.vue'
-import { ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 import Icon from '../../../components/Icon.vue'
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
@@ -47,11 +47,16 @@ import { customNavigateTo } from '../../../utils/customNavigate'
 import { deepClone } from '../../../utils'
 import { t } from '../../../utils/i18n'
 
-const myUserInfo = ref()
+const myUserInfo = ref({
+  account: '',
+  nick: '',
+})
 
-autorun(() => {
-  // @ts-ignore
-  myUserInfo.value = deepClone(uni.$UIKitStore.userStore.myUserInfo)
+const uninstallMyUserInfoWatch = autorun(() => {
+  myUserInfo.value = deepClone(
+    // @ts-ignore
+    uni.$UIKitStore.userStore.myUserInfo
+  )
 })
 
 onLoad(() => {
@@ -70,11 +75,15 @@ const gotoSetting = () => {
   })
 }
 
-const navigatorToMydetail = () => {
+const navigatorToMyDetail = () => {
   customNavigateTo({
     url: `/pages/user-card/my-detail/index?account=${myUserInfo.value.account}`,
   })
 }
+
+onUnmounted(() => {
+  uninstallMyUserInfoWatch()
+})
 </script>
 
 <style lang="scss">

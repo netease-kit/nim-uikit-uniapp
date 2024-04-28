@@ -8,8 +8,7 @@
 </template>
 
 <script lang="ts" setup>
-
-import NavBar from '../../../components/NavBar.vue';
+import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 
 const logout = () => {
@@ -19,20 +18,19 @@ const logout = () => {
     showCancel: true,
     success: function (res) {
       if (res.confirm) {
-        console.log('用户点击确定');
+        console.log('用户点击确定')
         const app = getApp()
         app.logout()
       } else if (res.cancel) {
-        console.log('用户点击取消');
+        console.log('用户点击取消')
       }
-    }
-  });
+    },
+  })
 }
-
 </script>
 
 <style lang="scss" scoped>
-@import "../../styles/common.scss";
+@import '../../styles/common.scss';
 
 page {
   padding-top: var(--status-bar-height);

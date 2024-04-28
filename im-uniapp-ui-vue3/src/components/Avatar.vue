@@ -5,7 +5,7 @@
     @click="handleAvatarClick"
     @longpress="longpress"
     @touchend="touchend"
-  > 
+  >
     <!-- 使用遮罩层避免android长按头像会出现保存图片的弹窗 -->
     <div class="img-mask"></div>
     <image
@@ -15,11 +15,10 @@
       :src="avatarUrl"
       mode="aspectFill"
     />
-    <div class="avatar-name-wrapper"  :style="{ backgroundColor: color }">
-      <div
-        class="avatar-name-text"
-        :style="{ fontSize: fontSize + 'px' }"
-      >{{ appellation }}</div>
+    <div class="avatar-name-wrapper" :style="{ backgroundColor: color }">
+      <div class="avatar-name-text" :style="{ fontSize: fontSize + 'px' }">
+        {{ appellation }}
+      </div>
     </div>
   </div>
 </template>
@@ -28,58 +27,59 @@
 import { customNavigateTo, customRedirectTo } from '../utils/customNavigate'
 import type { UserNameCard } from '@xkit-yx/im-store'
 import { autorun } from 'mobx'
-import { ref, computed } from '../utils/transformVue'
-import { deepClone } from '../utils';
+import { ref, computed, onUnmounted } from '../utils/transformVue'
+import { deepClone } from '../utils'
 
 const props = defineProps({
   account: {
     type: String,
-    required: true
+    required: true,
   },
   teamId: {
     type: String,
-    default: ''
+    default: '',
   },
   avatar: {
     type: String,
-    default: ''
+    default: '',
   },
   size: {
     type: String,
-    default: ''
+    default: '',
   },
   gotoUserCard: {
     type: Boolean,
-    default: false
+    default: false,
   },
   fontSize: {
     type: String,
-    default: ''
+    default: '',
   },
   isRedirect: {
     type: Boolean,
-    default: false
+    default: false,
   },
 })
-const $emit = defineEmits(["onLongpress"]);
+const $emit = defineEmits(['onLongpress'])
 
 const avatarSize = props.size || 42
 const user = ref<UserNameCard>()
 let isLongPress = false // uniapp 长按事件也会触发点击事件，此时需要处理
 const appellation = computed(() => {
   // @ts-ignore
-  return uni.$UIKitStore.uiStore.getAppellation({
-    account: props.account,
-    teamId: props.teamId,
-    ignoreAlias: false,
-    nickFromMsg: '',
-  }).slice(0,2)
+  return uni.$UIKitStore.uiStore
+    .getAppellation({
+      account: props.account,
+      teamId: props.teamId,
+      ignoreAlias: false,
+      nickFromMsg: '',
+    })
+    .slice(0, 2)
 })
-autorun(async () => {
+const uninstallUserInfoWatch = autorun(async () => {
   // @ts-ignore
   const data = await uni.$UIKitStore?.userStore?.getUserActive(props.account)
   user.value = deepClone(data)
-  
 })
 
 const avatarUrl = computed(() => {
@@ -109,7 +109,7 @@ const handleAvatarClick = () => {
   if (props.gotoUserCard && !isLongPress) {
     if (props.isRedirect) {
       // @ts-ignore
-       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.account) {
+      if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.account) {
         customRedirectTo({
           url: `/pages/user-card/my-detail/index`,
         })
@@ -120,7 +120,7 @@ const handleAvatarClick = () => {
       }
     } else {
       // @ts-ignore
-       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.account) {
+      if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.account) {
         customNavigateTo({
           url: `/pages/user-card/my-detail/index`,
         })
@@ -135,7 +135,7 @@ const handleAvatarClick = () => {
 
 const longpress = () => {
   isLongPress = true
-  $emit("onLongpress");
+  $emit('onLongpress')
 }
 
 const touchend = () => {
@@ -143,6 +143,10 @@ const touchend = () => {
     isLongPress = false
   }, 200)
 }
+
+onUnmounted(() => {
+  uninstallUserInfoWatch()
+})
 </script>
 
 <style scoped lang="scss">
@@ -153,7 +157,7 @@ const touchend = () => {
   position: relative;
 }
 
-.img-mask{
+.img-mask {
   position: absolute;
   z-index: 10;
   left: 0;

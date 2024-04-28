@@ -5,15 +5,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ALLOW_AT } from '../../../utils/constants';
-import { t } from '../../../utils/i18n';
+import { ALLOW_AT } from '../../../utils/constants'
+import { t } from '../../../utils/i18n'
 import type { IMMessage, Team, UserNameCard } from '@xkit-yx/im-store'
 
 const props = defineProps({
   msg: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const msg: IMMessage = props.msg as any
@@ -36,23 +36,26 @@ const getNotificationContent = () => {
       }
       if (team.inviteMode) {
         content.push(
-          `${t('updateTeamInviteMode')}“${team.inviteMode === 'all'
-            ? t('teamAll')
-            : t('teamOwnerAndManagerText')
+          `${t('updateTeamInviteMode')}“${
+            team.inviteMode === 'all'
+              ? t('teamAll')
+              : t('teamOwnerAndManagerText')
           }”`
         )
       }
       if (team.updateTeamMode) {
         content.push(
-          `${t('updateTeamUpdateTeamMode')}“${team.updateTeamMode === 'all'
-            ? t('teamAll')
-            : t('teamOwnerAndManagerText')
+          `${t('updateTeamUpdateTeamMode')}“${
+            team.updateTeamMode === 'all'
+              ? t('teamAll')
+              : t('teamOwnerAndManagerText')
           }”`
         )
       }
       if (team.muteType) {
         content.push(
-          `${t('updateTeamMute')}${team.muteType === 'none' ? t('closeText') : t('openText')
+          `${t('updateTeamMute')}${
+            team.muteType === 'none' ? t('closeText') : t('openText')
           }`
         )
       }
@@ -65,8 +68,10 @@ const getNotificationContent = () => {
         }
         if (ext[ALLOW_AT] !== undefined) {
           content.push(
-            `${t('updateAllowAt')}“${ext[ALLOW_AT] === 'manager'
-              ? t('teamOwnerAndManagerText') : t('teamAll')
+            `${t('updateAllowAt')}“${
+              ext[ALLOW_AT] === 'manager'
+                ? t('teamOwnerAndManagerText')
+                : t('teamAll')
             }”`
           )
         }
@@ -74,17 +79,21 @@ const getNotificationContent = () => {
       const attachUser = (msg.attach?.users as UserNameCard[]).find(
         (_) => _.account === msg.from
       )
-      return content.length ? `${uni.$UIKitStore.uiStore.getAppellation({
-        account: msg.from,
-        teamId,
-        nickFromMsg: attachUser?.nick,
-      })} ${content.join('、')}` : ''
+      return content.length
+        ? // @ts-ignore
+          `${uni.$UIKitStore.uiStore.getAppellation({
+            account: msg.from,
+            teamId,
+            nickFromMsg: attachUser?.nick,
+          })} ${content.join('、')}`
+        : ''
     }
     case 'passTeamApply':
     case 'acceptTeamInvite': {
       const attachUser = (msg.attach?.users as UserNameCard[]).find(
         (_) => _.account === msg.from
       )
+      // @ts-ignore
       return `${uni.$UIKitStore.uiStore.getAppellation({
         account: msg.from,
         teamId,
@@ -98,6 +107,7 @@ const getNotificationContent = () => {
           const attachUser = (msg.attach?.users as UserNameCard[]).find(
             (_) => _.account === item
           )
+          // @ts-ignore
           return uni.$UIKitStore.uiStore.getAppellation({
             account: item,
             teamId,
@@ -116,6 +126,7 @@ const getNotificationContent = () => {
           const attachUser = (msg.attach?.users as UserNameCard[]).find(
             (_) => _.account === item
           )
+          // @ts-ignore
           return uni.$UIKitStore.uiStore.getAppellation({
             account: item,
             teamId,
@@ -134,6 +145,7 @@ const getNotificationContent = () => {
           const attachUser = (msg.attach?.users as UserNameCard[]).find(
             (_) => _.account === item
           )
+          // @ts-ignore
           return uni.$UIKitStore.uiStore.getAppellation({
             account: item,
             teamId,
@@ -152,6 +164,7 @@ const getNotificationContent = () => {
           const attachUser = (msg.attach?.users as UserNameCard[]).find(
             (_) => _.account === item
           )
+          // @ts-ignore
           return uni.$UIKitStore.uiStore.getAppellation({
             account: item,
             teamId,
@@ -167,6 +180,7 @@ const getNotificationContent = () => {
       const attachUser = (msg.attach?.users as UserNameCard[]).find(
         (_) => _.account === msg.from
       )
+      // @ts-ignore
       return `${uni.$UIKitStore.uiStore.getAppellation({
         account: msg.from,
         teamId,
@@ -177,7 +191,7 @@ const getNotificationContent = () => {
       const attachUser = (msg.attach?.users as UserNameCard[]).find(
         (_) => _.account === msg.attach?.account
       )
-
+      // @ts-ignore
       return `${uni.$UIKitStore.uiStore.getAppellation({
         account: msg.attach?.account,
         teamId,

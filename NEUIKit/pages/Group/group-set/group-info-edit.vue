@@ -2,31 +2,36 @@
   <div class="group-set-container">
     <NavBar :title="t('teamTitle')" />
     <div class="group-name-input-container">
-      <FormInput 
-        :model-value="teamName" 
-        :allow-clear="true" 
-        :maxlength="maxlength" 
-        @input="handleInput" />
+      <FormInput
+        :model-value="teamName"
+        :allow-clear="true"
+        :maxlength="maxlength"
+        @input="handleInput"
+      />
       <div class="input-length">{{ inputLengthTips }}</div>
     </div>
-    <div :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'" @tap="handleSave">{{ t('saveText') }}</div>
+    <div
+      :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'"
+      @tap="handleSave"
+    >
+      {{ t('saveText') }}
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import NavBar from '../../../components/NavBar.vue';
-import FormInput from '../../../components/FormInput.vue';
+import NavBar from '../../../components/NavBar.vue'
+import FormInput from '../../../components/FormInput.vue'
 // @ts-ignore
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed } from '../../../utils/transformVue';
+import { ref, computed } from '../../../utils/transformVue'
 
-import { t } from '../../../utils/i18n';
-import { getUniPlatform } from '../../../utils';
+import { t } from '../../../utils/i18n'
+import { getUniPlatform } from '../../../utils'
 
 const maxlength = 15
 const teamName = ref<string>()
 let teamId = ''
-
 
 const inputLengthTips = computed(() => {
   return `${teamName.value ? teamName.value?.length : 0}/${maxlength}`
@@ -37,37 +42,41 @@ const handleSave = () => {
   if (!teamName.value) {
     uni.showToast({
       title: t('teamTitleConfirmText'),
-      icon: 'error'
+      icon: 'error',
     })
     return
   }
   // @ts-ignore
-  teamName.value && uni.$UIKitStore.teamStore.updateTeamActive({ teamId, name: teamName.value }).then(() => {
-    uni.showToast({
-      title: t('updateTeamSuccessText'),
-      icon: 'success'
-    })
-    uni.navigateBack()
-  }).catch((err) => {
-    switch (err?.code) {
-      case 802:
+  teamName.value &&
+    uni.$UIKitStore.teamStore
+      .updateTeamActive({ teamId, name: teamName.value })
+      .then(() => {
         uni.showToast({
-          title: t('noPermission'),
-          icon: 'error'
+          title: t('updateTeamSuccessText'),
+          icon: 'success',
         })
-        break;
-      default:
-        uni.showToast({
-          title: t('updateTeamFailedText'),
-          icon: 'error'
-        })
-        break;
-    }
-  })
+        uni.navigateBack()
+      })
+      .catch((err: any) => {
+        switch (err?.code) {
+          case 802:
+            uni.showToast({
+              title: t('noPermission'),
+              icon: 'error',
+            })
+            break
+          default:
+            uni.showToast({
+              title: t('updateTeamFailedText'),
+              icon: 'error',
+            })
+            break
+        }
+      })
 }
 
 const handleInput = (value: string) => {
-  teamName.value = value ? value.replace(/\s*/g, "") : value
+  teamName.value = value ? value.replace(/\s*/g, '') : value
 }
 
 onLoad((option) => {
@@ -94,7 +103,7 @@ page {
 }
 
 .group-name-input-container {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
   padding: 0 16px 5px;
   position: relative;

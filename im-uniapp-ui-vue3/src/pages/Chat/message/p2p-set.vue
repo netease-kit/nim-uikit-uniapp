@@ -28,17 +28,17 @@
 </template>
 
 <script lang="ts" setup>
-import NavBar from '../../../components/NavBar.vue';
+import NavBar from '../../../components/NavBar.vue'
 import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
 
-import type { Session } from '@xkit-yx/im-store';
+import type { Session } from '@xkit-yx/im-store'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref } from '../../../utils/transformVue';
-import { autorun } from 'mobx';
+import { onUnmounted, ref } from '../../../utils/transformVue'
+import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
-import { customNavigateTo } from '../../../utils/customNavigate';
-import { deepClone } from '../../../utils';
+import { customNavigateTo } from '../../../utils/customNavigate'
+import { deepClone } from '../../../utils'
 
 const myNick = ref('')
 const session = ref<Session>()
@@ -46,31 +46,45 @@ const isMute = ref(false)
 const isStickTop = ref(false)
 const account = ref('')
 
+let uninstallP2pSetWatch: () => void
 onLoad((option) => {
   const _account = option?.id
   account.value = _account
-  autorun(() => {
-    session.value = deepClone(uni.$UIKitStore.sessionStore.sessions.get('p2p-' + _account))
-    myNick.value = deepClone(uni.$UIKitStore.uiStore.getAppellation({ account: _account }))
-    isMute.value = deepClone(uni.$UIKitStore.relationStore.mutes.includes(_account))
+  uninstallP2pSetWatch = autorun(() => {
+    session.value = deepClone(
+      // @ts-ignore
+      uni.$UIKitStore.sessionStore.sessions.get('p2p-' + _account)
+    )
+    myNick.value = deepClone(
+      // @ts-ignore
+      uni.$UIKitStore.uiStore.getAppellation({ account: _account })
+    )
+    isMute.value = deepClone(
+      // @ts-ignore
+      uni.$UIKitStore.relationStore.mutes.includes(_account)
+    )
     isStickTop.value = session.value?.stickTopInfo?.isStickOnTop as boolean
   })
 })
 
 const addTeamMember = () => {
   customNavigateTo({
-    url: '/pages/Group/group-create/index?account=' + account.value
+    url: '/pages/Group/group-create/index?account=' + account.value,
   })
 }
 
 const changeSessionMute = async (e: any) => {
   const checked = !e.detail.value
   try {
-    await uni.$UIKitStore.relationStore.setMuteActive({ account: account.value, isAdd: checked })
+    // @ts-ignore
+    await uni.$UIKitStore.relationStore.setMuteActive({
+      account: account.value,
+      isAdd: checked,
+    })
   } catch (error) {
     uni.showToast({
       title: checked ? t('sessionMuteFailText') : t('sessionUnMuteFailText'),
-      icon: 'error'
+      icon: 'error',
     })
   }
 }
@@ -80,17 +94,23 @@ const changeStickTopInfo = async (e: any) => {
   const sessionId = 'p2p-' + account.value
   try {
     if (checked) {
+      // @ts-ignore
       await uni.$UIKitStore.sessionStore.addStickTopSessionActive(sessionId)
     } else {
+      // @ts-ignore
       await uni.$UIKitStore.sessionStore.deleteStickTopSessionActive(sessionId)
     }
   } catch (error) {
     uni.showToast({
       title: checked ? t('addStickTopFailText') : t('deleteStickTopFailText'),
-      icon: 'error'
+      icon: 'error',
     })
   }
 }
+
+onUnmounted(() => {
+  uninstallP2pSetWatch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -110,7 +130,7 @@ page {
 }
 
 .p2p-set-card {
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
   padding-left: 16px;
   margin-bottom: 10px;
@@ -118,9 +138,9 @@ page {
 
 .p2p-set-button {
   text-align: center;
-  background: #FFFFFF;
+  background: #ffffff;
   border-radius: 8px;
-  color: #E6605C;
+  color: #e6605c;
   height: 40px;
   line-height: 40px;
 }
@@ -132,7 +152,7 @@ page {
   padding: 10px 0;
 
   &:not(:last-child) {
-    border-bottom: 1rpx solid #F5F8FC;
+    border-bottom: 1rpx solid #f5f8fc;
   }
 }
 

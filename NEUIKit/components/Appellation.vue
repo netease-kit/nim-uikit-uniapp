@@ -1,52 +1,59 @@
 <template>
-  <span class="appellation" :style="{ color: color, fontSize: fontSize + 'px'}">{{ appellation }}</span>
+  <span
+    class="appellation"
+    :style="{ color: color, fontSize: fontSize + 'px' }"
+    >{{ appellation }}</span
+  >
 </template>
 
 <script lang="ts" setup>
-import { autorun } from 'mobx';
-import { ref } from '../utils/transformVue'
+import { autorun } from 'mobx'
+import { onUnmounted, ref } from '../utils/transformVue'
 
-import { deepClone } from '../utils';
+import { deepClone } from '../utils'
 
 const appellation = ref('')
 const { account, teamId, ignoreAlias, nickFromMsg } = defineProps({
   account: {
     type: String,
-    required: true
+    required: true,
   },
   teamId: {
     type: String,
-    default: null
+    default: null,
   },
   ignoreAlias: {
     type: Boolean,
-    default: false
+    default: false,
   },
   nickFromMsg: {
     type: String,
-    default: null
+    default: null,
   },
   color: {
     type: String,
-    default: '#333'
+    default: '#333',
   },
   fontSize: {
     type: Number,
-    default: 16
-  }
+    default: 16,
+  },
 })
 
-autorun(() => {
-  // @ts-ignore
-  appellation.value = deepClone(uni.$UIKitStore?.uiStore?.getAppellation({
-    account,
-    teamId,
-    ignoreAlias,
-    nickFromMsg
-  }))
+const uninstallAppellationWatch = autorun(() => {
+  appellation.value = deepClone(
+    // @ts-ignore
+    uni.$UIKitStore?.uiStore?.getAppellation({
+      account,
+      teamId,
+      ignoreAlias,
+      nickFromMsg,
+    })
+  )
 })
-
-
+onUnmounted(() => {
+  uninstallAppellationWatch()
+})
 </script>
 
 <style scoped lang="scss">

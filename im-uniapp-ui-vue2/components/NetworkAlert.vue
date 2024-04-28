@@ -6,8 +6,7 @@
 
 <script lang="ts" setup>
 import { autorun } from 'mobx'
-// import { ref } from 'vue';
-import { ref, onMounted } from '../utils/transformVue'
+import { ref, onMounted, onUnmounted } from '../utils/transformVue'
 import { t } from '../utils/i18n'
 const isConnected = ref(true)
 const text = ref(t('connectingText'))
@@ -33,9 +32,8 @@ onMounted(() => {
     text.value = t('connectingText')
   }
 })
-console.log(isConnected.value, text.value)
 
-autorun(() => {
+const uninstallConnectWatch = autorun(() => {
   // @ts-ignore
   if (uni.$UIKitStore?.connectStore?.connectState === 'connected') {
     isConnected.value = true
@@ -47,6 +45,10 @@ autorun(() => {
     isConnected.value = false
     text.value = t('connectingText')
   }
+})
+
+onUnmounted(() => {
+  uninstallConnectWatch()
 })
 </script>
 

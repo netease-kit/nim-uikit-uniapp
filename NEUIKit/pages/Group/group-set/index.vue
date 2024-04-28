@@ -96,7 +96,7 @@ import Icon from '../../../components/Icon.vue'
 import type { Team, TeamMember } from '@xkit-yx/im-store'
 // @ts-ignore
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
 import { deepClone } from '../../../utils'
@@ -237,10 +237,11 @@ const showLeaveConfirm = () => {
     },
   })
 }
-
+let uninstallTeamWatch = () => {}
+let uninstallSessionsWatch = () => {}
 onLoad((option) => {
   teamId = option ? option.id : ''
-  autorun(() => {
+  uninstallTeamWatch = autorun(() => {
     if (teamId) {
       // @ts-ignore
       team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
@@ -251,9 +252,9 @@ onLoad((option) => {
     }
   })
 
-  autorun(() => {
-    // @ts-ignore
+  uninstallSessionsWatch = autorun(() => {
     session.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.sessionStore.sessions.get('team-' + teamId)
     )
   })
@@ -284,6 +285,7 @@ const changeTeamMute = async (e: any) => {
     // @ts-ignore
     await uni.$UIKitStore.teamStore.muteTeamActive({ teamId, mute: checked })
   } catch (error) {
+    // @ts-ignore
     switch (error?.code) {
       // 无权限
       case 802:
@@ -303,6 +305,11 @@ const changeTeamMute = async (e: any) => {
     }
   }
 }
+
+onUnmounted(() => {
+  uninstallTeamWatch()
+  uninstallSessionsWatch()
+})
 </script>
 
 <style lang="scss" scoped>

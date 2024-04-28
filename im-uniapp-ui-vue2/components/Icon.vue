@@ -26,7 +26,7 @@
 <script lang="ts" setup>
 // svg 解决方案参考：https://github.com/iconfont-cli/mini-program-iconfont-cli/tree/master
 // import { ref } from 'vue'
-import { ref, onMounted, computed } from '../utils/transformVue'
+import { ref, computed } from '../utils/transformVue'
 const props = defineProps({
   type: {
     type: String,
@@ -47,6 +47,7 @@ const props = defineProps({
     default: null,
   },
   iconStyle: {
+    type: Object,
     default: () => {},
   },
 })
@@ -327,6 +328,8 @@ const urlMap = {
     'https://yx-web-nosdn.netease.im/common/20043a54056311986c867edf93f51f62/语音2.png',
   'icon-yuyin3':
     'https://yx-web-nosdn.netease.im/common/786476a9bd129f6a7b027621f9818883/语音3.png',
+  'icon-yuyin8':
+    'https://yx-web-nosdn.netease.im/common/40d631410c18983f6ee0ca880976c2e9/icon-yuyin8.png',
   'icon-audio':
     'https://yx-web-nosdn.netease.im/common/27c4c8b528fac12d3f79bb3154be87d4/audio1.png',
   'audio-btn':
@@ -339,6 +342,10 @@ const urlMap = {
     'https://yx-web-nosdn.netease.im/common/be9638b843a70f307ecb6803ffe5775c/paishe.png',
   'icon-shipin2':
     'https://yx-web-nosdn.netease.im/common/3865bf597f9f5ca03b2b222ca07344e1/icon-shipin2.png',
+  'icon-audio-call':
+    'https://yx-web-nosdn.netease.im/common/99438364d757b51e7e36c18d254e70e7/icon-audio-call.png',
+  'icon-video-call':
+    'https://yx-web-nosdn.netease.im/common/ed7c85a59de3e247d10ecfc684b05226/icon-video-call.png',
 }
 
 //以上链接访问有频率控制，建议您将静态放到您服务器上，然后修改上面的链接即可
