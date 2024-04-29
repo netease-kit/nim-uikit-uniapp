@@ -4,100 +4,29 @@
     <div class="valid-list-content">
       <Empty v-if="validMsg.length === 0" :text="t('validEmptyText')" />
       <template v-else>
-      <div class="valid-item" v-for="msg in validMsg">
-        <template v-if="msg.type === 'applyTeam'">
-          <div class="valid-item-left">
-            <Avatar :account="msg.attach && msg.attach.toTeam.teamId" :team-id="msg.attach && msg.attach.toTeam.teamId"
-              :avatar="msg.attach && msg.attach.toTeam.avatar" />
-            <div class="valid-name-container">
-              <div class="valid-name">{{ getAppellation({
-                account: msg.attach && msg.attach.fromUser.account,
-              }) }}</div>
-              <div class="valid-action">{{ t('applyTeamText') + (msg.attach && msg.attach.toTeam.name || msg.attach && msg.attach.toTeam.teamId)
-              }}</div>
-            </div>
-          </div>
-          <div v-if="msg.state === 'pass'" class="valid-state">
-            <Icon type="icon-yidu" />
-            <span class="valid-state-text">{{ t('acceptResultText') }}</span>
-          </div>
-          <div v-else-if="msg.state === 'decline'" class="valid-state">
-            <Icon type="icon-shandiao" />
-            <span class="valid-state-text">{{ t('rejectResultText') }}</span>
-          </div>
-          <div class="valid-buttons" v-else>
-            <div class="valid-button button-reject" @tap="handleRejectApplyTeamClick(msg)" :loading="applyTeamLoading">{{
-              t('rejectText') }}</div>
-            <div class="valid-button button-accept" @tap="handleAcceptApplyTeamClick(msg)" :loading="applyTeamLoading">{{
-              t('acceptText') }}</div>
-          </div>
-        </template>
-
-        <template v-else-if="msg.type === 'teamInvite'">
-          <div class="valid-item-left">
-            <Avatar :account="msg.attach && msg.attach.toTeam.teamId" :team-id="msg.attach && msg.attach.toTeam.teamId"
-              :avatar="msg.attach && msg.attach.toTeam.avatar" />
-            <div class="valid-name-container">
-              <div class="valid-name">{{ getAppellation({
-                account: msg.attach && msg.attach.fromUser.account,
-              }) }}</div>
-              <div class="valid-action">{{ t('inviteTeamText') + (msg.attach && msg.attach.toTeam.name || msg.attach && msg.attach.toTeam.teamId)
-              }}</div>
-            </div>
-          </div>
-          <div v-if="msg.state === 'pass'" class="valid-state">
-            <Icon type="icon-yidu" />
-            <span class="valid-state-text">{{ t('acceptResultText') }}</span>
-          </div>
-          <div v-else-if="msg.state === 'decline'" class="valid-state">
-            <Icon type="icon-shandiao" />
-            <span class="valid-state-text">{{ t('rejectResultText') }}</span>
-          </div>
-          <div class="valid-buttons" v-else>
-            <div class="valid-button button-reject" @tap="handleRejectTeamInviteClick(msg)" :loading="teamInviteLoading">
-              {{ t('rejectText') }}</div>
-            <div class="valid-button button-accept" @tap="handleAcceptTeamInviteClick(msg)" :loading="teamInviteLoading">
-              {{
-                t('acceptText') }}</div>
-          </div>
-        </template>
-
-        <template v-else-if="msg.type === 'rejectTeamApply'">
-          <div class="valid-item-left">
-            <Avatar :account="msg.attach && msg.attach.fromTeam.teamId" :team-id="msg.attach && msg.attach.fromTeam.teamId"
-              :avatar="msg.attach && msg.attach.fromTeam.avatar" />
-            <div class="valid-name-container">
-              <div class="valid-name">{{ msg.attach && msg.attach.fromTeam.name || msg.attach && msg.attach.fromTeam.teamId }}</div>
-            </div>
-          </div>
-          <div class="valid-state">
-            <Icon type="icon-shandiao" />
-            <span class="valid-state-text">{{ t('rejectResultText') }}</span>
-          </div>
-        </template>
-
-        <template v-else-if="msg.type === 'rejectTeamInvite'">
-          <div class="valid-item-left">
-            <Avatar :account="msg.attach && msg.attach.fromUser.account" />
-            <div class="valid-name-container">
-              <div class="valid-name">{{ getAppellation({
-                account: msg.attach && msg.attach.fromUser.account,
-              }) }}</div>
-              <div class="valid-action">{{ t('rejectTeamInviteText') }}</div>
-            </div>
-          </div>
-        </template>
-
-        <template v-else-if="msg.type === 'friendRequest'">
-
-          <template v-if="msg.attach && msg.attach.type === 'applyFriend'">
+        <div class="valid-item" v-for="msg in validMsg">
+          <template v-if="msg.type === 'applyTeam'">
             <div class="valid-item-left">
-              <Avatar :account="msg.attach.fromUser.account" />
+              <Avatar
+                :account="msg.attach && msg.attach.toTeam.teamId"
+                :team-id="msg.attach && msg.attach.toTeam.teamId"
+                :avatar="msg.attach && msg.attach.toTeam.avatar"
+              />
               <div class="valid-name-container">
-                <div class="valid-name">{{ getAppellation({
-                  account: msg.attach.fromUser.account,
-                }) }}</div>
-                <div class="valid-action">{{ t('applyFriendText') }}</div>
+                <div class="valid-name">
+                  {{
+                    getAppellation({
+                      account: msg.attach && msg.attach.fromUser.account,
+                    })
+                  }}
+                </div>
+                <div class="valid-action">
+                  {{
+                    t('applyTeamText') +
+                    ((msg.attach && msg.attach.toTeam.name) ||
+                      (msg.attach && msg.attach.toTeam.teamId))
+                  }}
+                </div>
               </div>
             </div>
             <div v-if="msg.state === 'pass'" class="valid-state">
@@ -109,64 +38,216 @@
               <span class="valid-state-text">{{ t('rejectResultText') }}</span>
             </div>
             <div class="valid-buttons" v-else>
-              <div class="valid-button button-reject" @tap="handleRejectApplyFriendClick(msg)"
-                :loading="applyFriendLoading">{{ t('rejectText')
-                }}</div>
-              <div class="valid-button button-accept" @tap="handleAcceptApplyFriendClick(msg)"
-                :loading="applyFriendLoading">{{
-                  t('acceptText') }}</div>
-            </div>
-          </template>
-
-          <template v-else-if="msg.attach && msg.attach.type === 'rejectFriendApply'">
-            <div class="valid-item-left">
-              <Avatar :account="msg.attach.fromUser.account" />
-              <div class="valid-name-container">
-                <div class="valid-name">{{ getAppellation({
-                  account: msg.attach.fromUser.account,
-                }) }}</div>
-                <div class="valid-action">{{ t('beRejectResultText') }}</div>
+              <div
+                class="valid-button button-reject"
+                @tap="handleRejectApplyTeamClick(msg)"
+                :loading="applyTeamLoading"
+              >
+                {{ t('rejectText') }}
+              </div>
+              <div
+                class="valid-button button-accept"
+                @tap="handleAcceptApplyTeamClick(msg)"
+                :loading="applyTeamLoading"
+              >
+                {{ t('acceptText') }}
               </div>
             </div>
           </template>
 
-          <template v-else-if="msg.attach && msg.attach.type === 'passFriendApply'">
+          <template v-else-if="msg.type === 'teamInvite'">
             <div class="valid-item-left">
-              <Avatar :account="msg.attach.fromUser.account" />
+              <Avatar
+                :account="msg.attach && msg.attach.toTeam.teamId"
+                :team-id="msg.attach && msg.attach.toTeam.teamId"
+                :avatar="msg.attach && msg.attach.toTeam.avatar"
+              />
               <div class="valid-name-container">
-                <div class="valid-name">{{ getAppellation({
-                  account: msg.attach.fromUser.account,
-                }) }}</div>
-                <div class="valid-action">{{ t('passResultText') }}</div>
+                <div class="valid-name">
+                  {{
+                    getAppellation({
+                      account: msg.attach && msg.attach.fromUser.account,
+                    })
+                  }}
+                </div>
+                <div class="valid-action">
+                  {{
+                    t('inviteTeamText') +
+                    ((msg.attach && msg.attach.toTeam.name) ||
+                      (msg.attach && msg.attach.toTeam.teamId))
+                  }}
+                </div>
+              </div>
+            </div>
+            <div v-if="msg.state === 'pass'" class="valid-state">
+              <Icon type="icon-yidu" />
+              <span class="valid-state-text">{{ t('acceptResultText') }}</span>
+            </div>
+            <div v-else-if="msg.state === 'decline'" class="valid-state">
+              <Icon type="icon-shandiao" />
+              <span class="valid-state-text">{{ t('rejectResultText') }}</span>
+            </div>
+            <div class="valid-buttons" v-else>
+              <div
+                class="valid-button button-reject"
+                @tap="handleRejectTeamInviteClick(msg)"
+                :loading="teamInviteLoading"
+              >
+                {{ t('rejectText') }}
+              </div>
+              <div
+                class="valid-button button-accept"
+                @tap="handleAcceptTeamInviteClick(msg)"
+                :loading="teamInviteLoading"
+              >
+                {{ t('acceptText') }}
               </div>
             </div>
           </template>
-        </template>
 
-      </div>
-    </template>
+          <template v-else-if="msg.type === 'rejectTeamApply'">
+            <div class="valid-item-left">
+              <Avatar
+                :account="msg.attach && msg.attach.fromTeam.teamId"
+                :team-id="msg.attach && msg.attach.fromTeam.teamId"
+                :avatar="msg.attach && msg.attach.fromTeam.avatar"
+              />
+              <div class="valid-name-container">
+                <div class="valid-name">
+                  {{
+                    (msg.attach && msg.attach.fromTeam.name) ||
+                    (msg.attach && msg.attach.fromTeam.teamId)
+                  }}
+                </div>
+              </div>
+            </div>
+            <div class="valid-state">
+              <Icon type="icon-shandiao" />
+              <span class="valid-state-text">{{ t('rejectResultText') }}</span>
+            </div>
+          </template>
+
+          <template v-else-if="msg.type === 'rejectTeamInvite'">
+            <div class="valid-item-left">
+              <Avatar :account="msg.attach && msg.attach.fromUser.account" />
+              <div class="valid-name-container">
+                <div class="valid-name">
+                  {{
+                    getAppellation({
+                      account: msg.attach && msg.attach.fromUser.account,
+                    })
+                  }}
+                </div>
+                <div class="valid-action">{{ t('rejectTeamInviteText') }}</div>
+              </div>
+            </div>
+          </template>
+
+          <template v-else-if="msg.type === 'friendRequest'">
+            <template v-if="msg.attach && msg.attach.type === 'applyFriend'">
+              <div class="valid-item-left">
+                <Avatar :account="msg.attach.fromUser.account" />
+                <div class="valid-name-container">
+                  <div class="valid-name">
+                    {{
+                      getAppellation({
+                        account: msg.attach.fromUser.account,
+                      })
+                    }}
+                  </div>
+                  <div class="valid-action">{{ t('applyFriendText') }}</div>
+                </div>
+              </div>
+              <div v-if="msg.state === 'pass'" class="valid-state">
+                <Icon type="icon-yidu" />
+                <span class="valid-state-text">{{
+                  t('acceptResultText')
+                }}</span>
+              </div>
+              <div v-else-if="msg.state === 'decline'" class="valid-state">
+                <Icon type="icon-shandiao" />
+                <span class="valid-state-text">{{
+                  t('rejectResultText')
+                }}</span>
+              </div>
+              <div class="valid-buttons" v-else>
+                <div
+                  class="valid-button button-reject"
+                  @tap="handleRejectApplyFriendClick(msg)"
+                  :loading="applyFriendLoading"
+                >
+                  {{ t('rejectText') }}
+                </div>
+                <div
+                  class="valid-button button-accept"
+                  @tap="handleAcceptApplyFriendClick(msg)"
+                  :loading="applyFriendLoading"
+                >
+                  {{ t('acceptText') }}
+                </div>
+              </div>
+            </template>
+
+            <template
+              v-else-if="msg.attach && msg.attach.type === 'rejectFriendApply'"
+            >
+              <div class="valid-item-left">
+                <Avatar :account="msg.attach.fromUser.account" />
+                <div class="valid-name-container">
+                  <div class="valid-name">
+                    {{
+                      getAppellation({
+                        account: msg.attach.fromUser.account,
+                      })
+                    }}
+                  </div>
+                  <div class="valid-action">{{ t('beRejectResultText') }}</div>
+                </div>
+              </div>
+            </template>
+
+            <template
+              v-else-if="msg.attach && msg.attach.type === 'passFriendApply'"
+            >
+              <div class="valid-item-left">
+                <Avatar :account="msg.attach.fromUser.account" />
+                <div class="valid-name-container">
+                  <div class="valid-name">
+                    {{
+                      getAppellation({
+                        account: msg.attach.fromUser.account,
+                      })
+                    }}
+                  </div>
+                  <div class="valid-action">{{ t('passResultText') }}</div>
+                </div>
+              </div>
+            </template>
+          </template>
+        </div>
+      </template>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import type { SystemMessage } from '@xkit-yx/im-store';
-import { autorun } from 'mobx';
-import { ref } from '../../../utils/transformVue';
+import type { SystemMessage } from '@xkit-yx/im-store'
+import { autorun } from 'mobx'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 // @ts-ignore
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import NavBar from '../../../components/NavBar.vue'
 import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
-import { deepClone } from '../../../utils';
+import { deepClone } from '../../../utils'
 
 const validMsg = ref<SystemMessage[]>([])
 const applyTeamLoading = ref(false)
 const teamInviteLoading = ref(false)
 const applyFriendLoading = ref(false)
 
-autorun(() => {
+const uninstallValidMsgWatch = autorun(() => {
   // @ts-ignore
   validMsg.value = deepClone(uni.$UIKitStore.uiStore.applyMsgList)
 })
@@ -180,19 +261,18 @@ const handleRejectApplyTeamClick = async (msg: SystemMessage) => {
   applyTeamLoading.value = true
   try {
     // @ts-ignore
-    await uni.$UIKitStore.teamStore
-      .rejectTeamApplyActive({
-        teamId: msg?.attach?.toTeam.teamId,
-        from: msg?.attach?.fromUser.account
-      })
+    await uni.$UIKitStore.teamStore.rejectTeamApplyActive({
+      teamId: msg?.attach?.toTeam.teamId,
+      from: msg?.attach?.fromUser.account,
+    })
     uni.showToast({
       title: t('rejectedText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('rejectFailedText'),
-      icon: 'error'
+      icon: 'error',
     })
   } finally {
     applyTeamLoading.value = false
@@ -203,19 +283,18 @@ const handleAcceptApplyTeamClick = async (msg: SystemMessage) => {
   applyTeamLoading.value = true
   try {
     // @ts-ignore
-    await uni.$UIKitStore.teamStore
-      .passTeamApplyActive({
-        teamId: msg?.attach?.toTeam.teamId,
-        from: msg?.attach?.fromUser.account,
-      })
+    await uni.$UIKitStore.teamStore.passTeamApplyActive({
+      teamId: msg?.attach?.toTeam.teamId,
+      from: msg?.attach?.fromUser.account,
+    })
     uni.showToast({
       title: t('acceptedText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('acceptFailedText'),
-      icon: 'error'
+      icon: 'error',
     })
   } finally {
     applyTeamLoading.value = false
@@ -226,19 +305,18 @@ const handleRejectTeamInviteClick = async (msg: SystemMessage) => {
   teamInviteLoading.value = true
   try {
     // @ts-ignore
-    await uni.$UIKitStore.teamStore
-      .rejectTeamInviteActive({
-        teamId: msg?.attach?.toTeam.teamId,
-        from: msg?.attach?.fromUser.account,
-      })
+    await uni.$UIKitStore.teamStore.rejectTeamInviteActive({
+      teamId: msg?.attach?.toTeam.teamId,
+      from: msg?.attach?.fromUser.account,
+    })
     uni.showToast({
       title: t('rejectedText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('rejectFailedText'),
-      icon: 'error'
+      icon: 'error',
     })
   } finally {
     teamInviteLoading.value = false
@@ -249,19 +327,18 @@ const handleAcceptTeamInviteClick = async (msg: SystemMessage) => {
   teamInviteLoading.value = true
   try {
     // @ts-ignore
-    await uni.$UIKitStore.teamStore
-      .acceptTeamInviteActive({
-        teamId: msg?.attach?.toTeam.teamId,
-        from: msg?.attach?.fromUser.account,
-      })
+    await uni.$UIKitStore.teamStore.acceptTeamInviteActive({
+      teamId: msg?.attach?.toTeam.teamId,
+      from: msg?.attach?.fromUser.account,
+    })
     uni.showToast({
       title: t('acceptedText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('acceptFailedText'),
-      icon: 'error'
+      icon: 'error',
     })
   } finally {
     teamInviteLoading.value = false
@@ -272,16 +349,17 @@ const handleRejectApplyFriendClick = async (msg: SystemMessage) => {
   applyFriendLoading.value = true
   try {
     // @ts-ignore
-    await uni.$UIKitStore.friendStore
-      .rejectFriendApplyActive(msg?.attach?.fromUser.account)
+    await uni.$UIKitStore.friendStore.rejectFriendApplyActive(
+      msg?.attach?.fromUser.account
+    )
     uni.showToast({
       title: t('rejectedText'),
-      icon: 'success'
+      icon: 'success',
     })
   } catch (error) {
     uni.showToast({
       title: t('rejectFailedText'),
-      icon: 'error'
+      icon: 'error',
     })
   } finally {
     applyFriendLoading.value = false
@@ -297,27 +375,30 @@ const handleAcceptApplyFriendClick = async (msg: SystemMessage) => {
       await uni.$UIKitStore.friendStore.passFriendApplyActive(account)
       uni.showToast({
         title: t('acceptedText'),
-        icon: 'success'
+        icon: 'success',
       })
     } catch (error) {
       uni.showToast({
         title: t('acceptFailedText'),
-        icon: 'error'
-      }) 
+        icon: 'error',
+      })
     }
     // @ts-ignore
     await uni.$UIKitStore.msgStore.sendTextMsgActive({
-        scene: 'p2p',
-        to: account,
-        body: t('passFriendAskText'),
-      })
+      scene: 'p2p',
+      to: account,
+      body: t('passFriendAskText'),
+    })
   } catch (error) {
-    console.log('error', error);
+    console.log('error', error)
   } finally {
     applyFriendLoading.value = false
   }
 }
 
+onUnmounted(() => {
+  uninstallValidMsgWatch()
+})
 </script>
 
 <style lang="scss" scoped>

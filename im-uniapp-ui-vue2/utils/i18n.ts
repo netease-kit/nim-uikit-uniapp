@@ -10,6 +10,7 @@ const localeMap = {
   en: 'en',
 }
 
-export const t = (key) => {
+export const t = (key: string) => {
+  // @ts-ignore
   return zh[key]
 }

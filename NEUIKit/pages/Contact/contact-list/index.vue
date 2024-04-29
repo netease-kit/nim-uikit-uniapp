@@ -1,14 +1,21 @@
 <template>
   <div class="contact-list-container">
-    <div class="dropdown-mark" v-if="addDropdownVisible" @touchstart="hideAddDropdown" />
+    <div
+      class="dropdown-mark"
+      v-if="addDropdownVisible"
+      @touchstart="hideAddDropdown"
+    />
     <div class="navigation-bar">
       <div class="logo-box">
         <div>{{ t('contactText') }}</div>
       </div>
       <div :class="buttonClass">
         <!-- #ifdef MP -->
-        <image src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
-          class="button-icon" @tap="showAddDropdown" />
+        <image
+          src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
+          class="button-icon"
+          @tap="showAddDropdown"
+        />
         <!-- #endif -->
         <!-- #ifndef MP -->
         <div @tap="showAddDropdown">
@@ -24,8 +31,8 @@
               {{ t('addFriendText') }}
             </div>
             <div class="add-menu-item" @tap="onDropdownClick('createGroup')">
-              <div :style="{ marginRight: '5px' }" >
-                <Icon type="icon-chuangjianqunzu"/>
+              <div :style="{ marginRight: '5px' }">
+                <Icon type="icon-chuangjianqunzu" />
               </div>
               {{ t('createTeamText') }}
             </div>
@@ -36,18 +43,36 @@
     <div class="contact-list">
       <div class="contact-item-content">
         <div class="contact-item" @click="handleValidMsgClick">
-          <Icon iconClassName="contact-item-icon contact-valid-icon" :size="42" type="icon-yanzheng" color="#fff" />
-          <Badge :num="unreadSysMsgCount" :style="{ position: 'absolute', top: '5px', left: '45px' }" />
+          <Icon
+            iconClassName="contact-item-icon contact-valid-icon"
+            :size="42"
+            type="icon-yanzheng"
+            color="#fff"
+          />
+          <Badge
+            :num="unreadSysMsgCount"
+            :style="{ position: 'absolute', top: '5px', left: '45px' }"
+          />
           <span class="contact-item-title"> {{ t('validMsgText') }}</span>
           <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
         </div>
         <div class="contact-item" @click="handleBlacklistClick">
-          <Icon iconClassName="contact-item-icon contact-blacklist-icon" :size="42" type="icon-lahei2" color="#fff" />
+          <Icon
+            iconClassName="contact-item-icon contact-blacklist-icon"
+            :size="42"
+            type="icon-lahei2"
+            color="#fff"
+          />
           <span class="contact-item-title"> {{ t('blacklistText') }}</span>
           <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
         </div>
         <div class="contact-item" @click="handleGroupContactClick">
-          <Icon iconClassName="contact-item-icon contact-group-icon" :size="42" type="icon-team2" color="#fff" />
+          <Icon
+            iconClassName="contact-item-icon contact-group-icon"
+            :size="42"
+            type="icon-team2"
+            color="#fff"
+          />
           <span class="contact-item-title"> {{ t('teamMenuText') }}</span>
           <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
         </div>
@@ -61,16 +86,16 @@
 import Icon from '../../../components/Icon.vue'
 import Badge from '../../../components/Badge.vue'
 import FriendList from './friend-list.vue'
-import { ref } from '../../../utils/transformVue';
-import { onHide } from '@dcloudio/uni-app';
-import { customNavigateTo } from '../../../utils/customNavigate';
-import { autorun } from 'mobx';
+import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onHide } from '@dcloudio/uni-app'
+import { customNavigateTo } from '../../../utils/customNavigate'
+import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
 
 const addDropdownVisible = ref(false)
 const unreadSysMsgCount = ref(0)
 
-autorun(() => {
+const uninstallUnreadWatch = autorun(() => {
   // @ts-ignore
   unreadSysMsgCount.value = uni.$UIKitStore.sysMsgStore.unreadSysMsgCount
 })
@@ -84,6 +109,7 @@ const onDropdownClick = (urlType: string) => {
   }
   addDropdownVisible.value = false
   customNavigateTo({
+    // @ts-ignore
     url: urlMap[urlType],
   })
 }
@@ -120,6 +146,10 @@ let buttonClass = 'button-box'
 // #ifdef MP
 buttonClass = 'button-box-mp'
 // #endif
+
+onUnmounted(() => {
+  uninstallUnreadWatch()
+})
 
 onHide(() => {
   addDropdownVisible.value = false

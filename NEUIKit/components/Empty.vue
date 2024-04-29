@@ -1,17 +1,20 @@
 <template>
   <div class="empty-wrapper">
-    <image class="empty-img" src="https://yx-web-nosdn.netease.im/common/e0f58096f06c18cdd101f2614e6afb09/empty.png" />
+    <image
+      class="empty-img"
+      src="https://yx-web-nosdn.netease.im/common/e0f58096f06c18cdd101f2614e6afb09/empty.png"
+    />
     <div class="empty-text">{{ text }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted } from '../utils/transformVue'
-const props = defineProps({
+defineProps({
   text: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 </script>
 <style lang="scss" scoped>
@@ -30,7 +33,7 @@ const props = defineProps({
 
   .empty-text {
     display: block;
-    color: #A6ADB6;
+    color: #a6adb6;
     margin: 10px;
   }
 }

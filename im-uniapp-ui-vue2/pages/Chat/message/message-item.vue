@@ -127,7 +127,7 @@
               class="msg-image"
               :lazy-load="true"
               mode="aspectFill"
-              :src="msg.attach.url"
+              :src="imageUrl"
             ></image>
           </div>
         </MessageBubble>
@@ -162,6 +162,23 @@
               :src="videoFirstFrameDataUrl"
             ></image>
           </div>
+        </MessageBubble>
+      </div>
+    </div>
+    <div
+      class="msg-common"
+      v-else-if="msg.type === 'g2'"
+      :style="{ flexDirection: !isSelf ? 'row' : 'row-reverse' }"
+    >
+      <Avatar
+        :account="msg.from"
+        :teamId="msg.scene === 'team' ? msg.to : ''"
+        :goto-user-card="true"
+      />
+      <div class="msg-content">
+        <div class="msg-name" v-if="!isSelf">{{ appellation }}</div>
+        <MessageBubble :msg="msg" :tooltip-visible="true" :bg-visible="true">
+          <MessageG2 :msg="msg" />
         </MessageBubble>
       </div>
     </div>
@@ -202,7 +219,10 @@
           :bg-visible="true"
           style="cursor: pointer"
         >
-          <MessageAudio :msg="msg" />
+          <MessageAudio
+            :msg="msg"
+            :broadcastNewAudioSrc="broadcastNewAudioSrc"
+          />
         </MessageBubble>
       </div>
     </div>
@@ -228,20 +248,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
-import MessageText from './message-text.vue'
 import { events, MSG_ID_FLAG } from '../../../utils/constants'
-import MessageFile from './message-file.vue'
-import ReplyMessage from './message-reply.vue'
 import { autorun } from 'mobx'
 import { deepClone, stopAllAudio } from '../../../utils'
 import { t } from '../../../utils/i18n'
-import type { IMMessage } from '@xkit-yx/im-store'
+import ReplyMessage from './message-reply.vue'
+import MessageFile from './message-file.vue'
+import MessageText from './message-text.vue'
 import MessageAudio from './message-audio.vue'
-import { customNavigateTo } from '../../../utils/customNavigate'
 import MessageNotification from './message-notification.vue'
+import MessageG2 from './message-g2.vue'
+import { customNavigateTo } from '../../../utils/customNavigate'
+
 const props = defineProps({
   scene: {
     type: String, // Assuming TMsgScene is a custom object type
@@ -290,6 +311,9 @@ const props = defineProps({
       type: undefined,
     }),
   },
+  broadcastNewAudioSrc: {
+    type: String,
+  },
 })
 const appellation = ref('')
 const isSelf = ref(false)
@@ -300,11 +324,16 @@ const videoFirstFrameDataUrl = computed(() => {
   return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
 })
 
-autorun(() => {
+const imageUrl = computed(() => {
+  return props?.msg?.attach?.url || props.msg?.uploadFileInfo?.filePath
+})
+
+const uninstallIsSelfWatch = autorun(() => {
   // @ts-ignore
   isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
 })
 
+// 点击图片预览
 const handleImageTouch = (url: string) => {
   if (url) {
     uni.previewImage({
@@ -313,7 +342,8 @@ const handleImageTouch = (url: string) => {
   }
 }
 
-const handleVideoTouch = (msg: IMMessage) => {
+// 点击视频播放
+const handleVideoTouch = (msg: any) => {
   stopAllAudio()
   const url = msg?.attach?.url
   if (url) {
@@ -323,11 +353,12 @@ const handleVideoTouch = (msg: IMMessage) => {
   }
 }
 
-const handleReeditMsg = (msg: IMMessage) => {
+// 重新编辑消息
+const handleReeditMsg = (msg: any) => {
   uni.$emit(events.ON_REEDIT_MSG, msg)
 }
 
-autorun(() => {
+const uninstallAppellationWatch = autorun(() => {
   // 昵称展示顺序 群昵称 > 备注 > 个人昵称 > 帐号
   appellation.value = deepClone(
     // @ts-ignore
@@ -336,6 +367,11 @@ autorun(() => {
       teamId: props.scene === 'team' ? props.to : '',
     })
   )
+})
+
+onUnmounted(() => {
+  uninstallIsSelfWatch()
+  uninstallAppellationWatch()
 })
 </script>
 

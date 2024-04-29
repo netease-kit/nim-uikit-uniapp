@@ -70,7 +70,7 @@
 <script lang="ts" setup>
 import type { NimKitCoreTypes } from '@xkit-yx/core-kit'
 
-import { onMounted, ref } from '../../../utils/transformVue'
+import { ref } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { onHide } from '@dcloudio/uni-app'
 
@@ -228,7 +228,7 @@ const needShowBeMentioned = (msgs: IMMessage[]) => {
 autorun(() => {
   //@ts-ignore
   sessionList.value = deepClone(uni.$UIKitStore?.uiStore?.sessionList)?.map(
-    (session: NimKitCoreTypes.ISession, index) => {
+    (session: NimKitCoreTypes.ISession, index: number) => {
       return {
         ...session,
         renderKey: session.id + index,

@@ -28,7 +28,7 @@
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
 import Appellation from '../../../components/Appellation.vue'
-import { ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 import { onLoad } from '@dcloudio/uni-app'
@@ -41,6 +41,7 @@ const teamMemberList = ref<TeamMember[]>([])
 let teamId = ''
 
 const onTapItem = (item: TeamMember) => {
+  // @ts-ignore
   const nick = uni.$UIKitStore.uiStore.getAppellation({
     account: item.account,
     teamId: item.teamId,
@@ -88,27 +89,33 @@ const onTapItem = (item: TeamMember) => {
   })
 }
 
+let uninstallTeamMemberWatch = () => {}
 onLoad((props) => {
   teamId = props ? props.id : ''
 
-  autorun(() => {
+  uninstallTeamMemberWatch = autorun(() => {
+    // @ts-ignore
     const members = uni.$UIKitStore.teamMemberStore
       .getTeamMember(teamId)
-      .filter((item) => {
+      .filter((item: any) => {
         // @ts-ignore
         return item.account !== uni.$UIKitStore.userStore.myUserInfo.account
       })
 
     const manager = members
-      .filter((item) => item.type === 'manager')
-      .sort((a, b) => a.joinTime - b.joinTime)
+      .filter((item: any) => item.type === 'manager')
+      .sort((a: any, b: any) => a.joinTime - b.joinTime)
 
     const other = members
-      .filter((item) => !['owner', 'manager'].includes(item.type))
-      .sort((a, b) => a.joinTime - b.joinTime)
+      .filter((item: any) => !['owner', 'manager'].includes(item.type))
+      .sort((a: any, b: any) => a.joinTime - b.joinTime)
 
     teamMemberList.value = deepClone([...manager, ...other])
   })
+})
+
+onUnmounted(() => {
+  uninstallTeamMemberWatch()
 })
 </script>
 

@@ -72,7 +72,7 @@ import Icon from '../../../components/Icon.vue'
 import type { Team, TeamMember } from '@xkit-yx/im-store'
 // @ts-ignore
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
 import { deepClone } from '../../../utils'
@@ -206,7 +206,7 @@ const goTeamManagerList = () => {
     url: `/pages/Group/group-set/group-manager-list?id=${teamId}`,
   })
 }
-
+let uninstallTeamWatch = () => {}
 onLoad((option) => {
   teamId = option ? option.id : ''
   autorun(() => {
@@ -219,6 +219,10 @@ onLoad((option) => {
       )
     }
   })
+})
+
+onUnmounted(() => {
+  uninstallTeamWatch()
 })
 </script>
 

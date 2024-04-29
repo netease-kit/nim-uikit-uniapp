@@ -46,7 +46,7 @@
 
 <script lang="ts" setup>
 import Avatar from '../../../components/Avatar.vue'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
@@ -150,30 +150,36 @@ const isShowRemoveBtn = (target: TeamMember) => {
   return false
 }
 
+let uninstallGroupMembersWatch = () => {}
+
 onLoad((props) => {
   teamId = props ? props.teamId : ''
 
-  autorun(() => {
+  uninstallGroupMembersWatch = autorun(() => {
     // @ts-ignore
     team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
 
     // 对群成员进行排序，群主在前，管理员在后，其他成员按加入时间排序
-    const sortGroupMembers = (members) => {
-      const owner = members.filter((item) => item.type === 'owner')
+    const sortGroupMembers = (members: any) => {
+      const owner = members.filter((item: any) => item.type === 'owner')
       const manager = members
-        .filter((item) => item.type === 'manager')
-        .sort((a, b) => a.joinTime - b.joinTime)
+        .filter((item: any) => item.type === 'manager')
+        .sort((a: any, b: any) => a.joinTime - b.joinTime)
       const other = members
-        .filter((item) => !['owner', 'manager'].includes(item.type))
-        .sort((a, b) => a.joinTime - b.joinTime)
+        .filter((item: any) => !['owner', 'manager'].includes(item.type))
+        .sort((a: any, b: any) => a.joinTime - b.joinTime)
       return [...owner, ...manager, ...other]
     }
 
-    // @ts-ignore
     groupMembers.value = deepClone(
+      // @ts-ignore
       sortGroupMembers(uni.$UIKitStore.teamMemberStore.getTeamMember(teamId))
     )
   })
+})
+
+onUnmounted(() => {
+  uninstallGroupMembersWatch()
 })
 </script>
 

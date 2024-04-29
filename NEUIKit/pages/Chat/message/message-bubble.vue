@@ -25,7 +25,7 @@
           <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
         </div>
         <div
-          v-if="msg.type !== 'audio'"
+          v-if="msg.type !== 'audio' && msg.type !== 'g2'"
           class="msg-action-btn"
           @tap="handleForwardMsg"
         >
@@ -37,7 +37,11 @@
           ></Icon>
           <text class="msg-action-btn-text">{{ t('forwardText') }}</text>
         </div>
-        <div class="msg-action-btn" @tap="handleReplyMsg">
+        <div
+          v-if="msg.type !== 'g2'"
+          class="msg-action-btn"
+          @tap="handleReplyMsg"
+        >
           <Icon
             :size="18"
             color="#656A72"
@@ -122,7 +126,7 @@
         :placement="placement"
         ref="tooltipRef"
         color="white"
-        :align:="isSelf"
+        :align="isSelf"
       >
         <template #content>
           <div
@@ -214,7 +218,7 @@
           <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
         </div>
         <div
-          v-if="msg.type !== 'audio'"
+          v-if="msg.type !== 'audio' && msg.type !== 'g2'"
           class="msg-action-btn"
           @tap="handleForwardMsg"
         >
@@ -226,7 +230,11 @@
           ></Icon>
           <text class="msg-action-btn-text">{{ t('forwardText') }}</text>
         </div>
-        <div class="msg-action-btn" @tap="handleReplyMsg">
+        <div
+          v-if="msg.type !== 'g2'"
+          class="msg-action-btn"
+          @tap="handleReplyMsg"
+        >
           <Icon
             :size="18"
             color="#656A72"
@@ -263,7 +271,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from '../../../utils/transformVue'
+import { onMounted, onUnmounted, ref } from '../../../utils/transformVue'
 // @ts-ignore
 import Tooltip from '../../../components/Tooltip.vue'
 import Icon from '../../../components/Icon.vue'
@@ -271,7 +279,7 @@ import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { events } from '../../../utils/constants'
 import { autorun } from 'mobx'
-import { deepClone, getUniPlatform } from '../../../utils'
+import { deepClone } from '../../../utils'
 
 const tooltipRef = ref(null)
 const props = defineProps({
@@ -309,15 +317,26 @@ const isSelf = ref(false)
 onMounted(() => {
   // @ts-ignore
   isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
+
+  // 当前版本仅支持文本、图片、文件、语音、视频 话单消息，其他消息类型统一为未知消息
+  isUnknownMsg.value = !(
+    props.msg.type == 'text' ||
+    props.msg.type == 'image' ||
+    props.msg.type == 'file' ||
+    props.msg.type == 'audio' ||
+    props.msg.type == 'video' ||
+    props.msg.type == 'g2'
+  )
 })
 
-autorun(() => {
+const uninstallMyUserInfoWatch = autorun(() => {
   // @ts-ignore
   isSelf.value = props.msg.from === uni.$UIKitStore.userStore.myUserInfo.account
 })
 
 const isFriend = ref(true)
 
+// 未知消息
 const isUnknownMsg = ref(false)
 
 const closeTooltip = () => {
@@ -325,6 +344,7 @@ const closeTooltip = () => {
   tooltipRef.value.close()
 }
 
+// 复制消息
 const handleCopy = () => {
   uni.setClipboardData({
     data: props.msg.body,
@@ -334,7 +354,7 @@ const handleCopy = () => {
     },
   })
 }
-
+// 重发消息
 const handleResendMsg = () => {
   const _msg = deepClone(props.msg)
   // 当filePath存在时，说明此次发送失败是由于断网导致的，而不是因为拉黑
@@ -396,6 +416,29 @@ const handleResendMsg = () => {
           uni.$emit(events.ON_SCROLL_BOTTOM)
         }, 100)
       })
+  } else if (props.msg.type === 'image' && filePath) {
+    // @ts-ignore
+    uni.$UIKitStore.msgStore.removeMsg(props.msg.sessionId, [
+      props.msg.idClient,
+    ])
+    // @ts-ignore
+    uni.$UIKitStore.msgStore
+      .sendImageMsgActive({
+        scene: props.msg.scene,
+        to: props.msg.to,
+        filePath: props.msg.uploadFileInfo.filePath,
+      })
+      .catch(() => {
+        uni.showToast({
+          title: t('resendMsgFailText'),
+          icon: 'error',
+        })
+      })
+      .finally(() => {
+        setTimeout(() => {
+          uni.$emit(events.ON_SCROLL_BOTTOM)
+        }, 300)
+      })
   } else {
     // @ts-ignore
     uni.$UIKitStore.msgStore.resendMsgActive(_msg).catch((error) => {
@@ -407,6 +450,7 @@ const handleResendMsg = () => {
   }
 }
 
+// 转发消息
 const handleForwardMsg = () => {
   uni.showActionSheet({
     itemList: [t('forwardToTeamText'), t('forwardToFriendText')],
@@ -427,13 +471,13 @@ const handleForwardMsg = () => {
   })
 }
 
+// 回复消息
 const handleReplyMsg = async () => {
   const _msg = deepClone(props.msg)
   // @ts-ignore
   await uni.$UIKitStore.msgStore.replyMsgActive(_msg)
   closeTooltip()
   uni.$emit(events.REPLY_MSG, props.msg)
-  uni.$emit(events.ON_INPUT_FOCUS_CHANGE, true)
 
   // 在群里回复其他人的消息，也是@被回复人
   if (props.msg.scene === 'team' && !isSelf.value) {
@@ -449,6 +493,7 @@ const handleReplyMsg = async () => {
   }
 }
 
+// 撤回消息
 const handleRecallMsg = () => {
   uni.showModal({
     title: t('recallText'),
@@ -474,6 +519,7 @@ const handleRecallMsg = () => {
   })
 }
 
+// 删除消息
 const handleDeleteMsg = () => {
   const _msg = deepClone(props.msg)
   uni.showModal({
@@ -507,13 +553,14 @@ const handleDeleteMsg = () => {
   })
 }
 
+// 添加好友
 const addFriend = () => {
   customNavigateTo({
     url: `/pages/user-card/friend/index?account=${props.msg.to}`,
   })
 }
 
-autorun(() => {
+const uninstallFriendsWatch = autorun(() => {
   // @ts-ignore
   const _isFriend = uni.$UIKitStore.uiStore.friendsWithoutBlacklist.some(
     (item: any) => item.account === props.msg.to
@@ -521,15 +568,9 @@ autorun(() => {
   isFriend.value = _isFriend
 })
 
-autorun(() => {
-  // 当前版本仅支持文本、图片、文件、语音、视频消息，其他消息类型统一为未知消息
-  isUnknownMsg.value = !(
-    props.msg.type == 'text' ||
-    props.msg.type == 'image' ||
-    props.msg.type == 'file' ||
-    props.msg.type == 'audio' ||
-    props.msg.type == 'video'
-  )
+onUnmounted(() => {
+  uninstallMyUserInfoWatch()
+  uninstallFriendsWatch()
 })
 </script>
 

@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
 import { t } from '../../../utils/i18n'
 import type { Team, TeamMember } from '@xkit-yx/im-store'
 import { autorun } from 'mobx'
@@ -115,9 +115,9 @@ const sortGroupMembers = (members: TeamMember[], teamId: string) => {
     .filter((item) => !['owner', 'manager'].includes(item.type))
     .sort((a, b) => a.joinTime - b.joinTime)
   const result = [...owner, ...manager, ...other].map((item) => {
-    // @ts-ignore
     return {
       ...item,
+      // @ts-ignore
       name: uni.$UIKitStore.uiStore.getAppellation({
         account: item.account,
         teamId,
@@ -147,7 +147,7 @@ const onClosePopup = () => {
   uni.$emit(events.CLOSE_AIT_POPUP)
 }
 
-autorun(() => {
+const uninstallTeamMemberWatch = autorun(() => {
   if (props.teamId) {
     teamMembers.value = deepClone(
       sortGroupMembers(
@@ -164,6 +164,10 @@ autorun(() => {
       teamExt.value = team.ext
     }
   }
+})
+
+onUnmounted(() => {
+  uninstallTeamMemberWatch()
 })
 </script>
 

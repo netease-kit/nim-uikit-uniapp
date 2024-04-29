@@ -1,5 +1,6 @@
 <script lang="ts">
 import RootStore, { type IMMessage } from "@xkit-yx/im-store";
+// @ts-ignore
 import { NimKitCore } from "@xkit-yx/core-kit/dist/uniapp-nim-core";
 import {
   customRedirectTo,
@@ -8,27 +9,39 @@ import {
 } from "./utils/customNavigate";
 import { getMsgContentTipByType } from "./utils/msg";
 import { STORAGE_KEY } from "./utils/constants";
-import { getUniPlatform } from "./utils";
+import { isWxApp } from "./utils";
 
 // #ifdef APP-PLUS
+// @ts-ignore
+// 推送插件
 const nimPushPlugin = uni.requireNativePlugin("NIMUniPlugin-PluginModule");
+// 音视频通话插件
+//@ts-ignore
+const nimCallKit = (uni.$UIKitCallKit =
+  uni.requireNativePlugin("netease-CallKit"));
 // #endif
 
 export default {
   onLaunch() {
     // #ifdef APP-PLUS
     // 关闭启动画面，锁定竖屏
+    // @ts-ignore
     plus.navigator.closeSplashscreen();
+    // @ts-ignore
     plus.screen.lockOrientation("portrait-primary");
     // #endif
     // @ts-ignore
     if (
+      // @ts-ignore
       uni.$UIKitStore &&
+      // @ts-ignore
       uni.$UIKitStore?.connectStore?.connectState === "connected"
     ) {
       return;
     }
-    const imOptions = uni.getStorageSync(STORAGE_KEY);
+    // @ts-ignore
+    const imOptions = uni.getStorageSync(STORAGE_KEY) || true;
+    // 登录逻辑您根据实际业务逻辑自行实现，在您的登录页完成登录后，将您的业务服务器返回的 account、token 传入 app.vue 里的初始化登录 IM 的方法，待 IM 初始化、连接完成后，再重定向到您需要的界面。
     if (imOptions) {
       this.initNim(imOptions);
     } else {
@@ -59,6 +72,7 @@ export default {
   methods: {
     initNim(opts: { account: string; token: string }) {
       // 保存登录信息
+      // @ts-ignore
       uni.setStorage({
         key: STORAGE_KEY,
         data: opts,
@@ -66,15 +80,18 @@ export default {
           console.log("保存登录信息success");
         },
       });
-      const isWeixinApp = getUniPlatform() === "mp-weixin";
       // @ts-ignore
       const nim = (uni.$UIKitNIM = new NimKitCore({
         initOptions: {
-          appkey: "",
-          lbsUrls: isWeixinApp
+          appkey: "", // 请填写你的appkey
+          account: "", // 请填写你的account
+          token: "", // 请填写你的token
+          // account: opts.account, // 请填写你的account
+          // token: opts.token, // 请填写你的token
+          lbsUrls: isWxApp
             ? ["https://lbs.netease.im/lbs/wxwebconf.jsp"]
             : ["https://lbs.netease.im/lbs/webconf.jsp"],
-          linkUrl: isWeixinApp ? "wlnimsc0.netease.im" : "weblink.netease.im",
+          linkUrl: isWxApp ? "wlnimsc0.netease.im" : "weblink.netease.im",
           needReconnect: true,
           /**
            * 使用固定设备ID，
@@ -82,7 +99,7 @@ export default {
           isFixedDeviceId: true,
           // "reconnectionAttempts": 5,
           debugLevel: "debug",
-          ...opts,
+          // ...opts,
         },
         platform: "UniApp",
       }));
@@ -105,6 +122,7 @@ export default {
             : { forcePushIDsList: "[]", needForcePush: false };
 
           // 如果是 at 消息，需要走离线强推
+          // @ts-ignore
           const { forcePushIDsList, needForcePush } = yxAitMsg
             ? // @ts-ignore
               store.msgStore._formatExtAitToPushInfo(yxAitMsg, options.body)
@@ -144,7 +162,7 @@ export default {
             sessionType: scene,
           });
 
-          const pushInfo = {
+          const pushInfo: any = {
             needPush: true,
             needPushBadge: true,
             pushPayload: "{}",
@@ -177,7 +195,7 @@ export default {
           oppoAppSecret: "",
           oppoCertificateName: "",
 
-          /**
+          /** vivo
            * 注意vivo的appid和appkey需要同时在此处，以及manifest.json(即插件参数配置)中配置
            */
           vivoAppId: "",
@@ -196,22 +214,76 @@ export default {
           apnsCertificateName: "",
         },
       });
-      // #endif
 
+      // 初始化音视频通话插件
+      if (nimCallKit) {
+        nimCallKit.initConfig(
+          {
+            appKey: "", // 请填写你的appkey
+            account: "", // 请填写你的account
+            token: "", // 请填写你的token
+            // account: opts.account, // 请填写你的account
+            // token: opts.token, // 请填写你的token
+            apnsCername: "",
+            pkCername: "",
+          },
+          (ret: any) => {
+            if (ret.code != 200) {
+              console.log("-------------callkit init失败\n错误码：", ret);
+            } else {
+              console.log("-------------callkit 开始登录------------");
+              //@ts-ignore
+              nimCallKit.login(
+                {
+                  account: "", // 请填写你的account
+                  token: "", // 请填写你的token
+                },
+                function (ret: any) {
+                  if (ret.code != 200) {
+                    console.log(
+                      "-------------callkit 登录失败------------",
+                      ret
+                    );
+                  } else {
+                    console.log(
+                      "-------------callkit 登录成功------------ ",
+                      ret
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+      }
+      // #endif
       nim.connect();
       customSwitchTab({
         url: "/pages/Conversation/index",
       });
     },
     logout() {
+      // @ts-ignore
       uni.removeStorageSync(STORAGE_KEY);
-      customReLaunch({
-        url: "/pages/Login/index",
-      });
+      try {
+        // @ts-ignore
+        nimCallKit.logout({}, (ret) => {
+          if (ret.code != 200) {
+            console.log("音视频通话插件退出失败");
+          } else {
+            console.log("音视频通话插件退出成功");
+          }
+        });
+      } catch (error) {
+        console.log("音视频通话插件退出失败", error);
+      }
       // @ts-ignore
       uni.$UIKitNIM.disconnect();
       // @ts-ignore
       uni.$UIKitStore.destroy();
+      customReLaunch({
+        url: "/pages/Login/index",
+      });
     },
   },
 };

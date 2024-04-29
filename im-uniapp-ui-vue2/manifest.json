@@ -2,7 +2,7 @@
   "name": "im-uniapp-ui-vue2",
   "appid": "",
   "description": "",
-  "versionName": "1.4.0",
+  "versionName": "1.0.0",
   "versionCode": "100",
   "transformPx": false,
   /* 5+App特有相关 */
@@ -17,7 +17,12 @@
       "delay": 0
     },
     /* 模块配置 */
-    "modules": {},
+    "modules": {
+      "Camera": {},
+      "Record": {},
+      "VideoPlayer": {},
+      "Push": {}
+    },
     /* 应用发布信息 */
     "distribute": {
       /* android打包配置 */
@@ -41,9 +46,63 @@
         ]
       },
       /* ios打包配置 */
-      "ios": {},
+      "ios": {
+        "dSYMs": false
+      },
       /* SDK配置 */
-      "sdkConfigs": {}
+      "sdkConfigs": {
+        "ad": {},
+        "push": {}
+      }
+    },
+    "nativePlugins": {
+      "NIMUniPlugin": {
+        "PUSH_VIVO_APPID": "213123123",
+        "PUSH_VIVO_APPKEY": "12312312312",
+        "PUSH_HONOR_APPID": "21312312",
+        "__plugin_info__": {
+          "name": "NIMUniPlugin",
+          "description": "uni消息推送插件",
+          "platforms": "Android,iOS",
+          "url": "",
+          "android_package_name": "",
+          "ios_bundle_id": "",
+          "isCloud": false,
+          "bought": -1,
+          "pid": "",
+          "parameters": {
+            "PUSH_VIVO_APPID": {
+              "des": "厂商VIVO-app_id",
+              "key": "com.vivo.push.app_id",
+              "value": ""
+            },
+            "PUSH_VIVO_APPKEY": {
+              "des": "厂商VIVO-app_key",
+              "key": "com.vivo.push.api_key",
+              "value": ""
+            },
+            "PUSH_HONOR_APPID": {
+              "des": "厂商HONOR-app_id",
+              "key": "com.hihonor.push.app_id",
+              "value": ""
+            }
+          }
+        }
+      },
+      "netease-CallKit": {
+        "__plugin_info__": {
+          "name": "netease-CallKit",
+          "description": "网易云信音视频通话插件",
+          "platforms": "Android,iOS",
+          "url": "",
+          "android_package_name": "",
+          "ios_bundle_id": "",
+          "isCloud": false,
+          "bought": -1,
+          "pid": "",
+          "parameters": {}
+        }
+      }
     }
   },
   "h5": {

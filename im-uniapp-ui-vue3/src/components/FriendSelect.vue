@@ -14,7 +14,9 @@
             "
           />
           <Avatar class="user-avatar" size="36" :account="item.account" />
-          <div class="user-name">{{ item.nick }}</div>
+          <div class="user-name">
+            {{ item.nick }}
+          </div>
         </div>
       </radio-group>
       <checkbox-group v-else @change="checkboxChange">
@@ -30,7 +32,9 @@
             "
           />
           <Avatar class="user-avatar" size="36" :account="item.account" />
-          <div class="user-name">{{ item.nick }}</div>
+          <div class="user-name">
+            {{ item.nick }}
+          </div>
         </div>
       </checkbox-group>
     </div>
@@ -95,10 +99,9 @@ const $emit = defineEmits<{
   (event: 'checkboxChange', selectList: string | string[]): void
 }>()
 
-const checkboxChange = (event) => {
+const checkboxChange = (event: any) => {
   const value = event.detail.value
   selectAccount.value = value
-
   $emit('checkboxChange', value)
 }
 

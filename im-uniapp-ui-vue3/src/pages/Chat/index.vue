@@ -38,7 +38,7 @@ import { autorun } from 'mobx'
 import { ref, onMounted, onUnmounted } from '../../utils/transformVue'
 import { parseSessionId } from '../../utils/msg'
 import type { TMsgScene } from '@xkit-yx/im-store'
-import { deepClone, getUniPlatform, stopAllAudio } from '../../utils'
+import { deepClone, getUniPlatform } from '../../utils'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { customSwitchTab } from '../../utils/customNavigate'
 import NetworkAlert from '../../components/NetworkAlert.vue'
@@ -49,6 +49,7 @@ import MessageInput from './message/message-input.vue'
 import type { IMMessage } from 'nim-web-sdk-ng/dist/NIM_MINIAPP_SDK/MsgServiceInterface'
 import { HISTORY_LIMIT, MSG_ID_FLAG } from '../../utils/constants'
 import { t } from '../../utils/i18n'
+import { clear } from 'console'
 
 trackInit('ChatUIKit')
 
@@ -111,10 +112,17 @@ const handleRemoveTeamMembers = (data: any) => {
 }
 
 const handleMsg = (msg: IMMessage) => {
-  uni.$emit(events.ON_MSG, msg)
+  uni.$emit(events.ON_SCROLL_BOTTOM, msg)
 }
 
-const getHistroy = async (endTime: number, lastMsgId?: string) => {
+const handleSyncOfflineMsgs = () => {
+  const timer = setTimeout(() => {
+    uni.$emit(events.ON_SCROLL_BOTTOM)
+    clearTimeout(timer)
+  }, 300)
+}
+
+const getHistory = async (endTime: number, lastMsgId?: string) => {
   try {
     if (noMore.value) {
       return []
@@ -144,7 +152,7 @@ const getHistroy = async (endTime: number, lastMsgId?: string) => {
 }
 
 const handleLoadMore = async (lastMsg: IMMessage) => {
-  const res = await getHistroy(lastMsg.time, lastMsg.idServer)
+  const res = await getHistory(lastMsg.time, lastMsg.idServer)
   return res
 }
 
@@ -165,14 +173,6 @@ onShow(function () {
   })
 })
 
-onHide(() => {
-  try {
-    stopAllAudio()
-  } catch (error) {
-    console.log('error', error)
-  }
-})
-
 onLoad(() => {
   uni.$on(events.HANDLE_MOVE_THROUGH, (flag) => {
     moveThrough.value = flag
@@ -182,12 +182,15 @@ onLoad(() => {
 })
 
 onMounted(() => {
-  setTimeout(() => {
-    uni.$emit(events.ON_CHAT_MOUNTED)
+  const timer = setTimeout(() => {
+    uni.$emit(events.ON_SCROLL_BOTTOM)
+    clearTimeout(timer)
   }, 300)
+
   if (scene === 'p2p') {
     // @ts-ignore
     title.value = deepClone(
+      // @ts-ignore
       uni.$UIKitStore.uiStore.getAppellation({ account: to })
     )
   } else if (scene === 'team') {
@@ -203,6 +206,8 @@ onMounted(() => {
   uni.$UIKitNIM.on('dismissTeam', handleDismissTeam)
   // @ts-ignore
   uni.$UIKitNIM.on('removeTeamMembers', handleRemoveTeamMembers)
+  // @ts-ignore
+  uni.$UIKitNIM.on('syncOfflineMsgs', handleSyncOfflineMsgs)
 
   uni.$on(events.GET_HISTORY_MSG, (msg: IMMessage) => {
     handleLoadMore(msg)
@@ -230,51 +235,14 @@ onMounted(() => {
 onUnload(() => {
   uni.$off(events.CONFIRM_FORWARD_MSG)
   uni.$off(events.CANCEL_FORWARD_MSG)
-  stopAllAudio()
-
-  // @ts-ignore 退出界面释放内存
-  uni.$currentAudioContext = ''
 })
 
-// 触底刷新还是下拉刷新，您可根据scroll-view自行实现
-
-// #ifndef H5
-// onPullDownRefresh(debounce(() => {
-//   uni.$emit(events.ON_LOAD_MORE)
-// }, 1000))
-// #endif
-
-// #ifdef H5
-// h5端下拉刷新会刷新页面，所以此处触顶加载更多消息
-// onPageScroll(debounce(function (data: any) {
-//   if (data.scrollTop <= 10) {
-//     // uni.$emit(events.ON_REACH_TOP)
-//     uni.$emit(events.ON_LOAD_MORE)
-//   }
-// }, 1000))
-// #endif
-
-onUnmounted(() => {
-  stopAllAudio()
-
-  // @ts-ignore
-  uni.$UIKitNIM.off('dismissTeam', handleDismissTeam)
-  // @ts-ignore
-  uni.$UIKitNIM.off('removeTeamMembers', handleRemoveTeamMembers)
-  // @ts-ignore
-  uni.$UIKitNIM.off('msg', handleMsg)
-
-  uni.$off(events.GET_HISTORY_MSG)
-  // 销毁时清空内存
-  // store.msgStore.removeMsg(sessionId)
-})
-
-autorun(() => {
+const uninstallHistoryWatch = autorun(() => {
   // @ts-ignore
   if (uni.$UIKitStore.connectStore.connectState === 'connected') {
-    getHistroy(Date.now()).then((msgs) => {
+    getHistory(Date.now()).then(() => {
       if (!isMounted) {
-        uni.$emit(events.ON_CHAT_MOUNTED, msgs?.[0])
+        uni.$emit(events.ON_SCROLL_BOTTOM)
         isMounted = true
       }
     })
@@ -282,7 +250,7 @@ autorun(() => {
 })
 
 // 动态更新消息
-autorun(() => {
+const uninstallMsgsWatch = autorun(() => {
   // @ts-ignore
   msgs.value = deepClone(uni.$UIKitStore.msgStore.getMsg(sessionId))
 
@@ -329,7 +297,7 @@ autorun(() => {
       // @ts-ignore
       uni.$UIKitStore.msgStore
         .getMsgByIdServerActive({ reqMsgs })
-        .then((res) => {
+        .then((res: IMMessage[]) => {
           if (res?.length > 0) {
             res.forEach((item: IMMessage) => {
               if (item.idServer) {
@@ -351,6 +319,22 @@ autorun(() => {
   if (msgs.value.length < 6) {
     uni.hideKeyboard()
   }
+})
+
+onUnmounted(() => {
+  // @ts-ignore
+  uni.$UIKitNIM.off('dismissTeam', handleDismissTeam)
+  // @ts-ignore
+  uni.$UIKitNIM.off('removeTeamMembers', handleRemoveTeamMembers)
+  // @ts-ignore
+  uni.$UIKitNIM.off('msg', handleMsg)
+  // @ts-ignore
+  uni.$UIKitNIM.off('syncOfflineMsgs', handleSyncOfflineMsgs)
+
+  uni.$off(events.GET_HISTORY_MSG)
+
+  uninstallHistoryWatch()
+  uninstallMsgsWatch()
 })
 </script>
 

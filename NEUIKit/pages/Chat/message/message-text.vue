@@ -2,11 +2,11 @@
   <div class="msg-text" :style="{ fontSize: (fontSize || 16) + 'px' }">
     <template v-for="item in textArr">
       <template v-if="item.type === 'text'">
-        <text class="msg-text" v-text="item.value"></text>
+        <span class="msg-text">{{ item.value }}</span>
       </template>
       <template v-else-if="item.type === 'Ait'">
         <text class="msg-text" :style="{ color: '#1861df' }">
-          {{ ' ' + item.value }}
+          {{ ' ' + item.value + ' ' }}
         </text>
       </template>
       <template v-else-if="item.type === 'emoji'">
@@ -49,14 +49,17 @@ const props = defineProps({
     default: undefined,
   },
 })
+
 const textArr = parseText(props?.msg?.body, props?.msg?.ext)
 </script>
 
 <style lang="scss" scoped>
 .msg-text {
-  word-break: break-all;
   color: #333;
   text-align: left;
   overflow-y: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: break-spaces;
 }
 </style>

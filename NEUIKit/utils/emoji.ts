@@ -76,14 +76,17 @@ export const emojiMap: IKeyMap = {
   [t('Poop')]: 'icon-a-70',
 }
 
+// emoji正则
 export const emojiRegExp = new RegExp(
-  Object.keys(emojiMap)
-    .map((item) => {
-      const left = `\\${item.slice(0, 1)}`
-      const right = `\\${item.slice(-1)}`
-      const mid = item.slice(1, -1)
-      return `${left}${mid}${right}`
-    })
-    .join('|'),
+  '(' +
+    Object.keys(emojiMap)
+      .map((item) => {
+        const left = `\\${item.slice(0, 1)}`
+        const right = `\\${item.slice(-1)}`
+        const mid = item.slice(1, -1)
+        return `${left}${mid}${right}`
+      })
+      .join('|') +
+    ')',
   'g'
 )
