@@ -130,10 +130,22 @@ export const startCall = (options: {
   try {
     // @ts-ignore
     uni.$UIKitCallKit.toCallPage({
-      remoteUserAccid: options.remoteUserAccid,
-      currentUserAccid: options.currentUserAccid,
+      calledAccount: options.remoteUserAccid,
       type: options.type,
-      remoteShowName: options.remoteShowName,
+      calledShowName: options.remoteShowName,
+    }, function(ret) {
+    	if (ret.code != 200) {
+    		var msg = '呼叫失败\n错误码：' + ret.code + '\n错误信息：' + ret.message;
+    		uni.showToast({
+    		  title: msg,
+    		  icon: 'none',
+    		})      
+    	} else {
+    		uni.showToast({
+    		  title: '呼叫成功',
+    		  icon: 'none',
+    		})
+    	}
     })
   } catch (error) {
     console.log('handleVideoCall error', error)
