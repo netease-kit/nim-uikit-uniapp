@@ -1,49 +1,40 @@
 {
     "name": "netease-CallKit",
     "id": "netease-CallKit",
-    "version": "1.7.0",
+    "version": "1.0.0",
     "description": "网易云信音视频通话插件",
     "_dp_type": "nativeplugin",
     "_dp_nativeplugin": {
         "android": {
             "plugins": [
                 {
-                    "type": "module",
-                    "name": "netease-CallKit",
-                    "class": "com.netease.yunxin.kit.call.dcloud.CallKitAPIModule"
+                  "type": "module",
+                  "name": "netease-CallKit",
+                  "class": "com.netease.yunxin.kit.call.dcloud.CallKitAPIModule"
                 }
             ],
             "hooksClass": "",
             "integrateType": "aar",
             "dependencies": [
-                "com.netease.yunxin.kit.call:call-ui:2.4.0"
+            	"com.netease.yunxin.kit.call:call-ui:2.4.0"
             ],
-            "excludeDependencies": [
-              "com.netease.nimlib:basesdk",
-              "com.netease.nimlib:push"
-            ],
+            "excludeDependencies": [],
             "compileOptions": {
                 "sourceCompatibility": "1.8",
                 "targetCompatibility": "1.8"
             },
-            "abis": [
-                "armeabi-v7a",
-                "arm64-v8a",
-                "x86"
-            ],
+            "abis": ["armeabi-v7a", "arm64-v8a", "x86"],
             "minSdkVersion": "21",
             "useAndroidX": true,
             "permissions": [],
             "parameters": {}
         },
         "ios": {
-            "plugins": [
-                {
-                    "type": "module",
-                    "name": "netease-CallKit",
-                    "class": "CallKitAPIModule"
-                }
-            ],
+            "plugins": [{
+                "type": "module",
+                "name": "netease-CallKit",
+                "class": "CallKitAPIModule"
+            }],
             "frameworks": [
                 "CocoaLumberjack.framework",
                 "libwebp.framework",
@@ -85,3 +76,5 @@
         }
     }
 }
+
+
