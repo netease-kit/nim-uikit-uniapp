@@ -16,7 +16,7 @@
             "hooksClass": "",
             "integrateType": "aar",
             "dependencies": [
-            	"com.netease.yunxin.kit.call:call-ui:2.4.0"
+            	"com.netease.yunxin.kit.call:call-ui:2.4.1"
             ],
             "excludeDependencies": [],
             "compileOptions": {
