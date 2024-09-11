@@ -1,20 +1,21 @@
-coverage/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
 node_modules
-.idea
-junit.xml
-.history
 .DS_Store
 dist
-*-error.log
-es
-lib
-storybook-static
-# umi
-.umi
-.umi-production
-.umi-test
-.env.local
-.npmrc
-build_tools
-*-debug.log
-miniprogram_dist
+*.local
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
