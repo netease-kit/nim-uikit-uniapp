@@ -11,6 +11,8 @@ im-uikit-uniapp 界面效果如下图所示：
 
 - Android
 - iOS
+- 微信小程序
+- h5
 
 ## 运行 demo
 
