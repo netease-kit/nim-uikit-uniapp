@@ -16,7 +16,7 @@ im-uikit-uniapp 界面效果如下图所示：
 
 - [创建应用并获取 AppKey](https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console)
 - [注册云信账号，获取 account、token](https://doc.yunxin.163.com/messaging/docs/DQ3Nzk1MTY?platform=server)
-- `执行 npm install 安装依赖 && App.vue 中填入 appkey、account 和 token，最后使用 HBuilderX 启动项目`
+- `执行 npm install 安装依赖 && 在im-uniapp-ui项目中的App.vue 中填入 appkey、account 和 token，最后使用 HBuilderX 启动项目`
 
 ## 项目集成
 
