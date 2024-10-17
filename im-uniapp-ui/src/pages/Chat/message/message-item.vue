@@ -1,6 +1,16 @@
 <template>
   <div
-    class="msg-item-wrapper"
+    :class="`msg-item-wrapper ${
+      props.msg.pinState &&
+      !(
+        props.msg.messageType ===
+          V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CUSTOM &&
+        props.msg.timeValue !== undefined
+      ) &&
+      !props.msg.recallType
+        ? 'msg-pin'
+        : ''
+    }`"
     :id="MSG_ID_FLAG + props.msg.messageClientId"
     :key="props.msg.createTime"
   >
@@ -99,10 +109,8 @@
         </div>
         <div :class="props.msg.isSelf ? 'self-msg-recall' : 'msg-recall'">
           <text class="msg-recall2">
-            {{
-              !props.msg.isSelf ? t('recall2') : `${t('you') + t('recall')}`
-            }}</text
-          >
+            {{ !props.msg.isSelf ? t('recall2') : `${t('you') + t('recall')}` }}
+          </text>
         </div>
       </div>
     </div>
@@ -140,6 +148,7 @@
           <MessageText :msg="props.msg"></MessageText>
         </MessageBubble>
       </div>
+      <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
     <div
       class="msg-common"
@@ -185,6 +194,7 @@
           </div>
         </MessageBubble>
       </div>
+      <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
     <div
       class="msg-common"
@@ -230,6 +240,7 @@
           </div>
         </MessageBubble>
       </div>
+      <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
     <div
       class="msg-common"
@@ -292,6 +303,7 @@
           <MessageFile :msg="props.msg" />
         </MessageBubble>
       </div>
+      <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
     <div
       class="msg-common"
@@ -329,6 +341,7 @@
           />
         </MessageBubble>
       </div>
+      <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
     <MessageNotification
       v-else-if="
@@ -365,6 +378,38 @@
         </MessageBubble>
       </div>
     </div>
+    <!-- 不展示 pinState 为 0 、时间消息以及撤回消息的标记样式 -->
+    <div
+      class="msg-pin-tip"
+      v-if="
+        props.msg.pinState &&
+        !(
+          props.msg.messageType ===
+            V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CUSTOM &&
+          props.msg.timeValue !== undefined
+        ) &&
+        !props.msg.recallType
+      "
+      :style="{ justifyContent: !props.msg.isSelf ? 'flex-start' : 'flex-end' }"
+    >
+      <Icon :size="11" type="icon-green-pin"></Icon>&nbsp;<span
+        v-if="props.msg.operatorId === accountId"
+        >{{ `${t('you')}` }}</span
+      >
+      <Appellation
+        v-else
+        :account="props.msg.operatorId"
+        :teamId="
+          conversationType ===
+          V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+            ? to
+            : ''
+        "
+        color="#3EAF96"
+        fontSize="11"
+      ></Appellation
+      >&nbsp;{{ `${t('pinThisText')}` }}
+    </div>
   </div>
 </template>
 
@@ -391,7 +436,10 @@ import MessageG2 from './message-g2.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-
+import MessageIsRead from './message-read.vue'
+import Icon from '../../../components/Icon.vue'
+import Appellation from '../../../components/Appellation.vue'
+import { onLoad } from '@dcloudio/uni-app'
 const props = withDefaults(
   defineProps<{
     msg: V2NIMMessageForUI & { timeValue?: number }
@@ -403,6 +451,7 @@ const props = withDefaults(
 )
 
 const appellation = ref('')
+const accountId = uni.$UIKitStore?.userStore?.myUserInfo.accountId
 
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
@@ -472,10 +521,27 @@ onUnmounted(() => {
 }
 
 .msg-common {
-  margin-top: 8px;
+  padding-top: 8px;
   display: flex;
   align-items: flex-start;
   font-size: 16px;
+  message-is-read {
+    align-self: flex-end;
+  }
+}
+.msg-pin {
+  opacity: 1;
+  background: #fffbea;
+}
+.msg-pin-tip {
+  font-size: 11px;
+  font-weight: normal;
+  color: #3eaf96;
+  margin: 8px 50px 0 50px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .msg-content {

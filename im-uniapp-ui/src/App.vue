@@ -1,5 +1,6 @@
 <script lang="ts">
 import RootStore from "@xkit-yx/im-store-v2";
+
 import V2NIM, { V2NIMConst } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
 import {
   customRedirectTo,
@@ -29,39 +30,48 @@ export default {
     plus.navigator.closeSplashscreen();
     plus.screen.lockOrientation("portrait-primary");
     // #endif
-    // if (
-    //   uni?.$UIKitStore?.connectStore?.connectStatus ===
-    //   V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
-    // ) {
-    //   return;
-    // }
-    // const imOptions = uni.getStorageSync(STORAGE_KEY);
-    // if (imOptions) {
-    //   this.initNim(imOptions);
-    // } else {
-    //   // 需要登录 im
-    //   customRedirectTo({
-    //     url: isWxApp ? "/pages/index/index" : "/pages/Login/index",
-    //   });
-    // }
+    if (
+      uni?.$UIKitStore?.connectStore?.connectStatus ===
+      V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
+    ) {
+      return;
+    }
+    const imOptions = {
+      appkey: "", // 请填写你的appkey
+      account: "", // 请填写你的account
+      token: "", // 请填写你的token
+    };
+    if (imOptions) {
+      this.initNim(imOptions);
+    } else {
+      // 需要登录 im
+      customRedirectTo({
+        url: isWxApp ? "/pages/index/index" : "/pages/Login/index",
+      });
+    }
   },
   onShow() {
-    // #ifdef APP-PLUS 推送相关
+    // #ifdef APP-PLUS
     uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(false);
     // #endif
   },
   onHide() {
-    // #ifdef APP-PLUS 推送相关
+    // #ifdef APP-PLUS
     uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(true);
     // #endif
   },
   methods: {
-    initNim() {
-      const opts = {
-        appkey: "", // 请填写你的appkey
-        account: "", // 请填写你的account
-        token: "", // 请填写你的token
-      };
+    initNim(opts: { account: string; token: string; appkey: string }) {
+      // 保存登录信息
+
+      uni.setStorage({
+        key: STORAGE_KEY,
+        data: opts,
+        success: function () {
+          console.log("保存登录信息success");
+        },
+      });
+
       const nim = (uni.$UIKitNIM = V2NIM.getInstance(
         {
           appkey: opts.appkey,
@@ -86,9 +96,16 @@ export default {
       const store = (uni.$UIKitStore = new RootStore(
         nim,
         {
+          // 添加好友是否需要验证
           addFriendNeedVerify: false,
+          // 是否需要显示 p2p 消息、p2p会话列表消息已读未读，默认 false
+          p2pMsgReceiptVisible: true,
+          // 是否需要显示群组消息已读未读，默认 false
+          teamMsgReceiptVisible: true,
+          // 群组被邀请模式，默认需要验证
           teamAgreeMode:
             V2NIMConst.V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH,
+          // 发送消息前回调, 可对消息体进行修改，添加自定义参数
           sendMsgBefore: async (options: {
             msg: V2NIMMessage;
             conversationId: string;
@@ -220,7 +237,7 @@ export default {
       console.log("-------------callkit init 开始", opts.account, opts.token);
       nimCallKit.initConfig(
         {
-          appKey: opts.account, // 请填写你的appkey
+          appKey: "", // 请填写你的appkey
           account: opts.account, // 请填写你的account
           token: opts.token, // 请填写你的token
           apnsCername: "",

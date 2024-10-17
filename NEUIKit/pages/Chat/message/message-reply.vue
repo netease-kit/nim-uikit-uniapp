@@ -6,19 +6,18 @@
         <span>{{ t('replyNotFindText') }}</span>
       </div>
       <div v-else class="reply-msg" @tap="showFullReplyMsg">
-        <div class="reply-msg-name">|{{ repliedTo }}:</div>
-        <div
+        <div class="reply-msg-name-wrapper">
+          <div class="reply-msg-name-line">|</div>
+          <div class="reply-msg-name-content">{{ repliedTo }}</div>
+          <div class="reply-msg-name-to">:</div>
+        </div>
+        <message-one-line
           v-if="
             props.replyMsg.messageType ===
             V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT
           "
-          class="reply-msg-content"
-        >
-          <message-one-line
-            :text="props.replyMsg.text"
-            :maxWidth="260"
-          ></message-one-line>
-        </div>
+          :text="props.replyMsg.text"
+        ></message-one-line>
         <div
           v-else-if="
             props.replyMsg.messageType ===
@@ -187,16 +186,44 @@ const closeFullReplyMsg = () => {
   color: #929299;
   font-size: 13px;
   white-space: nowrap;
+
   .reply-msg {
     display: flex;
     align-items: center;
+    width: 100%;
+    message-one-line {
+      flex: 1;
+      font-size: 13px;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
-  .reply-msg-name {
+  .reply-msg-name-wrapper {
     margin-right: 5px;
+    max-width: 125px;
+    flex: 0 0 auto;
+    display: flex;
+    white-space: nowrap;
+  }
+  .reply-msg-name-line {
+    flex-basis: 0 0 3px;
+    margin-right: 2px;
+  }
+  .reply-msg-name-to {
+    flex-basis: 0 0 3px;
+  }
+  .reply-msg-name-content {
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .reply-msg-content {
-    display: flex;
-    align-items: center;
+    // display: flex;
+    // align-items: center;
+    flex: 1;
   }
 }
 

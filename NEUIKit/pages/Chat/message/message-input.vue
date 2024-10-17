@@ -15,42 +15,38 @@
             type="icon-guanbi"
           />
         </div>
-        ｜
+        <div class="reply-line">｜</div>
         <div class="reply-title">{{ t('replyText') }}</div>
+        <div class="reply-to">
+          <Appellation
+            :account="replyMsg && replyMsg.senderId"
+            :team-id="
+              props.conversationType ===
+              V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+                ? to
+                : ''
+            "
+            color="#929299"
+            :fontSize="13"
+          >
+          </Appellation>
+        </div>
+        <div class="reply-to-colon">:</div>
         <div
-          class="reply-noFind"
           v-if="replyMsg && replyMsg.messageClientId === 'noFind'"
+          class="reply-noFind"
         >
           {{ t('replyNotFindText') }}
         </div>
         <div class="reply-message" v-else>
-          <div class="reply-to">
-            <Appellation
-              :account="replyMsg && replyMsg.senderId"
-              :team-id="
-                props.conversationType ===
-                V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
-                  ? to
-                  : ''
-              "
-              color="#929299"
-              :fontSize="13"
-            >
-            </Appellation>
-          </div>
-          :
-          <div
+          <message-one-line
             v-if="
               replyMsg &&
               replyMsg.messageType ===
                 V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT
             "
-            class="reply-msg-content"
-          >
-            <message-one-line
-              :text="replyMsg && replyMsg.text"
-            ></message-one-line>
-          </div>
+            :text="replyMsg && replyMsg.text"
+          ></message-one-line>
           <div v-else>
             {{
               '[' + REPLY_MSG_TYPE_MAP[replyMsg && replyMsg.messageType] + ']'
@@ -60,7 +56,7 @@
       </div>
       <!-- 输入框上按钮组 -->
       <div class="msg-button-group">
-        <div v-if="!isWeb" class="msg-input-button" @tap="handleAudioVisible">
+        <div @tap="handleAudioVisible" v-if="!isWeb" class="msg-input-button">
           <Icon
             v-if="audioPanelVisible"
             :size="20"
@@ -69,19 +65,19 @@
           />
           <Icon v-else :size="20" type="icon-audio" key="icon-audio" />
         </div>
-        <div class="msg-input-button" @tap="handleEmojiVisible">
-          <Icon :size="20" type="icon-biaoqing" />
+        <div class="msg-input-button">
+          <Icon @tap="handleEmojiVisible" :size="20" type="icon-biaoqing" />
         </div>
-        <div class="msg-input-button" @tap="handleSendImageMsg">
+        <div class="msg-input-button">
           <div>
-            <Icon :size="20" type="icon-tupian" />
+            <Icon @tap="handleSendImageMsg" :size="20" type="icon-tupian" />
           </div>
         </div>
-        <div class="msg-input-button" @tap="handleSetting">
-          <Icon type="icon-shezhi" :size="20" />
+        <div class="msg-input-button">
+          <Icon @tap="handleSendMoreVisible" type="send-more" :size="20" />
         </div>
-        <div class="msg-input-button" @tap="handleSendMoreVisible">
-          <Icon type="send-more" :size="20" />
+        <div class="msg-input-button">
+          <Icon @tap="handleSetting" type="icon-shezhi" :size="20" />
         </div>
       </div>
       <div v-if="inputVisible" class="msg-input">
@@ -185,6 +181,16 @@
           </div>
           <div class="icon-text">{{ t('videoCallText') }}</div>
         </div>
+        <div
+          v-if="isWeb"
+          class="send-more-panel-item-wrapper"
+          @tap="handleSendFileMsg"
+        >
+          <div class="send-more-panel-item">
+            <Icon type="icon-file" :size="30"></Icon>
+          </div>
+          <div class="icon-text">{{ t('fileText') }}</div>
+        </div>
       </div>
     </div>
     <!-- @消息相关 popup -->
@@ -227,9 +233,11 @@ import {
   isWxApp,
   startCall,
   isApp,
+  isIosApp,
 } from '../../../utils'
 // @ts-ignore
 import UniPopup from '../../../components/uni-components/uni-popup/components/uni-popup/uni-popup.vue'
+// @ts-ignore
 import MentionMemberList from './mention-member-list.vue'
 import { autorun } from 'mobx'
 import Appellation from '../../../components/Appellation.vue'
@@ -384,6 +392,7 @@ const onPopupChange = (e: any) => {
 
 // 点击@群成员
 const handleMentionItemClick = (member: MentionedMember) => {
+  //@ts-ignore
   ctx.refs.popupRef.close()
   uni.$emit(events.HANDLE_MOVE_THROUGH, false)
   const nickInTeam = member.appellation
@@ -399,6 +408,7 @@ const handleMentionItemClick = (member: MentionedMember) => {
 }
 
 const closePopup = () => {
+  //@ts-ignore
   ctx.refs.popupRef.close()
 }
 
@@ -438,7 +448,7 @@ const handleInputBlur = () => {
 
 // 滚动到底部
 const scrollBottom = () => {
-  if (isAndroidApp || isWxApp) {
+  if (isAndroidApp || isWxApp || isIosApp) {
     setTimeout(() => {
       uni.$emit(events.ON_SCROLL_BOTTOM)
     }, 300)
@@ -458,7 +468,7 @@ const handleInput = (event: any) => {
     if (isAit) {
       // 当前输入的是@
       uni.hideKeyboard()
-
+      // @ts-ignore
       ctx.refs.popupRef.open('bottom')
       isFocus.value = false
       uni.$emit(events.HANDLE_MOVE_THROUGH, true)
@@ -483,6 +493,12 @@ const handleSendTextMsg = () => {
         scrollBottom()
       },
     })
+    .catch(() => {
+      uni.showToast({
+        icon: 'error',
+        title: t('sendMsgFailedText'),
+      })
+    })
     .finally(() => {
       scrollBottom()
     })
@@ -490,6 +506,39 @@ const handleSendTextMsg = () => {
   inputText.value = ''
   isReplyMsg.value = false
   selectedAtMembers.value = []
+}
+
+// 发送文件消息
+const handleSendFileMsg = () => {
+  uni.chooseFile({
+    count: 1,
+    type: 'all',
+    success: (res) => {
+      // @ts-ignore
+      const filePath = res?.tempFilePaths?.[0]
+      // @ts-ignore
+      const fileName = res?.tempFiles?.[0]?.name
+      if (filePath && fileName) {
+        const fileMsg = uni.$UIKitNIM.V2NIMMessageCreator.createFileMessage(
+          filePath,
+          fileName
+        )
+        uni.$UIKitStore.msgStore.sendMessageActive({
+          msg: fileMsg,
+          conversationId,
+          sendBefore: () => {
+            scrollBottom()
+          },
+        })
+      }
+    },
+    fail: () => {
+      uni.showToast({
+        title: t('sendFileFailedText'),
+        icon: 'none',
+      })
+    },
+  })
 }
 
 // 移除回复消息
@@ -652,8 +701,16 @@ const handleSendAudioMsg = (filePath: string, duration: number) => {
       msg: audioMsg,
       conversationId,
       progress: () => true,
-      sendBefore: () => {
+      sendBefore: (msg) => {
         scrollBottom()
+        uni.$UIKitStore.msgStore.addMsg(msg.conversationId, [
+          {
+            ...msg,
+            attachment: {
+              duration: duration,
+            },
+          },
+        ])
       },
     })
     .then(() => {
@@ -712,7 +769,9 @@ onMounted(() => {
         )
         .some((member) => member.accountId === (myUser ? myUser.accountId : ''))
       team.value = _team
-      teamMute.value = _team.chatBannedMode
+      if (_team) {
+        teamMute.value = _team.chatBannedMode
+      }
       updateTeamMute()
     }
   })
@@ -870,6 +929,7 @@ const onAtMembersExtHandler = () => {
         }
       })
   }
+  // @ts-ignore
   return ext
 }
 
@@ -991,13 +1051,38 @@ onUnmounted(() => {
 }
 
 .send-more-panel {
-  display: flex;
   padding: 15px;
   overflow-y: hidden;
   width: 100%;
   height: 300px;
   background-color: #eff1f3;
   z-index: 1;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+
+.send-more-panel-item-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: inline-block;
+  margin-bottom: 10px;
+  .send-more-panel-item {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    margin: 0 15px;
+    justify-content: center;
+  }
+  .icon-text {
+    font-size: 12px;
+    color: #747475;
+    margin-top: 8px;
+    text-align: center;
+  }
 }
 
 .reply-message-wrapper {
@@ -1013,6 +1098,11 @@ onUnmounted(() => {
     width: fit-content;
   }
 
+  .reply-to-colon {
+    flex-basis: 3px;
+    margin-right: 2px;
+  }
+
   .reply-message-close {
     flex-basis: 14px;
     margin-left: 10px;
@@ -1021,12 +1111,20 @@ onUnmounted(() => {
   }
 
   .reply-message {
+    flex: 1;
     display: flex;
     align-items: center;
-    flex-basis: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    message-one-line {
+      flex: 1;
+      font-size: 13px;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   .reply-title {
@@ -1036,7 +1134,8 @@ onUnmounted(() => {
   }
 
   .reply-to {
-    flex-basis: content;
+    max-width: 120px;
+    flex: 0 0 auto;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -1066,25 +1165,14 @@ onUnmounted(() => {
   border-radius: 6px;
   color: gray;
 }
-
-.send-more-panel-item-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .send-more-panel-item {
-    background-color: #fff;
-    border-radius: 8px;
+.file-picker-wrapper {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  z-index: 1;
+  .files-button {
     width: 60px;
     height: 60px;
-    display: flex;
-    align-items: center;
-    margin: 0 12px;
-    justify-content: center;
-  }
-  .icon-text {
-    font-size: 12px;
-    color: #747475;
-    margin-top: 8px;
   }
 }
 </style>

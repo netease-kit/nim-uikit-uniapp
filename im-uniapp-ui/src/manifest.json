@@ -3,8 +3,8 @@
   "fallbackLocale": "zh-Hans",
   "appid": "",
   "description": "",
-  "versionName": "10.0.1",
-  "versionCode": 101,
+  "versionName": "10.1.0",
+  "versionCode": "100",
   "transformPx": false,
   "app-plus": {
     "usingComponents": true,

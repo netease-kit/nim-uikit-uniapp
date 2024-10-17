@@ -85,7 +85,7 @@ const mpDownload = () => {
 
 <style scoped lang="scss">
 .msg-file-wrapper {
-  // max-width: 300rpx;
+  // max-width: 360rpx;
 }
 
 .msg-file {
@@ -107,7 +107,7 @@ const mpDownload = () => {
 
   &-content {
     margin-left: 15px;
-    max-width: 200rpx;
+    max-width: 300rpx;
     min-width: 0;
   }
 

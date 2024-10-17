@@ -14,6 +14,10 @@
         </div>
       </div>
       <div class="p2p-set-card">
+        <div class="p2p-set-item p2p-set-item-flex-sb" @tap="goPinInP2p">
+          <div>{{ t('pinText') }}</div>
+          <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+        </div>
         <div class="p2p-set-item p2p-set-item-flex-sb">
           <div>{{ t('sessionMuteText') }}</div>
           <switch :checked="!isMute" @change="changeSessionMute" />
@@ -72,8 +76,17 @@ onLoad((option) => {
 })
 
 const addTeamMember = () => {
+  const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
+    conversationId.value
+  )
   customNavigateTo({
-    url: '/pages/Group/group-create/index?account=' + account.value,
+    url: `/pages/Group/group-create/index?p2pConversationId=${to}`,
+  })
+}
+
+const goPinInP2p = () => {
+  customNavigateTo({
+    url: `/pages/Chat/message/pin-list?conversationId=${conversationId.value}`,
   })
 }
 

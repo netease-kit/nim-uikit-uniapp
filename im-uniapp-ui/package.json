@@ -54,7 +54,7 @@
     "@dcloudio/uni-mp-weixin": "3.0.0-3090920231225001",
     "@dcloudio/uni-mp-xhs": "3.0.0-3090920231225001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-3090920231225001",
-    "@xkit-yx/im-store-v2": "^0.2.3",
+    "@xkit-yx/im-store-v2": "^0.3.0",
     "@xkit-yx/utils": "^0.5.6",
     "dayjs": "^1.11.7",
     "mobx": "^6.6.1",

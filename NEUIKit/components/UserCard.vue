@@ -4,9 +4,13 @@
       <Avatar v-if="props.account" size="70" :account="props.account"></Avatar>
     </div>
     <div class="account-wrapper">
-      <div class="nick">{{ nick || account }}</div>
-      <div class="account">
-        {{ props.account }}
+      <div v-if="alias">
+        <div class="main">{{ alias }}</div>
+        <div class="deputy">昵称:{{ nick || account }}</div>
+      </div>
+      <div v-else class="main">{{ nick || account }}</div>
+      <div class="deputy">
+        账号:{{ props.account }}
         <div @tap.stop="copyAccount">
           <Icon
             class="copy-icon"
@@ -23,8 +27,14 @@
 <script lang="ts" setup>
 import Avatar from './Avatar.vue'
 import Icon from './Icon.vue'
-import { defineProps, withDefaults } from '../utils/transformVue'
-
+import {
+  onUnmounted,
+  defineProps,
+  withDefaults,
+  ref,
+} from '../utils/transformVue'
+import { onLoad } from '@dcloudio/uni-app'
+import { autorun } from 'mobx'
 const props = withDefaults(
   defineProps<{
     account?: string
@@ -35,6 +45,20 @@ const props = withDefaults(
     nick: '',
   }
 )
+const alias = ref<string>()
+let uninstallFriendsWatch = () => {}
+
+onLoad((props) => {
+  let account = props ? props.account : ''
+  uninstallFriendsWatch = autorun(() => {
+    const friend = { ...uni.$UIKitStore.friendStore.friends.get(account) }
+    alias.value = friend ? friend.alias : ''
+  })
+})
+
+onUnmounted(() => {
+  uninstallFriendsWatch()
+})
 
 const copyAccount = () => {
   uni.setClipboardData({
@@ -62,7 +86,7 @@ const copyAccount = () => {
     overflow: hidden;
     padding-right: 40px;
 
-    .nick {
+    .main {
       font-size: 20px;
       overflow: hidden;
       white-space: nowrap;
@@ -70,7 +94,7 @@ const copyAccount = () => {
       font-weight: 500;
     }
 
-    .account {
+    .deputy {
       font-size: 14px;
       display: flex;
       align-items: center;

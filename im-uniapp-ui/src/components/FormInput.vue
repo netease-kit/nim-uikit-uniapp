@@ -13,14 +13,12 @@
         :placeholder="placeholder"
         :maxlength="maxlength"
       />
-      <icon
-        v-show="modelValue && allowClear"
-        type="clear"
-        size="16"
-        @tap="clearInput()"
-      />
+      <div class="clear-icon" @tap="clearInput()">
+        <icon v-show="modelValue && allowClear" type="clear" size="16" />
+      </div>
       <slot name="addonAfter" />
     </div>
+
     <div v-if="inputError && rule" class="error-tips">{{ rule.message }}</div>
   </div>
 </template>
@@ -123,8 +121,13 @@ $error-color: #f56c6c;
 
 .input {
   flex: 1;
+  height: 30px;
   border: none;
   outline: none;
+}
+.clear-icon {
+  width: 40px;
+  text-align: right;
 }
 
 .error-tips {

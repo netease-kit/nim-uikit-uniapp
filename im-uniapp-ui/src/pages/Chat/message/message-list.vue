@@ -145,7 +145,7 @@ const broadcastNewAudioSrc = ref<string>('')
 
 // 消息滑动到底部，建议搭配 nextTick 使用
 const scrollToBottom = () => {
-  scrollTop.value += 3000
+  scrollTop.value += 9999999
   const timer = setTimeout(() => {
     scrollTop.value += 1
     clearTimeout(timer)

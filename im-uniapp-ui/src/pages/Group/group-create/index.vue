@@ -20,7 +20,6 @@ import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { customRedirectTo } from '../../../utils/customNavigate'
-import { deepClone } from '../../../utils'
 import { events } from '../../../utils/constants'
 
 const friendList = ref<FriendSelectItem[]>([])
@@ -31,13 +30,18 @@ const groupMembers = computed(() => {
     .map((item) => item.accountId)
 })
 
+let p2pConversationId = ''
+
 onLoad((options) => {
+  p2pConversationId = options?.p2pConversationId
   const list = uni.$UIKitStore.uiStore.friends.filter(
     (item) => !uni.$UIKitStore.relationStore.blacklist.includes(item.accountId)
   )
-  friendList.value = deepClone(
-    list.map((item) => ({ accountId: item.accountId }))
-  )
+  friendList.value = list
+    .map((item) => ({ accountId: item.accountId }))
+    .filter((item) => {
+      return item.accountId !== p2pConversationId
+    })
 
   uni.$on(events.FRIEND_SELECT, () => {
     createGroup()
@@ -73,7 +77,7 @@ const createGroupName = (groupMembers: string[]) => {
     uni.$UIKitStore.userStore.myUserInfo.accountId
   const _groupName = (_ownerName + '、' + _memberNickArr.join('、')).slice(
     0,
-    15
+    30
   )
   return _groupName
 }
@@ -113,7 +117,10 @@ const createGroup = async () => {
     flag = true
 
     const team = await uni.$UIKitStore?.teamStore.createTeamActive({
-      accounts: [...groupMembers.value],
+      // 这里需要判断是否是从单聊设置页跳转到创建群聊页面，如果是的话，需要将单聊的账号添加创建群的账号列表中
+      accounts: p2pConversationId
+        ? [...groupMembers.value, p2pConversationId]
+        : [...groupMembers.value],
       avatar: createTeamAvatar(),
       name: createGroupName(groupMembers.value),
     })

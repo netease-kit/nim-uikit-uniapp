@@ -9,19 +9,13 @@
     </div>
     <div class="box-shadow"></div>
     <div class="userInfo-item-wrapper">
-      <uni-link
-        href="https://yunxin.163.com/"
-        :showUnderLine="false"
-        color="#000000"
-      >
-        <div class="userInfo-item">
-          <div class="item-left">
-            <Icon iconClassName="guanyu" type="icon-guanyu"></Icon>
-            {{ t('commsEaseText') }}
-          </div>
-          <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
+      <div class="userInfo-item" @click="gotoAbout">
+        <div class="item-left">
+          <Icon iconClassName="guanyu" type="icon-guanyu"></Icon>
+          {{ t('commsEaseText') }}
         </div>
-      </uni-link>
+        <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
+      </div>
       <div class="shadow"></div>
       <div class="userInfo-item" @click="gotoSetting">
         <div class="item-left">
@@ -39,8 +33,6 @@ import { onLoad, onShow } from '@dcloudio/uni-app'
 import UserCard from '../../../components/UserCard.vue'
 import { onUnmounted, ref } from '../../../utils/transformVue'
 import Icon from '../../../components/Icon.vue'
-// @ts-ignore
-import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import { autorun } from 'mobx'
 import { setContactTabUnread, setTabUnread } from '../../../utils/msg'
 import { customNavigateTo } from '../../../utils/customNavigate'
@@ -66,6 +58,11 @@ onShow(() => {
 const gotoSetting = () => {
   customNavigateTo({
     url: '/pages/user-card/my/setting',
+  })
+}
+const gotoAbout = () => {
+  customNavigateTo({
+    url: '/pages/user-card/my/about',
   })
 }
 

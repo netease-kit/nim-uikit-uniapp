@@ -127,11 +127,6 @@ const handleSessionItemClick = async (conversation: V2NIMConversation) => {
   } finally {
     flag = false
   }
-
-  if (uni.$currentAudioContext) {
-    uni.$currentAudioContext?.destroy()
-    uni.$currentAudioContext = null
-  }
 }
 // 删除会话
 const handleSessionItemDeleteClick = async (

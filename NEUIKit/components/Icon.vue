@@ -235,7 +235,7 @@ const urlMap = {
   'icon-shandiao':
     'https://yx-web-nosdn.netease.im/common/14eea1edc7801449a30700a3c9d604c6/icon-shandiao.png',
   'icon-shezhi':
-    'https://yx-web-nosdn.netease.im/common/fd70b269c209fcd98f50537b51639826/shezhi.png',
+    'https://yx-web-nosdn.netease.im/common/698d483a7aacade68ea976f727184e1e/setting.png',
   'icon-shezhi1':
     'https://yx-web-nosdn.netease.im/common/eced271ac35864b7c716262f1a37217e/icon-shezhi1.png',
   'icon-shipin':
@@ -334,6 +334,16 @@ const urlMap = {
     'https://yx-web-nosdn.netease.im/common/99438364d757b51e7e36c18d254e70e7/icon-audio-call.png',
   'icon-video-call':
     'https://yx-web-nosdn.netease.im/common/ed7c85a59de3e247d10ecfc684b05226/icon-video-call.png',
+  'icon-read':
+    'https://yx-web-nosdn.netease.im/common/271c53e493cfd6ea98c51650d8b39b79/read.png',
+  'icon-file':
+    'https://yx-web-nosdn.netease.im/common/90485f277f50fc081970ded8772ec7c5/file.png',
+  'icon-pin':
+    'https://yx-web-nosdn.netease.im/common/8874f30f648cde89dbbe9a59e9cb7f8a/pin.png',
+  'icon-green-pin':
+    'https://yx-web-nosdn.netease.im/common/4a1f15eff2f53563c4f1cf6ecde82d2c/green-pin.png',
+  'choose-picture':
+    'https://yx-web-nosdn.netease.im/common/97b3ca79a589d5753cbc0e8e8ec09501/choose-picture.png',
 }
 
 //以上链接访问有频率控制，建议您将静态放到您服务器上，然后修改上面的链接即可

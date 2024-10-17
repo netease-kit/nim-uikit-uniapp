@@ -7,6 +7,5 @@ declare global {
         $UIKitNIM: V2NIM
         $UIKitStore: RootStore
         $UIKitCallKit: any
-        $currentAudioContext: any
     }
 }

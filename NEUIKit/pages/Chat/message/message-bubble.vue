@@ -23,14 +23,21 @@
           ></Icon>
           <text class="msg-action-btn-text">{{ t('copyText') }}</text>
         </div>
-        <div class="msg-action-btn" @tap="handleDeleteMsg">
+        <div
+          v-if="
+            props.msg.messageType !==
+            V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
+          "
+          class="msg-action-btn"
+          @tap="handleReplyMsg"
+        >
           <Icon
             :size="18"
             color="#656A72"
             class="msg-action-btn-icon"
-            type="icon-shanchu"
+            type="icon-huifu"
           ></Icon>
-          <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
+          <text class="msg-action-btn-text">{{ t('replyText') }}</text>
         </div>
         <div
           v-if="
@@ -51,20 +58,32 @@
           <text class="msg-action-btn-text">{{ t('forwardText') }}</text>
         </div>
         <div
+          class="msg-action-btn"
           v-if="
             props.msg.messageType !==
             V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
           "
-          class="msg-action-btn"
-          @tap="handleReplyMsg"
+          @tap="handlePinMsg"
         >
           <Icon
             :size="18"
             color="#656A72"
             class="msg-action-btn-icon"
-            type="icon-huifu"
+            type="icon-pin"
           ></Icon>
-          <text class="msg-action-btn-text">{{ t('replyText') }}</text>
+          <!-- pinState 为 0 或者 undefined，显示“标记”，其他显示“取消标记” -->
+          <text class="msg-action-btn-text">{{
+            props.msg.pinState ? t('unpinText') : t('pinText')
+          }}</text>
+        </div>
+        <div class="msg-action-btn" @tap="handleDeleteMsg">
+          <Icon
+            :size="18"
+            color="#656A72"
+            class="msg-action-btn-icon"
+            type="icon-shanchu"
+          ></Icon>
+          <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
         </div>
       </div>
       <!-- 未知消息体 -->
@@ -166,8 +185,8 @@
               width:
                 props.msg.messageType ===
                 V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT
-                  ? '110px'
-                  : '55px',
+                  ? '112px'
+                  : '56px',
             }"
           >
             <div
@@ -239,26 +258,20 @@
           <text class="msg-action-btn-text">{{ t('copyText') }}</text>
         </div>
         <div
+          v-if="
+            props.msg.messageType !==
+            V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
+          "
           class="msg-action-btn"
-          v-if="props.msg.canRecall"
-          @tap="handleRecallMsg"
+          @tap="handleReplyMsg"
         >
           <Icon
             :size="18"
             color="#656A72"
             class="msg-action-btn-icon"
-            type="icon-chehui"
+            type="icon-huifu"
           ></Icon>
-          <text class="msg-action-btn-text">{{ t('recallText') }}</text>
-        </div>
-        <div class="msg-action-btn" @tap="handleDeleteMsg">
-          <Icon
-            :size="18"
-            color="#656A72"
-            class="msg-action-btn-icon"
-            type="icon-shanchu"
-          ></Icon>
-          <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
+          <text class="msg-action-btn-text">{{ t('replyText') }}</text>
         </div>
         <div
           v-if="
@@ -279,20 +292,45 @@
           <text class="msg-action-btn-text">{{ t('forwardText') }}</text>
         </div>
         <div
+          class="msg-action-btn"
           v-if="
             props.msg.messageType !==
             V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
           "
-          class="msg-action-btn"
-          @tap="handleReplyMsg"
+          @tap="handlePinMsg"
         >
           <Icon
             :size="18"
             color="#656A72"
             class="msg-action-btn-icon"
-            type="icon-huifu"
+            type="icon-pin"
           ></Icon>
-          <text class="msg-action-btn-text">{{ t('replyText') }}</text>
+          <!-- pinState 为 0 或者 undefined，显示“标记”，其他显示“取消标记” -->
+          <text class="msg-action-btn-text">{{
+            props.msg.pinState ? t('unpinText') : t('pinText')
+          }}</text>
+        </div>
+        <div class="msg-action-btn" @tap="handleDeleteMsg">
+          <Icon
+            :size="18"
+            color="#656A72"
+            class="msg-action-btn-icon"
+            type="icon-shanchu"
+          ></Icon>
+          <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
+        </div>
+        <div
+          class="msg-action-btn"
+          v-if="props.msg.canRecall"
+          @tap="handleRecallMsg"
+        >
+          <Icon
+            :size="18"
+            color="#656A72"
+            class="msg-action-btn-icon"
+            type="icon-chehui"
+          ></Icon>
+          <text class="msg-action-btn-text">{{ t('recallText') }}</text>
         </div>
       </div>
       <!-- 未知消息体 -->
@@ -341,6 +379,7 @@ import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
 const tooltipRef = ref(null)
+
 const props = withDefaults(
   defineProps<{
     msg: V2NIMMessageForUI
@@ -464,6 +503,51 @@ const handleForwardMsg = () => {
       closeTooltip()
     },
   })
+}
+// pin消息
+const handlePinMsg = () => {
+  const _msg = deepClone(props.msg)
+  if (_msg.pinState) {
+    // 取消标记
+    uni.$UIKitStore.msgStore.unpinMessageActive(_msg).catch((err: any) => {
+      if (err?.code && typeof t(`${err.code}`) !== 'undefined') {
+        uni.showToast({
+          title: t(`${err.code}`),
+          icon: 'error',
+          duration: 1000,
+        })
+      } else {
+        uni.showToast({
+          title: t('unpinFailedText'),
+          icon: 'error',
+          duration: 1000,
+        })
+      }
+    })
+  } else {
+    // 显示标记
+    uni.$UIKitStore.msgStore.pinMessageActive(_msg).catch((err: any) => {
+      if (err?.code && typeof t(`${err.code}`) !== 'undefined') {
+        uni.showToast({
+          title: t(`${err.code}`),
+          icon: 'error',
+          duration: 1000,
+        })
+      } else {
+        uni.showToast({
+          title: t('pinFailedText'),
+          icon: 'error',
+          duration: 1000,
+        })
+      }
+    })
+  }
+  closeTooltip()
+}
+const handleUnPinMsg = () => {
+  const _msg = deepClone(props.msg)
+
+  closeTooltip()
 }
 
 // 回复消息
@@ -597,15 +681,17 @@ onUnmounted(() => {
 .msg-action-groups {
   display: flex;
   flex-direction: row;
-  // flex-wrap: wrap;
-  // width: 120px;
+  flex-wrap: wrap;
+  max-width: 224px;
+  width: max-content;
 }
 
 .msg-action-btn {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 10px 12px 0 12px;
+  margin-top: 10px;
+  width: 56px;
   &-icon {
     color: #656a72;
     font-size: 18px;

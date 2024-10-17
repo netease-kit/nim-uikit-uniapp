@@ -1,22 +1,21 @@
 <template>
-  <div>
-    <div class="wrapper">
-      <template v-for="item in textArr">
-        <template v-if="item.type === 'text'">
-          <div class="msg-reply-text">{{ item.value }}</div>
-        </template>
-        <template v-else-if="item.type === 'emoji'">
-          <div class="icon">
-            <Icon
-              :type="emojiMap[item.value]"
-              :size="14"
-              :style="{ margin: '3px', verticalAlign: 'bottom' }"
-            />
-          </div>
-        </template>
+  <div class="wrapper">
+    <template v-for="item in textArr">
+      <template v-if="item.type === 'text'" class="msg-reply-text">
+        {{ item.value }}
       </template>
-    </div>
-    <div class="ellipsis" v-if="text.length > 15">...</div>
+      <template class="icon" v-else-if="item.type === 'emoji'">
+        <Icon
+          :type="emojiMap[item.value]"
+          :size="14"
+          :iconStyle="{
+            margin: '3px',
+            verticalAlign: 'bottom',
+            display: 'inline-block',
+          }"
+        />
+      </template>
+    </template>
   </div>
 </template>
 
@@ -76,20 +75,20 @@ const textArr = computed(() => {
 
 <style lang="scss" scoped>
 .wrapper {
-  display: inline-flex;
+  flex: 1;
   font-size: 13px;
-  flex-wrap: nowrap;
+  width: 100%;
   overflow: hidden;
-  align-items: center;
-  max-width: 125px;
-  box-sizing: border-box;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .msg-reply-text {
   font-size: 13px !important;
   height: 18px;
   line-height: 18px;
-  width: fit-content;
+  width: 100%;
+  display: inline;
 }
 .ellipsis {
   display: inline-block;

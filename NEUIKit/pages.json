@@ -25,6 +25,12 @@
       }
     },
     {
+      "path": "pages/Chat/message/pin-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/Group/group-set/index",
       "style": {
         "navigationStyle": "custom"
@@ -32,6 +38,24 @@
     },
     {
       "path": "pages/Group/group-set/group-info-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/group-name-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/group-intro-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Group/group-set/group-avatar-edit",
       "style": {
         "navigationStyle": "custom"
       }
@@ -104,6 +128,12 @@
       }
     },
     {
+      "path": "pages/Friend/friend-info-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/user-card/friend/index",
       "style": {
         "navigationStyle": "custom"
@@ -111,6 +141,12 @@
     },
     {
       "path": "pages/user-card/my/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/user-card/my/about",
       "style": {
         "navigationStyle": "custom"
       }
@@ -165,6 +201,12 @@
     },
     {
       "path": "pages/Chat/forward",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/Chat/message-read-info",
       "style": {
         "navigationStyle": "custom"
       }

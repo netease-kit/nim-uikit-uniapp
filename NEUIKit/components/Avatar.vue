@@ -72,12 +72,13 @@ const appellation = computed(() => {
     .slice(0, 2)
 })
 const uninstallUserInfoWatch = autorun(async () => {
-  const data = await uni.$UIKitStore?.userStore?.getUserActive(props.account)
-  user.value = deepClone(data)
+  uni.$UIKitStore?.userStore?.getUserActive(props.account).then((data) => {
+    user.value = data
+  })
 })
 
 const avatarUrl = computed(() => {
-  user.value = deepClone(uni.$UIKitStore?.userStore?.users?.get(props.account))
+  user.value = uni.$UIKitStore?.userStore?.users?.get(props.account)
   return props.avatar || user.value?.avatar
 })
 

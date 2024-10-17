@@ -51,11 +51,27 @@
         </div>
       </div>
       <div class="group-set-card">
+        <div class="group-set-item group-set-item-flex" @tap="goPinInTeam">
+          <div>{{ t('pinText') }}</div>
+          <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+        </div>
         <div class="group-set-item group-set-item-flex">
           <div>{{ t('stickTopText') }}</div>
           <switch
             :checked="conversation && !!conversation.stickTop"
             @change="changeStickTopInfo"
+          />
+        </div>
+        <div class="group-set-item group-set-item-flex">
+          <div>{{ t('sessionMuteText') }}</div>
+          <switch
+            :checked="
+              team &&
+              teamMuteMode !==
+                V2NIMConst.V2NIMTeamMessageMuteMode
+                  .V2NIM_TEAM_MESSAGE_MUTE_MODE_ON
+            "
+            @change="changeTeamMute"
           />
         </div>
         <div class="group-set-item group-set-item-flex" @tap="goNickInTeam">
@@ -65,7 +81,7 @@
       </div>
       <div class="group-set-card" v-if="isGroupOwner || isGroupManager">
         <div class="group-set-item group-set-item-flex">
-          <div>{{ t('teamMuteText') }}</div>
+          <div>{{ t('teamBannedText') }}</div>
           <switch
             :checked="
               team &&
@@ -73,7 +89,7 @@
                 V2NIMConst.V2NIMTeamChatBannedMode
                   .V2NIM_TEAM_CHAT_BANNED_MODE_UNBAN
             "
-            @change="changeTeamMute"
+            @change="setTeamChatBanned"
           />
         </div>
         <div class="group-set-item group-set-item-flex" @tap="goTeamManage">
@@ -116,9 +132,10 @@ import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 
 let teamId = ''
-const team = ref<V2NIMTeam>()
 const teamMembers = ref<V2NIMTeamMember[]>([])
 const conversation = ref<V2NIMConversation>()
+const team = ref<V2NIMTeam>()
+const teamMuteMode = ref<V2NIMConst.V2NIMTeamMessageMuteMode>()
 
 const isGroupOwner = computed(() => {
   const myUser = uni.$UIKitStore.userStore.myUserInfo
@@ -172,6 +189,13 @@ const goNickInTeam = () => {
     url: `/pages/Group/group-set/nick-in-team?id=${teamId}`,
   })
 }
+const goPinInTeam = () => {
+  const conversationId =
+    uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(teamId)
+  customNavigateTo({
+    url: `/pages/Chat/message/pin-list?conversationId=${conversationId}`,
+  })
+}
 
 const addTeamMember = () => {
   if (!canAddMember.value) {
@@ -208,7 +232,6 @@ const showDismissConfirm = () => {
               title: t('dismissTeamSuccessText'),
               icon: 'success',
             })
-            // customSwitchTab({ url: '/pages/Conversation/index' })
           })
           .catch(() => {
             uni.showToast({
@@ -251,10 +274,19 @@ const showLeaveConfirm = () => {
 }
 let uninstallTeamWatch = () => {}
 let uninstallSessionsWatch = () => {}
+
 onLoad((option) => {
   teamId = option ? option.id : ''
   const conversationId =
     uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(teamId)
+
+  // 查询当前群是否开启免打扰
+  uni.$UIKitStore.teamStore
+    .getTeamMessageMuteModeActive(teamId, 1)
+    .then((res: V2NIMConst.V2NIMTeamMessageMuteMode) => {
+      teamMuteMode.value = res
+    })
+
   uninstallTeamWatch = autorun(() => {
     if (teamId) {
       team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
@@ -288,7 +320,44 @@ const changeStickTopInfo = async (e: any) => {
   }
 }
 
-const changeTeamMute = async (e: any) => {
+const changeTeamMute = (e: any) => {
+  const checked = e.detail.value
+
+  uni.$UIKitStore.teamStore
+    .setTeamMessageMuteModeActive(
+      teamId,
+      V2NIMConst.V2NIMTeamType.V2NIM_TEAM_TYPE_ADVANCED,
+      checked
+        ? V2NIMConst.V2NIMTeamMessageMuteMode.V2NIM_TEAM_MESSAGE_MUTE_MODE_OFF
+        : V2NIMConst.V2NIMTeamMessageMuteMode.V2NIM_TEAM_MESSAGE_MUTE_MODE_ON
+    )
+    .then(() => {
+      teamMuteMode.value = checked
+        ? V2NIMConst.V2NIMTeamMessageMuteMode.V2NIM_TEAM_MESSAGE_MUTE_MODE_OFF
+        : V2NIMConst.V2NIMTeamMessageMuteMode.V2NIM_TEAM_MESSAGE_MUTE_MODE_ON
+    })
+    .catch((error: any) => {
+      switch (error?.code) {
+        // 无权限
+        case 109432:
+          uni.showToast({
+            title: t('noPermission'),
+            icon: 'none',
+          })
+          break
+        default:
+          uni.showToast({
+            title: checked
+              ? t('sessionMuteFailText')
+              : t('sessionUnMuteFailText'),
+            icon: 'none',
+          })
+          break
+      }
+    })
+}
+
+const setTeamChatBanned = async (e: any) => {
   const checked = e.detail.value
   try {
     await uni.$UIKitStore.teamStore.setTeamChatBannedActive({
@@ -311,7 +380,7 @@ const changeTeamMute = async (e: any) => {
         uni.showToast({
           title: checked
             ? t('muteAllTeamFailedText')
-            : t('unmuteAllTeamFailedText'),
+            : t('sessionUnMuteFailText'),
           icon: 'error',
         })
         break

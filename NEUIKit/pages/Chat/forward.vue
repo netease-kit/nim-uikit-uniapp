@@ -118,6 +118,13 @@ const handleForwardConfirm = (forwardComment: string) => {
   forwardModalVisible.value = false
 
   if (!forwardMsg.value) {
+    uni.showToast({
+      title: t('getMessageFailed'),
+      icon: 'error',
+    })
+    setTimeout(() => {
+      backToChat()
+    }, 1000)
     return
   }
 
@@ -200,6 +207,23 @@ const handleItemClick = (_forwardTo: string) => {
     forwardMsg.value = deepClone(
       uni.$UIKitStore.msgStore.getMsg(conversationId, [msgIdClient])?.[0]
     )
+    if (!forwardMsg.value) {
+      // forwardMsg.value 为空，说明是转发的 pin 消息，此时内存里面可能没有该消息，需要从 pinMsgs 中去查。
+      const curPinMsgsMap = uni.$UIKitStore.msgStore.pinMsgs.get(conversationId)
+
+      const pinInfo = [...curPinMsgsMap.values()].find((pinInfo) => {
+        if (pinInfo.message) {
+          return pinInfo.message.messageClientId === msgIdClient
+        } else {
+          return false
+        }
+      })
+
+      if (pinInfo) {
+        forwardMsg.value = pinInfo.message
+      }
+    }
+
     forwardModalVisible.value = true
     if (
       forwardConversationType.value ===

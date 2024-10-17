@@ -2809,10 +2809,10 @@
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
 
-"@xkit-yx/im-store-v2@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.npmjs.org/@xkit-yx/im-store-v2/-/im-store-v2-0.2.3.tgz"
-  integrity sha512-wa2hXL9p2kYblo7qNoSN5ZtdPKbnZuJ2z83VQUsTxy5fISKfgjq1JKq93MRQ6YYd0hpaL/hWcE9duu9NR9Ao9Q==
+"@xkit-yx/im-store-v2@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.npmjs.org/@xkit-yx/im-store-v2/-/im-store-v2-0.3.0.tgz"
+  integrity sha512-y41wtbpApCQs8UnIDlyE8Zv7j0qhjfl+SVsqygt9sclHErXfLV4U3CUStySkURNh0gYyo4ZLYMEKRSZMptWxzw==
   dependencies:
     "@xkit-yx/utils" "^0.7.1"
     mobx "^6.6.1"
