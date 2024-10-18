@@ -29,13 +29,19 @@
             "
             :account="to"
           />
-          <span v-else class="conversation-item-title">{{ sessionName }}</span>
+          <span v-else class="conversation-item-title">
+            {{ sessionName }}
+          </span>
           <span class="conversation-item-time">{{ date }}</span>
         </div>
         <div class="conversation-item-desc">
-          <span v-if="beMentioned" class="beMentioned">{{
-            '[' + t('someoneText') + '@' + t('meText') + ']'
-          }}</span>
+          <span v-if="beMentioned" class="beMentioned">
+            {{ '[' + t('someoneText') + '@' + t('meText') + ']' }}
+          </span>
+          <ConversationItemIsRead
+            v-if="showSessionUnread"
+            :conversation="props.conversation"
+          ></ConversationItemIsRead>
           <span class="conversation-item-desc-content">{{ content }}</span>
           <Icon
             v-if="isMute"
@@ -69,7 +75,7 @@ import dayjs from 'dayjs'
 import { t } from '../../../utils/i18n'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMConversationForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-
+import ConversationItemIsRead from './conversation-item-isRead.vue'
 const props = withDefaults(
   defineProps<{
     conversation: V2NIMConversationForUI
@@ -203,6 +209,30 @@ const isMute = computed(() => {
 
 const beMentioned = computed(() => {
   return !!props.conversation.beMentioned
+})
+
+const showSessionUnread = computed(() => {
+  const myUserAccountId = uni.$UIKitNIM.V2NIMLoginService.getLoginUser()
+  if (
+    props.conversation.type ===
+    V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
+  ) {
+    return (
+      props?.conversation?.lastMessage?.messageRefer.senderId ===
+        myUserAccountId &&
+      props?.conversation?.lastMessage?.messageType !==
+        V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL &&
+      props?.conversation?.lastMessage?.messageType !==
+        V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION &&
+      props?.conversation?.lastMessage?.sendingState ===
+        V2NIMConst.V2NIMMessageSendingState
+          .V2NIM_MESSAGE_SENDING_STATE_SUCCEEDED &&
+      props?.conversation?.lastMessage?.lastMessageState !==
+        V2NIMConst.V2NIMLastMessageState.V2NIM_MESSAGE_STATUS_REVOKE
+    )
+  } else {
+    return false
+  }
 })
 
 // 左滑显示 action 动画
@@ -383,7 +413,8 @@ $cellHeight: 72px;
 
 .unread {
   position: absolute;
-  right: 0;
+  right: -4px;
+  top: -2px;
   z-index: 99;
 }
 </style>

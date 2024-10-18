@@ -91,14 +91,13 @@ import Icon from '../../components/Icon.vue'
 import { deepClone } from '../../utils'
 import ForwardModal from './message/message-forward-modal.vue'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMMessage } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
 
 const friendGroupList = ref<
   { key: string; data: { account: string; appellation: string }[] }[]
 >([])
-const forwardConversationType = ref<V2NIMConversationType>(
+const forwardConversationType = ref<V2NIMConst.V2NIMConversationType>(
   V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
 )
 const teamList = ref<V2NIMTeam[]>([])
@@ -118,6 +117,13 @@ const handleForwardConfirm = (forwardComment: string) => {
   forwardModalVisible.value = false
 
   if (!forwardMsg.value) {
+    uni.showToast({
+      title: t('getMessageFailed'),
+      icon: 'error',
+    })
+    setTimeout(() => {
+      backToChat()
+    }, 1000)
     return
   }
 
@@ -200,6 +206,23 @@ const handleItemClick = (_forwardTo: string) => {
     forwardMsg.value = deepClone(
       uni.$UIKitStore.msgStore.getMsg(conversationId, [msgIdClient])?.[0]
     )
+    if (!forwardMsg.value) {
+      // forwardMsg.value 为空，说明是转发的 pin 消息，此时内存里面可能没有该消息，需要从 pinMsgs 中去查。
+      const curPinMsgsMap = uni.$UIKitStore.msgStore.pinMsgs.get(conversationId)
+
+      const pinInfo = [...curPinMsgsMap.values()].find((pinInfo) => {
+        if (pinInfo.message) {
+          return pinInfo.message.messageClientId === msgIdClient
+        } else {
+          return false
+        }
+      })
+
+      if (pinInfo) {
+        forwardMsg.value = pinInfo.message
+      }
+    }
+
     forwardModalVisible.value = true
     if (
       forwardConversationType.value ===

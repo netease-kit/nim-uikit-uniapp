@@ -9,15 +9,25 @@
       <div class="userInfo-item-wrapper">
         <div class="userInfo-item">
           <div class="item-left">{{ t('addBlacklist') }}</div>
-          <switch :checked="isInBlacklist" @change="handleSwitchChange" />
+          <switch
+            :checked="isInBlacklist"
+            @change="(checked) => handleSwitchChange(checked)"
+          />
         </div>
       </div>
+
       <div class="button" :style="{ marginTop: '10px' }" @click="addFriend">
         {{ t('addFriendText') }}
       </div>
     </template>
     <template v-else>
       <div class="userInfo-item-wrapper">
+        <div class="userInfo-item" @tap="handleAliasClick">
+          <div class="item-left">{{ t('remarkText') }}</div>
+          <div class="item-right">
+            <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+          </div>
+        </div>
         <div class="userInfo-item">
           <div class="item-left">{{ t('genderText') }}</div>
           <div class="item-right">
@@ -80,11 +90,15 @@ import { onUnmounted, ref } from '../../../utils/transformVue'
 import { t } from '../../../utils/i18n'
 import NavBar from '../../../components/NavBar.vue'
 import { autorun } from 'mobx'
-import { customRedirectTo } from '../../../utils/customNavigate'
+import {
+  customRedirectTo,
+  customNavigateTo,
+} from '../../../utils/customNavigate'
 import { deepClone } from '../../../utils'
 import type { Relation } from '@xkit-yx/im-store-v2'
 import { V2NIMUser } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMUserService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import Icon from '../../../components/Icon.vue'
 
 const userInfo = ref<V2NIMUser>()
 const relation = ref<Relation>('stranger')
@@ -92,13 +106,17 @@ const isInBlacklist = ref(false)
 
 let account = ''
 
+const handleAliasClick = () => {
+  customNavigateTo({
+    url: `/pages/Friend/friend-info-edit?id=${account}`,
+  })
+}
 let uninstallFriendWatch = () => {}
 let uninstallRelationWatch = () => {}
+
 onLoad((props) => {
   account = props ? props.account : ''
-
   uni.$UIKitStore.userStore.getUserForceActive(account)
-
   uninstallFriendWatch = autorun(() => {
     userInfo.value = deepClone(
       uni.$UIKitStore.uiStore.getFriendWithUserNameCard(account)

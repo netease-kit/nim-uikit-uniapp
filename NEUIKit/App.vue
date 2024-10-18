@@ -1,5 +1,6 @@
 <script lang="ts">
 import RootStore from "@xkit-yx/im-store-v2";
+
 import V2NIM, { V2NIMConst } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
 import {
   customRedirectTo,
@@ -92,9 +93,16 @@ export default {
       const store = (uni.$UIKitStore = new RootStore(
         nim,
         {
+          // 添加好友是否需要验证
           addFriendNeedVerify: false,
+          // 是否需要显示 p2p 消息、p2p会话列表消息已读未读，默认 false
+          p2pMsgReceiptVisible: true,
+          // 是否需要显示群组消息已读未读，默认 false
+          teamMsgReceiptVisible: true,
+          // 群组被邀请模式，默认需要验证
           teamAgreeMode:
             V2NIMConst.V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH,
+          // 发送消息前回调, 可对消息体进行修改，添加自定义参数
           sendMsgBefore: async (options: {
             msg: V2NIMMessage;
             conversationId: string;

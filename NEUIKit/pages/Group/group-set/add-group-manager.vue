@@ -85,6 +85,7 @@ const onOk = debounce(() => {
 }, 800)
 
 let uninstallTeamMemberListWatch = () => {}
+
 onLoad((props) => {
   teamId = props ? props.id : ''
   autorun(() => {

@@ -49,19 +49,19 @@ const onStartRecord = () => {
 }
 
 const onStopRecord = () => {
-  console.log('========结束录音========')
+  console.log('结束录音')
   recordState.value = 'stop'
   recorderManager.stop()
 }
 
 recorderManager.onStart(() => {
-  console.log('=======recorder start======')
+  console.log('recorder start')
   recordState.value = 'recording'
   startRecordStamp = new Date().getTime()
 })
 
 recorderManager.onStop((res) => {
-  console.log('=======recorder stop======', res)
+  console.log('recorder stop', res)
   recordState.value = 'stop'
   const duration = new Date().getTime() - startRecordStamp
   if (duration < 1000) {
@@ -75,7 +75,7 @@ recorderManager.onStop((res) => {
 })
 
 recorderManager.onError((res) => {
-  console.log('=======recorder error======', res)
+  console.log('recorder error', res)
   recordState.value = 'stop'
   if (!isWxApp) {
     uni.showToast({

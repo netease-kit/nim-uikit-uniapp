@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="!msg.isSelf ? 'audio-in' : 'audio-out'"
+    :class="!msg.isSelf || mode === 'audio-in' ? 'audio-in' : 'audio-out'"
     :style="{ width: audioContainerWidth + 'px' }"
     @tap="onPlayAudio"
   >
@@ -27,6 +27,7 @@ import { V2NIMMessageAudioAttachment } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_S
 const props = withDefaults(
   defineProps<{
     msg: V2NIMMessageForUI
+    mode?: 'audio-in' | 'audio-out'
     broadcastNewAudioSrc?: string
   }>(),
   {}
@@ -45,7 +46,7 @@ const formatDuration = (duration: number) => {
 
 // 音频消息宽度
 const audioContainerWidth = computed(() => {
-  const duration = formatDuration(props.msg.attachment?.dur)
+  const duration = formatDuration(props.msg.attachment?.duration)
   const maxWidth = 180
   return 50 + 8 * (duration - 1) > maxWidth ? maxWidth : 50 + 8 * (duration - 1)
 })
@@ -57,6 +58,7 @@ const duration = computed(() => {
   )
 })
 
+// 播发音频
 const onPlayAudio = () => {
   uni.$emit(events.AUDIO_URL_CHANGE, props.msg?.attachment?.url)
   const audioContext = getAudio()
@@ -126,6 +128,7 @@ function onAudioError() {
   animationFlag.value = false
   console.warn('audio played error')
 }
+
 const getAudio = () => {
   return audioMap.get('audio')
 }
@@ -141,15 +144,6 @@ const stopAudio = () => {
     console.log('stop audio error')
   }
 }
-
-onUnmounted(() => {
-  const audioContext = getAudio()
-  if (isAudioPlaying.value) {
-    stopAudio()
-  }
-  audioContext?.destroy?.()
-  audioMap.delete('audio')
-})
 
 // 播放音频动画
 const playAudioAnimation = () => {
@@ -173,6 +167,15 @@ const playAudioAnimation = () => {
     console.log('playAudioAnimation error', error)
   }
 }
+
+onUnmounted(() => {
+  const audioContext = getAudio()
+  if (isAudioPlaying.value) {
+    stopAudio()
+  }
+  audioContext?.destroy?.()
+  audioMap.delete('audio')
+})
 </script>
 
 <style scoped lang="scss">

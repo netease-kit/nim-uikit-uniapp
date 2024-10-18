@@ -41,7 +41,6 @@ import { caculateTimeago } from '../../../utils/date'
 import { t } from '../../../utils/i18n'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
 import { autorun } from 'mobx'
 import { deepClone } from '../../../utils'
@@ -49,7 +48,7 @@ import { deepClone } from '../../../utils'
 const props = withDefaults(
   defineProps<{
     msgs: V2NIMMessageForUI[]
-    conversationType: V2NIMConversationType
+    conversationType: V2NIMConst.V2NIMConversationType
     to: string
     loadingMore?: boolean
     noMore?: boolean
@@ -145,7 +144,7 @@ const broadcastNewAudioSrc = ref<string>('')
 
 // 消息滑动到底部，建议搭配 nextTick 使用
 const scrollToBottom = () => {
-  scrollTop.value += 3000
+  scrollTop.value += 9999999
   const timer = setTimeout(() => {
     scrollTop.value += 1
     clearTimeout(timer)

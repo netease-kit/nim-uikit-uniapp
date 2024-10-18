@@ -1,91 +1,273 @@
 <template>
-  <div class="group-set-container">
-    <NavBar :title="t('teamTitle')" />
-    <div class="group-name-input-container">
-      <FormInput
-        :model-value="teamName"
-        :allow-clear="true"
-        :maxlength="15"
-        @input="handleInput"
-      />
-      <div class="input-length">{{ inputLengthTips }}</div>
-    </div>
-    <div
-      :class="getUniPlatform() === 'mp-weixin' ? 'ok-btn-mp' : 'ok-btn'"
-      @tap="handleSave"
-    >
-      {{ t('saveText') }}
+  <div>
+    <NavBar :title="t('teamInfoText')" />
+    <div class="group-set-container" v-if="team">
+      <div class="group-set-card">
+        <div
+          class="group-set-item group-set-item-flex"
+          @tap="handleAvatarClick"
+        >
+          <div>{{ t('teamAvatar') }}</div>
+          <div class="group-set-item-flex">
+            <Avatar
+              :account="team && team.teamId"
+              :avatar="team && team.avatar"
+            />
+            <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+          </div>
+        </div>
+        <div class="group-set-item group-set-item-flex" @tap="handleTitleClick">
+          <div>{{ t('teamTitle') }}</div>
+          <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+        </div>
+        <div class="group-set-item group-set-item-flex" @tap="handleIntroClick">
+          <div>{{ t('teamIntro') }}</div>
+          <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import NavBar from '../../../components/NavBar.vue'
-import FormInput from '../../../components/FormInput.vue'
+import Avatar from '../../../components/Avatar.vue'
+import Icon from '../../../components/Icon.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from '../../../utils/transformVue'
+import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
-import { getUniPlatform } from '../../../utils'
+import { deepClone } from '../../../utils'
+import {
+  customNavigateTo,
+  customSwitchTab,
+} from '../../../utils/customNavigate'
+import {
+  V2NIMTeam,
+  V2NIMTeamMember,
+} from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 
-const teamName = ref<string>()
 let teamId = ''
+const team = ref<V2NIMTeam>()
+const teamMembers = ref<V2NIMTeamMember[]>([])
+const conversation = ref<V2NIMConversation>()
 
-const inputLengthTips = computed(() => {
-  return `${teamName.value ? teamName.value?.length : 0}/${15}`
+const isGroupOwner = computed(() => {
+  const myUser = uni.$UIKitStore.userStore.myUserInfo
+  return (
+    (team.value ? team.value.ownerAccountId : '') ===
+    (myUser ? myUser.accountId : '')
+  )
 })
 
-// 保存群名称
-const handleSave = () => {
-  if (!teamName.value) {
+const isGroupManager = computed(() => {
+  const myUser = uni.$UIKitStore.userStore.myUserInfo
+  return teamMembers.value
+    .filter(
+      (item) =>
+        item.memberRole ===
+        V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER
+    )
+    .some((member) => member.accountId === (myUser ? myUser.accountId : ''))
+})
+
+const canAddMember = computed(() => {
+  if (
+    team.value?.inviteMode ===
+    V2NIMConst.V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_ALL
+  ) {
+    return true
+  }
+  return isGroupOwner.value || isGroupManager.value
+})
+
+const handleAvatarClick = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-set/group-avatar-edit?id=${teamId}`,
+  })
+}
+
+const handleTitleClick = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-set/group-name-edit?id=${teamId}`,
+  })
+}
+
+const handleIntroClick = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-set/group-intro-edit?id=${teamId}`,
+  })
+}
+
+const goBackChat = () => {
+  customSwitchTab({
+    url: '/pages/Conversation/index',
+  })
+}
+
+const goTeamManage = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-set/group-manage?id=${teamId}`,
+  })
+}
+
+const goNickInTeam = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-set/nick-in-team?id=${teamId}`,
+  })
+}
+
+const addTeamMember = () => {
+  if (!canAddMember.value) {
     uni.showToast({
-      title: t('teamTitleConfirmText'),
+      title: t('noPermission'),
       icon: 'error',
     })
     return
   }
-
-  teamName.value &&
-    uni.$UIKitStore.teamStore
-      .updateTeamActive({
-        teamId,
-        info: {
-          name: teamName.value,
-        },
-      })
-      .then(() => {
-        uni.showToast({
-          title: t('updateTeamSuccessText'),
-          icon: 'success',
-        })
-        uni.navigateBack()
-      })
-      .catch((err: any) => {
-        switch (err?.code) {
-          case 109432:
-            uni.showToast({
-              title: t('noPermission'),
-              icon: 'error',
-            })
-            break
-          default:
-            uni.showToast({
-              title: t('updateTeamFailedText'),
-              icon: 'error',
-            })
-            break
-        }
-      })
+  customNavigateTo({
+    url: `/pages/Group/group-add/index?teamId=${teamId}`,
+  })
 }
 
-const handleInput = (value: string) => {
-  teamName.value = value ? value.replace(/\s*/g, '') : value
+const gotoTeamMember = () => {
+  customNavigateTo({
+    url: `/pages/Group/group-member/index?teamId=${teamId}`,
+  })
 }
 
+const showDismissConfirm = () => {
+  uni.showModal({
+    title: t('dismissTeamText'),
+    content: t('dismissTeamConfirmText'),
+    cancelText: t('cancelText'),
+    confirmText: t('okText'),
+    showCancel: true,
+    success: function (res) {
+      if (res.confirm) {
+        uni.$UIKitStore.teamStore
+          .dismissTeamActive(teamId)
+          .then(() => {
+            uni.showToast({
+              title: t('dismissTeamSuccessText'),
+              icon: 'success',
+            })
+            // customSwitchTab({ url: '/pages/Conversation/index' })
+          })
+          .catch(() => {
+            uni.showToast({
+              title: t('dismissTeamFailedText'),
+              icon: 'error',
+            })
+          })
+      }
+    },
+  })
+}
+
+const showLeaveConfirm = () => {
+  uni.showModal({
+    title: t('leaveTeamTitle'),
+    content: t('leaveTeamConfirmText'),
+    cancelText: t('cancelText'),
+    confirmText: t('okText'),
+    showCancel: true,
+    success: function (res) {
+      if (res.confirm) {
+        uni.$UIKitStore.teamStore
+          .leaveTeamActive(teamId)
+          .then(() => {
+            uni.showToast({
+              title: t('leaveTeamSuccessText'),
+              icon: 'success',
+            })
+            goBackChat()
+          })
+          .catch(() => {
+            uni.showToast({
+              title: t('leaveTeamFailedText'),
+              icon: 'error',
+            })
+          })
+      }
+    },
+  })
+}
+let uninstallTeamWatch = () => {}
+let uninstallSessionsWatch = () => {}
 onLoad((option) => {
-  teamId = option?.id
+  teamId = option ? option.id : ''
+  const conversationId =
+    uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(teamId)
+  uninstallTeamWatch = autorun(() => {
+    if (teamId) {
+      team.value = deepClone(uni.$UIKitStore.teamStore.teams.get(teamId))
+      teamMembers.value = deepClone(
+        uni.$UIKitStore.teamMemberStore.getTeamMember(teamId)
+      )
+    }
+  })
 
-  const team = uni.$UIKitStore.teamStore.teams.get(teamId)
-  teamName.value = team ? team.name.substring(0, 15) : ''
+  uninstallSessionsWatch = autorun(() => {
+    conversation.value = deepClone(
+      uni.$UIKitStore.conversationStore.conversations.get(conversationId)
+    )
+  })
+})
+
+const changeStickTopInfo = async (e: any) => {
+  const checked = e.detail.value
+  const conversationId =
+    uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(teamId)
+  try {
+    await uni.$UIKitStore.conversationStore.stickTopConversationActive(
+      conversationId,
+      checked
+    )
+  } catch (error) {
+    uni.showToast({
+      title: checked ? t('addStickTopFailText') : t('deleteStickTopFailText'),
+      icon: 'error',
+    })
+  }
+}
+
+const changeTeamMute = async (e: any) => {
+  const checked = e.detail.value
+  try {
+    await uni.$UIKitStore.teamStore.setTeamChatBannedActive({
+      teamId,
+      chatBannedMode: checked
+        ? V2NIMConst.V2NIMTeamChatBannedMode
+            .V2NIM_TEAM_CHAT_BANNED_MODE_BANNED_NORMAL
+        : V2NIMConst.V2NIMTeamChatBannedMode.V2NIM_TEAM_CHAT_BANNED_MODE_UNBAN,
+    })
+  } catch (error: any) {
+    switch (error?.code) {
+      // 无权限
+      case 109432:
+        uni.showToast({
+          title: t('noPermission'),
+          icon: 'error',
+        })
+        break
+      default:
+        uni.showToast({
+          title: checked
+            ? t('muteAllTeamFailedText')
+            : t('unmuteAllTeamFailedText'),
+          icon: 'error',
+        })
+        break
+    }
+  }
+}
+
+onUnmounted(() => {
+  uninstallTeamWatch()
+  uninstallSessionsWatch()
 })
 </script>
 
@@ -102,25 +284,103 @@ page {
   height: 100vh;
   box-sizing: border-box;
   background-color: #eff1f4;
+  padding: 10px 20px;
 }
 
-.group-name-input-container {
+.group-set-card {
   background: #ffffff;
   border-radius: 8px;
-  padding: 0 16px 5px;
-  position: relative;
-  margin: 10px 20px;
+  padding-left: 16px;
+  margin-bottom: 10px;
+}
 
-  .input-length {
-    position: absolute;
-    right: 25px;
-    bottom: 5px;
-    font-size: 12px;
+.group-set-button {
+  text-align: center;
+  background: #ffffff;
+  border-radius: 8px;
+  color: #e6605c;
+  height: 40px;
+  line-height: 40px;
+}
+
+.group-set-item:not(:last-child) {
+  border-bottom: 1rpx solid #f5f8fc;
+}
+
+.group-set-item-flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.more-icon {
+  margin: 0 16px;
+  color: #999999;
+}
+
+.group-info-item {
+  height: 70px;
+  display: flex;
+  align-items: center;
+
+  .group-info-title {
+    font-size: 16px;
+    margin-left: 10px;
+    width: 0;
+    flex: 1;
+    overflow: hidden; //超出的文本隐藏
+    text-overflow: ellipsis; //溢出用省略号显示
+    white-space: nowrap; //溢出不换行
+  }
+}
+
+.group-members-item {
+  height: 90px;
+}
+
+.group-members-info-item {
+  display: flex;
+  align-items: center;
+}
+
+.group-members-info {
+  height: 40px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+
+  .group-info-subtitle {
     color: #999999;
   }
+}
 
-  ::v-deep.form-input-item {
-    border: none;
-  }
+.member-list {
+  white-space: nowrap;
+  overflow-x: hidden;
+  margin-right: 30px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+
+.member-add {
+  width: 32px;
+  height: 32px;
+  border-radius: 100%;
+  border: 1px dashed #999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  flex-shrink: 0;
+}
+
+.member-item {
+  margin-right: 10px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 </style>

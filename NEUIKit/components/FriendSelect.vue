@@ -137,7 +137,7 @@ const onBtnClick = () => {
     flex-direction: row;
     align-items: center;
     padding: 8px 20px;
-    width: 100vw;
+    // width: 100vw;
 
     .user-avatar {
       margin: 0 14px;
@@ -156,5 +156,12 @@ const onBtnClick = () => {
       margin-right: 8px;
     }
   }
+}
+.ok-btn {
+  margin-bottom: 15px;
+}
+
+.ok-btn-mp {
+  margin-bottom: 15px;
 }
 </style>

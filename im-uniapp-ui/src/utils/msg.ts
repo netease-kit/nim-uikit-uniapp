@@ -70,6 +70,18 @@ export const setTabUnread = (): void => {
   const store = uni.$UIKitStore
   const unread = store?.conversationStore.totalUnreadCount || 0
   if (unread === 0) {
+    uni.hideTabBarRedDot({
+      //隐藏数字
+      index: 0, //tabbar下标
+    })
+  } else {
+    uni.showTabBarRedDot({
+      index: 0, //tabbar下标
+    })
+  }
+  /**
+   * 此为展示tabbar的未读消息数字的写法
+  if (unread === 0) {
     uni.removeTabBarBadge({
       //隐藏数字
       index: 0, //tabbar下标
@@ -81,6 +93,7 @@ export const setTabUnread = (): void => {
       text: unread > 99 ? '99+' : unread.toString(), //显示的数字
     })
   }
+   */
 }
 
 export const setContactTabUnread = (): void => {
@@ -106,4 +119,14 @@ export const setContactTabUnread = (): void => {
       index: 1, //tabbar下标
     })
   }
+  // if (unread === 0) {
+  //   uni.hideTabBarRedDot({
+  //     //隐藏数字
+  //     index: 1, //tabbar下标
+  //   })
+  // } else {
+  //   uni.showTabBarRedDot({
+  //     index: 1, //tabbar下标
+  //   })
+  // }
 }

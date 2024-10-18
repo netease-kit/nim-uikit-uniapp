@@ -31,6 +31,7 @@ import { onUnmounted, ref } from '../../../utils/transformVue'
 import { friendGroupByPy } from '../../../utils/friend'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import Empty from '../../../components/Empty.vue'
+
 import { deepClone } from '../../../utils'
 import { t } from '../../../utils/i18n'
 import { V2NIMFriend } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMFriendService'

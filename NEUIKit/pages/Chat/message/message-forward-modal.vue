@@ -56,7 +56,6 @@ import Modal from '../../../components/Modal.vue'
 import Avatar from '../../../components/Avatar.vue'
 import { deepClone } from '../../../utils'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
 interface ForwardToTeamInfo {
@@ -70,7 +69,7 @@ const props = withDefaults(
     forwardModalVisible: boolean
     forwardTo: string
     forwardMsg: V2NIMMessageForUI
-    forwardConversationType: V2NIMConversationType
+    forwardConversationType: V2NIMConst.V2NIMConversationType
     forwardToTeamInfo?: ForwardToTeamInfo
   }>(),
   {}
