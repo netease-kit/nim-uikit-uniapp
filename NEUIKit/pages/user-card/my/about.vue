@@ -11,8 +11,7 @@
     <div class="aboutInfo-item-wrapper">
       <div class="item">
         <div>版本号</div>
-        <!-- 注意每次发版本时记得更新 package.json 里的 version -->
-        <div>{{ pkg.version }}</div>
+        <div>10.1.0</div>
       </div>
       <div class="item">
         <div>IM 版本</div>
@@ -44,8 +43,7 @@ import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 import { isWxApp } from '../../../utils'
 import imPkg from 'nim-web-sdk-ng/package.json'
-// @ts-ignore
-import pkg from '../../../../package.json'
+
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import Icon from '../../../components/Icon.vue'
