@@ -91,14 +91,13 @@ import Icon from '../../components/Icon.vue'
 import { deepClone } from '../../utils'
 import ForwardModal from './message/message-forward-modal.vue'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMMessage } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
 
 const friendGroupList = ref<
   { key: string; data: { account: string; appellation: string }[] }[]
 >([])
-const forwardConversationType = ref<V2NIMConversationType>(
+const forwardConversationType = ref<V2NIMConst.V2NIMConversationType>(
   V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
 )
 const teamList = ref<V2NIMTeam[]>([])

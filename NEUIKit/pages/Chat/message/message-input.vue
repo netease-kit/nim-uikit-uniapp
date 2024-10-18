@@ -248,7 +248,6 @@ import {
   V2NIMTeamChatBannedMode,
   V2NIMTeamMember,
 } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 import {
   V2NIMMessageForUI,
   YxServerExt,
@@ -260,7 +259,7 @@ export type MentionedMember = { accountId: string; appellation: string }
 
 const props = withDefaults(
   defineProps<{
-    conversationType: V2NIMConversationType
+    conversationType: V2NIMConst.V2NIMConversationType
     to: string
     replyMsgsMap?: {
       [key: string]: V2NIMMessageForUI
