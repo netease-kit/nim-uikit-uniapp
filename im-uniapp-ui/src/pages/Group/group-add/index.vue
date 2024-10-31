@@ -1,20 +1,20 @@
 <template>
   <div>
     <NavBar :title="t('friendSelectText')" />
-    <FriendSelect
-      :friendList="friendList"
+    <PersonSelect
+      :personList="friendList"
       @checkboxChange="checkboxChange"
       :showBtn="true"
       :onBtnClick="addTeamMember"
     >
-    </FriendSelect>
+    </PersonSelect>
   </div>
 </template>
 
 <script lang="ts" setup>
-import FriendSelect, {
-  FriendSelectItem,
-} from '../../../components/FriendSelect.vue'
+import PersonSelect, {
+  PersonSelectItem,
+} from '../../../components/PersonSelect.vue'
 import { ref } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
@@ -23,7 +23,7 @@ import { debounce } from '@xkit-yx/utils'
 import { deepClone } from '../../../utils'
 import { events } from '../../../utils/constants'
 
-const friendList = ref<FriendSelectItem[]>([])
+const friendList = ref<PersonSelectItem[]>([])
 let teamId = ''
 let newTeamMember: string[] = []
 

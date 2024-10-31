@@ -48,13 +48,13 @@ import NavBar from './message/nav-bar.vue'
 import Icon from '../../components/Icon.vue'
 import MessageList from './message/message-list.vue'
 import MessageInput from './message/message-input.vue'
-import { HISTORY_LIMIT, MSG_ID_FLAG } from '../../utils/constants'
+import { HISTORY_LIMIT } from '../../utils/constants'
 import { t } from '../../utils/i18n'
 import { V2NIMMessage } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
 export interface YxReplyMsg {
-  idClient: string
+  messageClientId: string
   scene: V2NIMConst.V2NIMConversationType
   from: string
   receiverId: string
@@ -321,7 +321,7 @@ const msgsWatch = autorun(() => {
   if (messages.length !== 0) {
     const _replyMsgsMap: any = {}
     const reqMsgs: YxReplyMsg[] = []
-    const idClients: Record<string, string> = {}
+    const messageClientIds: Record<string, string> = {}
     msgs.value.forEach((msg) => {
       if (msg.serverExtension) {
         try {
@@ -337,16 +337,23 @@ const msgsWatch = autorun(() => {
               _replyMsgsMap[msg.messageClientId] = replyMsg
               // 如果没找到，说明被回复的消息可能有三种情况：1.被删除 2.被撤回 3.不在当前消息列表中（一次性没拉到，在之前的消息中）
             } else {
-              _replyMsgsMap[msg.messageClientId] = { idClient: 'noFind' }
-              const { scene, from, to, idServer, idClient, time, receiverId } =
-                yxReplyMsg
+              _replyMsgsMap[msg.messageClientId] = { messageClientId: 'noFind' }
+              const {
+                scene,
+                from,
+                to,
+                idServer,
+                messageClientId,
+                time,
+                receiverId,
+              } = yxReplyMsg
 
               if (
                 scene &&
                 from &&
                 to &&
                 idServer &&
-                idClient &&
+                messageClientId &&
                 time &&
                 receiverId
               ) {
@@ -355,11 +362,11 @@ const msgsWatch = autorun(() => {
                   from,
                   to,
                   idServer,
-                  idClient,
+                  messageClientId,
                   time,
                   receiverId,
                 })
-                idClients[idServer] = msg.messageClientId
+                messageClientIds[idServer] = msg.messageClientId
               }
             }
           }
@@ -373,7 +380,7 @@ const msgsWatch = autorun(() => {
         reqMsgs.map((item) => ({
           senderId: item.from,
           receiverId: item.receiverId,
-          messageClientId: item.idClient,
+          messageClientId: item.messageClientId,
           messageServerId: item.idServer,
           createTime: item.time,
           conversationType: item.scene,
@@ -384,7 +391,7 @@ const msgsWatch = autorun(() => {
           if (res?.length > 0) {
             res.forEach((item: V2NIMMessage) => {
               if (item.messageServerId) {
-                _replyMsgsMap[idClients[item.messageServerId]] = item
+                _replyMsgsMap[messageClientIds[item.messageServerId]] = item
               }
             })
           }

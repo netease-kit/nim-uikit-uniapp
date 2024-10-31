@@ -98,7 +98,7 @@ page {
   box-sizing: border-box;
   padding-bottom: 30px;
   background-color: rgb(245, 246, 247);
-
+  min-height: 100vh;
   .nav-bar-text {
     color: rgb(20, 146, 209);
   }

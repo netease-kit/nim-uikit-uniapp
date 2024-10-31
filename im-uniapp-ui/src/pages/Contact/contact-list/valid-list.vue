@@ -4,7 +4,8 @@
     <div class="valid-list-content">
       <Empty v-if="validMsg.length === 0" :text="t('validEmptyText')" />
       <template v-else>
-        <div class="valid-item" v-for="msg in validMsg">
+        <div class="valid-item" v-for="msg in validMsg" :key="msg.timestamp">
+          <!-- 好友申请 已同意 -->
           <template
             v-if="
               msg.status ===
@@ -16,11 +17,7 @@
               <Avatar :account="msg.applicantAccountId" />
               <div class="valid-name-container">
                 <div class="valid-name">
-                  {{
-                    getAppellation({
-                      account: msg.applicantAccountId,
-                    })
-                  }}
+                  <Appellation :account="msg.applicantAccountId" />
                 </div>
                 <div class="valid-action">{{ t('applyFriendText') }}</div>
               </div>
@@ -30,6 +27,7 @@
               <span class="valid-state-text">{{ t('acceptResultText') }}</span>
             </div>
           </template>
+          <!--好友申请 已拒绝 -->
           <template
             v-else-if="
               msg.status ===
@@ -42,11 +40,7 @@
                 <Avatar :account="msg.recipientAccountId" />
                 <div class="valid-name-container">
                   <div class="valid-name">
-                    {{
-                      getAppellation({
-                        account: msg.recipientAccountId,
-                      })
-                    }}
+                    <Appellation :account="msg.recipientAccountId" />
                   </div>
                   <div class="valid-action">{{ t('beRejectResultText') }}</div>
                 </div>
@@ -57,11 +51,7 @@
                 <Avatar :account="msg.applicantAccountId" />
                 <div class="valid-name-container">
                   <div class="valid-name">
-                    {{
-                      getAppellation({
-                        account: msg.applicantAccountId,
-                      })
-                    }}
+                    <Appellation :account="msg.applicantAccountId" />
                   </div>
                   <div class="valid-action">{{ t('applyFriendText') }}</div>
                 </div>
@@ -74,6 +64,7 @@
               </div>
             </template>
           </template>
+          <!-- 好友申请 未处理 -->
           <template
             v-else-if="
               msg.status ===
@@ -86,11 +77,7 @@
                 <Avatar :account="msg.applicantAccountId" />
                 <div class="valid-name-container">
                   <div class="valid-name">
-                    {{
-                      getAppellation({
-                        account: msg.applicantAccountId,
-                      })
-                    }}
+                    <Appellation :account="msg.applicantAccountId" />
                   </div>
                   <div class="valid-action">{{ t('applyFriendText') }}</div>
                 </div>
@@ -130,24 +117,18 @@ import { t } from '../../../utils/i18n'
 import { deepClone } from '../../../utils'
 import { V2NIMFriendAddApplicationForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-
+import Appellation from '../../../components/Appellation.vue'
 const validMsg = ref<V2NIMFriendAddApplicationForUI[]>([])
 const applyFriendLoading = ref(false)
 
+// 是否是我发起的申请
 const isMeApplicant = (data: V2NIMFriendAddApplicationForUI) => {
   return (
     data.applicantAccountId === uni.$UIKitStore.userStore.myUserInfo.accountId
   )
 }
 
-const uninstallValidMsgWatch = autorun(() => {
-  validMsg.value = deepClone(uni.$UIKitStore.sysMsgStore.friendApplyMsgs)
-})
-
-const getAppellation = (params: { account: string }) => {
-  return uni.$UIKitStore.uiStore.getAppellation(params)
-}
-
+// 拒绝好友申请
 const handleRejectApplyFriendClick = async (
   msg: V2NIMFriendAddApplicationForUI
 ) => {
@@ -168,6 +149,7 @@ const handleRejectApplyFriendClick = async (
   }
 }
 
+// 接受好友申请
 const handleAcceptApplyFriendClick = async (
   msg: V2NIMFriendAddApplicationForUI
 ) => {
@@ -201,6 +183,13 @@ const handleAcceptApplyFriendClick = async (
     applyFriendLoading.value = false
   }
 }
+
+const uninstallValidMsgWatch = autorun(() => {
+  validMsg.value = deepClone(uni.$UIKitStore.sysMsgStore.friendApplyMsgs)
+  uni.$UIKitStore.sysMsgStore.friendApplyMsgs?.map((item) => {
+    uni.$UIKitStore.userStore.getUserActive(item.applicantAccountId)
+  })
+})
 
 onUnmounted(() => {
   uninstallValidMsgWatch()

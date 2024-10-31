@@ -12,7 +12,9 @@
       <Icon :type="iconType" :size="32"></Icon>
       <div class="msg-file-content">
         <div class="msg-file-title">
-          <text class="msg-file-name" v-text="name"></text>
+          <div class="msg-file-title-prefix">{{ prefixName }}</div>
+          <div class="msg-file-title-suffix">{{ suffixName }}</div>
+          <!-- <text class="msg-file-name" v-text="name"></text> -->
         </div>
         <div class="msg-file-size">{{ parseFileSize(size) }}</div>
       </div>
@@ -25,7 +27,9 @@
       <Icon :type="iconType" :size="32"></Icon>
       <div class="msg-file-content">
         <div class="msg-file-title">
-          <text class="msg-file-name" v-text="name"></text>
+          <div class="msg-file-title-prefix">{{ prefixName }}</div>
+          <div class="msg-file-title-suffix">{{ suffixName }}</div>
+          <!-- <text class="msg-file-name" v-text="name"></text> -->
         </div>
         <div class="msg-file-size">{{ parseFileSize(size) }}</div>
       </div>
@@ -67,6 +71,11 @@ const {
 
 //@ts-ignore
 const iconType = fileIconMap[getFileType(ext)] || 'icon-weizhiwenjian'
+
+const index = name.lastIndexOf('.') > -1 ? name.lastIndexOf('.') : name.length
+
+const prefixName = name.slice(0, Math.max(index - 5, 0))
+const suffixName = name.slice(Math.max(index - 5, 0))
 
 const downloadUrl =
   url + ((url as string).includes('?') ? '&' : '?') + `download=${name}`
@@ -115,9 +124,16 @@ const mpDownload = () => {
     color: #333;
     font-size: 14px;
     font-weight: 400;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    display: flex;
+
+    &-prefix {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    &-suffix {
+      white-space: nowrap;
+    }
   }
 
   &-name {

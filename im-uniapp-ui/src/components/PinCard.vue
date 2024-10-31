@@ -187,11 +187,11 @@ const handlePinMsg = () => {
           handleCopy()
         } else if (data.tapIndex === 2) {
           customNavigateTo({
-            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM}&msgIdClient=${props.msg.messageClientId}`,
+            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM}&msgIdClient=${props.msg.messageClientId}&origin=pin`,
           })
         } else if (data.tapIndex === 3) {
           customNavigateTo({
-            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P}&msgIdClient=${props.msg.messageClientId}`,
+            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P}&msgIdClient=${props.msg.messageClientId}&origin=pin`,
           })
         }
       } else if (
@@ -202,11 +202,11 @@ const handlePinMsg = () => {
           props.handleUnPinMsg()
         } else if (data.tapIndex === 1) {
           customNavigateTo({
-            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM}&msgIdClient=${props.msg.messageClientId}`,
+            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM}&msgIdClient=${props.msg.messageClientId}&origin=pin`,
           })
         } else if (data.tapIndex === 2) {
           customNavigateTo({
-            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P}&msgIdClient=${props.msg.messageClientId}`,
+            url: `/pages/Chat/forward?forwardConversationType=${V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P}&msgIdClient=${props.msg.messageClientId}&origin=pin`,
           })
         }
       } else {
@@ -307,7 +307,7 @@ const timeFormat = () => {
   }
   .content-wrapper {
     padding: 12px 16px 16px 16px;
-
+    word-wrap: break-word;
     .file-wrapper {
       position: relative;
       width: 50%;
@@ -344,10 +344,11 @@ const timeFormat = () => {
         transform: translate(-40%, -50%);
       }
       .audio-wrapper {
+        width: fit-content;
         opacity: 1;
         background: #d6e5f6;
         overflow: hidden;
-        padding: 12px 16px;
+        padding: 10px 12px;
         border-radius: 0 8px 8px 8px;
         background-color: #e8eaed;
       }

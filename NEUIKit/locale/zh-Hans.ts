@@ -123,6 +123,8 @@ export default {
   getMessageFailed: '获取消息失败',
   replyText: '回复',
   replyNotFindText: '该消息已撤回或删除',
+  msgRecallTimeErrorText: '已超过时间无法撤回',
+
   forwardToTeamText: '转发到群组',
   forwardToFriendText: '转发到个人',
   sessionRecordText: '的会话记录',
@@ -132,6 +134,12 @@ export default {
   unpinText: '取消标记',
   unpinFailedText: '取消标记失败',
   noPinListText: '暂无标记消息',
+  collectionText: '收藏',
+  deleteCollectionText: '删除收藏',
+  addCollectionSuccessText: '收藏成功',
+  addCollectionFailedText: '添加收藏失败',
+  deleteCollectionFailedText: '删除收藏失败',
+  noCollectionsText: '暂无收藏',
   you: '你',
   pinThisText: '标记了这条消息',
   delete: '删除此消息',
@@ -267,7 +275,15 @@ export default {
   fileText: '文件',
   allUnReadText: '全部成员未读',
   allReadText: '全部成员已读',
-
+  searchText: '请输入你要搜索的关键字',
+  searchTitleText: '搜索',
+  friendText: '好友',
+  teamText: '群组',
+  searchResultNullText: '该用户不存在',
+  conversationSendFailText: '[发送失败]',
+  conversationNotificationText: '[通知消息]',
+  getForwardMessageFailed: '该消息已撤回或删除',
+  fileMsgTitleText: '[文件消息]',
   // emoji 不能随便填，要用固定 key
   Laugh: '[大笑]',
   Happy: '[开心]',
@@ -359,6 +375,9 @@ export default {
   107320: 'PIN 消息不存在',
   107322: '重复 PIN',
   107327: '未开启 PIN 功能',
+  189301: '收藏数量超限',
+  189302: '收藏不存在',
+  189449: '并发操作收藏失败',
   // 群相关
   109432: '没有权限',
 }

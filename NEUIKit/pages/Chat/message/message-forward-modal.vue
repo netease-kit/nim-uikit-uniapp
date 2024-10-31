@@ -102,7 +102,7 @@ const forwardToNick = computed(() => {
 const forwardFromNick = computed(() => {
   return deepClone(
     uni.$UIKitStore.uiStore.getAppellation({
-      account: props.forwardMsg.senderId,
+      account: props.forwardMsg?.senderId,
     })
   )
 })

@@ -1,4 +1,3 @@
-import { V2NIMMessageType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
 import { t } from './i18n'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
@@ -87,3 +86,5 @@ export const g2StatusMap: any = {
   4: t('callTimeoutText'),
   5: t('callBusyText'),
 }
+
+export const msgRecallTime = 2 * 60 * 1000

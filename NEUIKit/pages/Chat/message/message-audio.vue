@@ -4,7 +4,7 @@
     :style="{ width: audioContainerWidth + 'px' }"
     @tap="onPlayAudio"
   >
-    <div>{{ duration }}s</div>
+    <div class="audio-dur">{{ duration }}s</div>
     <div class="audio-icon-wrapper">
       <Icon :size="24" :key="audioIconType" :type="audioIconType" />
     </div>
@@ -23,6 +23,7 @@ import Icon from '../../../components/Icon.vue'
 import { events } from '../../../utils/constants'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMMessageAudioAttachment } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
+import { onHide, onUnload } from '@dcloudio/uni-app'
 
 const props = withDefaults(
   defineProps<{
@@ -88,6 +89,7 @@ const toggleAudioPlayState = () => {
   }
 }
 
+// 初始化音频实例
 function initAudioSrc() {
   const audioContext = getAudio()
   if (!audioContext) {
@@ -168,17 +170,34 @@ const playAudioAnimation = () => {
   }
 }
 
-onUnmounted(() => {
+const stopAudioOnHide = () => {
   const audioContext = getAudio()
   if (isAudioPlaying.value) {
     stopAudio()
   }
   audioContext?.destroy?.()
+  animationFlag.value = false
   audioMap.delete('audio')
+}
+
+onUnmounted(() => {
+  stopAudioOnHide()
+})
+
+onHide(() => {
+  stopAudioOnHide()
+})
+
+onUnload(() => {
+  stopAudioOnHide()
 })
 </script>
 
 <style scoped lang="scss">
+.audio-dur {
+  height: 24px;
+  line-height: 24px;
+}
 .audio-in,
 .audio-out {
   width: 50px;
@@ -193,5 +212,11 @@ onUnmounted(() => {
   .audio-icon-wrapper {
     transform: rotate(180deg);
   }
+}
+
+.audio-icon-wrapper {
+  height: 24px;
+  display: flex;
+  align-items: center;
 }
 </style>

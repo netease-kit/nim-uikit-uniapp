@@ -1,20 +1,20 @@
 <template>
   <div>
     <NavBar :title="t('createTeamText')" />
-    <FriendSelect
-      :friendList="friendList"
+    <PersonSelect
+      :personList="friendList"
       @checkboxChange="checkboxChange"
       :showBtn="true"
       :btnText="t('createButtonText') + '(' + groupMembers.length + ')'"
     >
-    </FriendSelect>
+    </PersonSelect>
   </div>
 </template>
 
 <script lang="ts" setup>
-import FriendSelect, {
-  type FriendSelectItem,
-} from '../../../components/FriendSelect.vue'
+import PersonSelect, {
+  type PersonSelectItem,
+} from '../../../components/PersonSelect.vue'
 import { ref, computed } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
@@ -22,7 +22,7 @@ import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { customRedirectTo } from '../../../utils/customNavigate'
 import { events } from '../../../utils/constants'
 
-const friendList = ref<FriendSelectItem[]>([])
+const friendList = ref<PersonSelectItem[]>([])
 
 const groupMembers = computed(() => {
   return friendList.value

@@ -141,10 +141,7 @@
           :tooltip-visible="true"
           :bg-visible="true"
         >
-          <ReplyMessage
-            v-if="!!props.replyMsg"
-            :replyMsg="props.replyMsg"
-          ></ReplyMessage>
+          <ReplyMessage v-if="!!replyMsg" :replyMsg="replyMsg"></ReplyMessage>
           <MessageText :msg="props.msg"></MessageText>
         </MessageBubble>
       </div>
@@ -420,6 +417,7 @@ import {
   onUnmounted,
   defineProps,
   withDefaults,
+  onMounted,
 } from '../../../utils/transformVue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
@@ -439,24 +437,32 @@ import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import MessageIsRead from './message-read.vue'
 import Icon from '../../../components/Icon.vue'
 import Appellation from '../../../components/Appellation.vue'
-import { onLoad } from '@dcloudio/uni-app'
 const props = withDefaults(
   defineProps<{
     msg: V2NIMMessageForUI & { timeValue?: number }
     index: number
-    replyMsg?: V2NIMMessageForUI
+    replyMsgsMap?: {
+      [key: string]: V2NIMMessageForUI
+    }
     broadcastNewAudioSrc: string
   }>(),
   {}
 )
 
+const replyMsg = computed(() => {
+  return props.replyMsgsMap && props.replyMsgsMap[props.msg.messageClientId]
+})
+
+// 昵称
 const appellation = ref('')
 const accountId = uni.$UIKitStore?.userStore?.myUserInfo.accountId
 
+// 会话类型
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
   )
+// 会话对象
 const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
   props.msg.conversationId
 )
@@ -467,7 +473,12 @@ const videoFirstFrameDataUrl = computed(() => {
   return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
 })
 
+// 图片
 const imageUrl = computed(() => {
+  // 被拉黑
+  if (props.msg.errorCode == 102426) {
+    return 'https://yx-web-nosdn.netease.im/common/c1f278b963b18667ecba4ee9a6e68047/img-fail.png'
+  }
   return props.msg?.attachment?.url || props.msg.attachment?.file
 })
 
@@ -496,6 +507,7 @@ const handleReeditMsg = (msg: V2NIMMessageForUI) => {
   uni.$emit(events.ON_REEDIT_MSG, msg)
 }
 
+// 监听昵称变化
 const uninstallAppellationWatch = autorun(() => {
   // 昵称展示顺序 群昵称 > 备注 > 个人昵称 > 帐号
   appellation.value = deepClone(

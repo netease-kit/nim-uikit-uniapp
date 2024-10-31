@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="props.replyMsg.messageClientId" class="reply-msg-wrapper">
+    <div v-if="props.replyMsg?.messageClientId" class="reply-msg-wrapper">
       <!-- replyMsg 不存在 说明回复的消息被删除或者撤回 -->
       <div v-if="!isReplyMsgExist">
         <span>{{ t('replyNotFindText') }}</span>
@@ -26,7 +26,7 @@
           class="other-msg-wrapper"
         >
           <uni-link :href="downloadUrl" :download="name" :showUnderLine="false">
-            [文件消息]
+            {{ t('fileMsgTitleText') }}
           </uni-link>
         </div>
         <div class="other-msg-wrapper" v-else>
@@ -93,6 +93,7 @@ import {
   computed,
   defineProps,
   withDefaults,
+  onUnmounted,
 } from '../../../utils/transformVue'
 import MessageText from './message-text.vue'
 // @ts-ignore
@@ -107,15 +108,20 @@ import MessageAudio from './message-audio.vue'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
-const props = withDefaults(defineProps<{ replyMsg: V2NIMMessageForUI }>(), {})
+const props = withDefaults(
+  defineProps<{ replyMsg: V2NIMMessageForUI | undefined }>(),
+  {}
+)
 
 const isFullScreen = ref(false)
 const repliedTo = ref('')
 
 const { name = '', url = '' } = props.replyMsg?.attachment || {}
+
 const downloadUrl =
   url + ((url as string).includes('?') ? '&' : '?') + `download=${name}`
 
+// 被回复消息是否存在
 const isReplyMsgExist = computed(() => {
   return props.replyMsg?.messageClientId !== 'noFind'
 })
@@ -123,16 +129,16 @@ const isReplyMsgExist = computed(() => {
 onMounted(() => {
   repliedTo.value = deepClone(
     uni.$UIKitStore.uiStore.getAppellation({
-      account: props.replyMsg?.senderId,
+      account: props.replyMsg?.senderId as string,
       teamId: props.replyMsg?.receiverId,
     })
   )
 })
 
-autorun(() => {
+const repliedToWatch = autorun(() => {
   repliedTo.value = deepClone(
     uni.$UIKitStore.uiStore.getAppellation({
-      account: props.replyMsg?.senderId,
+      account: props.replyMsg?.senderId as string,
       teamId: props.replyMsg?.receiverId,
     })
   )
@@ -177,6 +183,10 @@ const closeFullReplyMsg = () => {
   stopAllAudio()
   uni.$emit(events.HANDLE_MOVE_THROUGH, false)
 }
+
+onUnmounted(() => {
+  repliedToWatch()
+})
 </script>
 
 <style lang="scss" scoped>
@@ -263,7 +273,7 @@ const closeFullReplyMsg = () => {
   position: fixed;
   right: 20px;
   z-index: 999999;
-  top: 40px;
+  top: 60px;
 }
 
 .reply-message-close-mp {

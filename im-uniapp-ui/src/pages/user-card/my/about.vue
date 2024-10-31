@@ -11,7 +11,7 @@
     <div class="aboutInfo-item-wrapper">
       <div class="item">
         <div>版本号</div>
-        <div>10.1.0</div>
+        <div>10.2.0</div>
       </div>
       <div class="item">
         <div>IM 版本</div>

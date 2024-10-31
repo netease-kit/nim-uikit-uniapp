@@ -15,9 +15,7 @@
           :msg="item"
           :index="index"
           :key="item.renderKey"
-          :reply-msg="
-            props.replyMsgsMap && props.replyMsgsMap[item.messageClientId]
-          "
+          :reply-msgs-map="replyMsgsMap"
           :broadcastNewAudioSrc="broadcastNewAudioSrc"
         >
         </MessageItem>
@@ -137,6 +135,7 @@ const finalMsgs = computed(() => {
       renderKey: `${item.createTime}`,
     })
   })
+
   return res
 })
 
@@ -184,14 +183,6 @@ const handleTapMessageList = () => {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-// .msg-list {
-//   padding: 0 16px 20px 16px;
-//   box-sizing: border-box;
-//   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-//   overflow-x: hidden;
-//   // height: 100%;
-// }
-
 .msg-tip {
   text-align: center;
   color: #b3b7bc;
@@ -216,6 +207,7 @@ const handleTapMessageList = () => {
   font-size: 15px;
   margin-top: 20px;
 }
+
 page > view > message > view > message-list {
   height: 100%;
 }

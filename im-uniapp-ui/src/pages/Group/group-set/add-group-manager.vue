@@ -1,21 +1,21 @@
 <template>
   <div>
-    <NavBar :title="t('teamMemebrSelect')" />
-    <FriendSelect
+    <NavBar :title="t('teamMemberSelect')" />
+    <PersonSelect
       :max="10"
-      :friendList="teamMemberList"
+      :personList="teamMemberList"
       @checkboxChange="checkboxChange"
       :showBtn="true"
       :onBtnClick="onOk"
     >
-    </FriendSelect>
+    </PersonSelect>
   </div>
 </template>
 
 <script lang="ts" setup>
-import FriendSelect, {
-  FriendSelectItem,
-} from '../../../components/FriendSelect.vue'
+import PersonSelect, {
+  PersonSelectItem,
+} from '../../../components/PersonSelect.vue'
 import { onUnmounted, ref } from '../../../utils/transformVue'
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
@@ -26,7 +26,7 @@ import { events } from '../../../utils/constants'
 import { autorun } from 'mobx'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
-const teamMemberList = ref<FriendSelectItem[]>([])
+const teamMemberList = ref<PersonSelectItem[]>([])
 let selectManager: string[] = []
 let teamId = ''
 
@@ -88,8 +88,8 @@ let uninstallTeamMemberListWatch = () => {}
 
 onLoad((props) => {
   teamId = props ? props.id : ''
-  autorun(() => {
-    uninstallTeamMemberListWatch = teamMemberList.value = deepClone(
+  uninstallTeamMemberListWatch = autorun(() => {
+    teamMemberList.value = deepClone(
       uni.$UIKitStore.teamMemberStore
         .getTeamMember(teamId)
         .filter((item) => {
@@ -107,6 +107,7 @@ onLoad((props) => {
           }
           return {
             accountId: item.accountId,
+            teamId: item.teamId,
             checked:
               item.memberRole ===
               V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER,
