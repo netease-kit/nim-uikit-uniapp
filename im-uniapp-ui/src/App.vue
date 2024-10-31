@@ -1,6 +1,6 @@
 <script lang="ts">
-import RootStore from "@xkit-yx/im-store-v2";
-
+// import RootStore from '@xkit-yx/im-store-v2'
+import RootStore from "./store/dist/index.esm.js";
 import V2NIM, { V2NIMConst } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
 import {
   customRedirectTo,
@@ -61,7 +61,7 @@ export default {
     // #endif
   },
   methods: {
-    initNim(opts: { account: string; token: string; appkey: string }) {
+    initNim(opts: { appkey: string; account: string; token: string }) {
       // 保存登录信息
 
       uni.setStorage({
@@ -237,7 +237,7 @@ export default {
       console.log("-------------callkit init 开始", opts.account, opts.token);
       nimCallKit.initConfig(
         {
-          appKey: "", // 请填写你的appkey
+          appKey: opts.appkey, // 请填写你的appkey
           account: opts.account, // 请填写你的account
           token: opts.token, // 请填写你的token
           apnsCername: "",

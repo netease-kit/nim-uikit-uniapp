@@ -9,18 +9,26 @@
     </div>
     <div class="box-shadow"></div>
     <div class="userInfo-item-wrapper">
-      <div class="userInfo-item" @click="gotoAbout">
-        <div class="item-left">
-          <Icon iconClassName="guanyu" type="icon-guanyu"></Icon>
-          {{ t('commsEaseText') }}
-        </div>
-        <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
-      </div>
-      <div class="shadow"></div>
       <div class="userInfo-item" @click="gotoSetting">
         <div class="item-left">
           <Icon iconClassName="guanyu" type="icon-shezhi1"></Icon>
           {{ t('setText') }}
+        </div>
+        <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
+      </div>
+      <div class="shadow"></div>
+      <div class="userInfo-item" @click="gotoCollection">
+        <div class="item-left">
+          <Icon iconClassName="guanyu" type="blue-collection"></Icon>
+          {{ t('collectionText') }}
+        </div>
+        <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
+      </div>
+      <div class="shadow"></div>
+      <div class="userInfo-item" @click="gotoAbout">
+        <div class="item-left">
+          <Icon iconClassName="guanyu" type="icon-guanyu"></Icon>
+          {{ t('commsEaseText') }}
         </div>
         <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
       </div>
@@ -63,6 +71,11 @@ const gotoSetting = () => {
 const gotoAbout = () => {
   customNavigateTo({
     url: '/pages/user-card/my/about',
+  })
+}
+const gotoCollection = () => {
+  customNavigateTo({
+    url: '/pages/user-card/my/collection-list',
   })
 }
 

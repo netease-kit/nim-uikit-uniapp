@@ -42,7 +42,9 @@
             v-if="showSessionUnread"
             :conversation="props.conversation"
           ></ConversationItemIsRead>
-          <span class="conversation-item-desc-content">{{ content }}</span>
+          <span class="conversation-item-desc-content">{{
+            lastMsgContent
+          }}</span>
           <Icon
             v-if="isMute"
             iconClassName="conversation-item-desc-state"
@@ -111,6 +113,7 @@ const handleClick = (type: string) => {
   }
 }
 
+// 群头像
 const teamAvatar = computed(() => {
   if (
     props.conversation.type ===
@@ -121,6 +124,7 @@ const teamAvatar = computed(() => {
   }
 })
 
+// 对话方
 const sessionName = computed(() => {
   if (props.conversation.name) {
     return props.conversation.name
@@ -128,14 +132,8 @@ const sessionName = computed(() => {
   return props.conversation.conversationId
 })
 
-const to = computed(() => {
-  const res = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
-    props.conversation.conversationId
-  )
-  return res
-})
-
-const content = computed(() => {
+// 会话最后一条消息内容
+const lastMsgContent = computed(() => {
   const lastMsg = props.conversation.lastMessage
 
   if (lastMsg) {
@@ -153,11 +151,15 @@ const content = computed(() => {
     }
 
     if (
-      sendingState ===
-        V2NIMConst.V2NIMMessageSendingState
-          .V2NIM_MESSAGE_SENDING_STATE_SENDING ||
       messageType ===
-        V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION
+      V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION
+    ) {
+      return t('conversationNotificationText')
+    }
+
+    if (
+      sendingState ===
+      V2NIMConst.V2NIMMessageSendingState.V2NIM_MESSAGE_SENDING_STATE_SENDING
     ) {
       return ''
     }
@@ -166,7 +168,7 @@ const content = computed(() => {
       sendingState ===
       V2NIMConst.V2NIMMessageSendingState.V2NIM_MESSAGE_SENDING_STATE_FAILED
     ) {
-      return '[发送失败]'
+      return t('conversationSendFailText')
     }
 
     return getMsgContentTipByType({
@@ -175,6 +177,13 @@ const content = computed(() => {
     })
   }
   return ''
+})
+
+const to = computed(() => {
+  const res = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
+    props.conversation.conversationId
+  )
+  return res
 })
 
 const date = computed(() => {

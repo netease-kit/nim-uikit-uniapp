@@ -339,11 +339,15 @@ const urlMap = {
   'icon-file':
     'https://yx-web-nosdn.netease.im/common/90485f277f50fc081970ded8772ec7c5/file.png',
   'icon-pin':
-    'https://yx-web-nosdn.netease.im/common/8874f30f648cde89dbbe9a59e9cb7f8a/pin.png',
+    'https://yx-web-nosdn.netease.im/common/6eb4fafcca008d2e93e90311696d6b96/black-pin.png',
   'icon-green-pin':
     'https://yx-web-nosdn.netease.im/common/4a1f15eff2f53563c4f1cf6ecde82d2c/green-pin.png',
   'choose-picture':
     'https://yx-web-nosdn.netease.im/common/97b3ca79a589d5753cbc0e8e8ec09501/choose-picture.png',
+  'icon-collection':
+    'https://yx-web-nosdn.netease.im/common/aa1bad3410009dea83d34d513dcd20f3/add-collection.png',
+  'blue-collection':
+    'https://yx-web-nosdn.netease.im/common/fb3836a8731b57720fcfdd3b589b3d5f/collection.png',
 }
 
 //以上链接访问有频率控制，建议您将静态放到您服务器上，然后修改上面的链接即可

@@ -7,9 +7,6 @@ import ConversationList from './conversation-list/index.vue'
 import { trackInit } from '../../utils/reporter'
 import { onShow } from '@dcloudio/uni-app'
 
-import { setContactTabUnread, setTabUnread } from '../../utils/msg'
-import { autorun } from 'mobx'
-
 trackInit('ConversationUIKit')
 
 onShow(() => {

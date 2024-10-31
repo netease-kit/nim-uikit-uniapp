@@ -1,10 +1,10 @@
 <template>
-  <div v-if="friendList.length > 0" class="friend-select-wrapper">
+  <div v-if="personList.length > 0" class="friend-select-wrapper">
     <div class="member-wrapper">
       <radio-group v-if="radio" @change="checkboxChange">
         <div
           class="member-item"
-          v-for="item in friendList"
+          v-for="item in personList"
           :key="item.accountId"
         >
           <radio
@@ -19,14 +19,14 @@
           />
           <Avatar class="user-avatar" size="36" :account="item.accountId" />
           <div class="user-name">
-            <Appellation :account="item.accountId" />
+            <Appellation :account="item.accountId" :teamId="item.teamId" />
           </div>
         </div>
       </radio-group>
       <checkbox-group v-else @change="checkboxChange">
         <div
           class="member-item"
-          v-for="item in friendList"
+          v-for="item in personList"
           :key="item.accountId"
         >
           <checkbox
@@ -41,7 +41,7 @@
           />
           <Avatar class="user-avatar" size="36" :account="item.accountId" />
           <div class="user-name">
-            <Appellation :account="item.accountId" />
+            <Appellation :account="item.accountId" :teamId="item.teamId" />
           </div>
         </div>
       </checkbox-group>
@@ -72,15 +72,16 @@ import {
   withDefaults,
 } from '../utils/transformVue'
 
-export type FriendSelectItem = {
+export type PersonSelectItem = {
   accountId: string
+  teamId?: string
   disabled?: boolean
   checked?: boolean
 }
 
 const props = withDefaults(
   defineProps<{
-    friendList: FriendSelectItem[]
+    personList: PersonSelectItem[]
     showBtn?: boolean
     btnText?: string
     radio?: boolean
@@ -97,7 +98,7 @@ const props = withDefaults(
 const selectAccount = ref<string[]>([])
 
 onMounted(() => {
-  selectAccount.value = props.friendList
+  selectAccount.value = props.personList
     .filter((item) => item.checked)
     .map((item) => item.accountId)
 })

@@ -45,12 +45,42 @@
     </div>
     <div class="block"></div>
     <NetworkAlert />
+    <div
+      v-if="!conversationList || conversationList.length === 0"
+      class="conversation-search"
+      @click="jumpToSearch"
+    >
+      <div class="search-input-wrapper">
+        <div class="search-icon-wrapper">
+          <Icon
+            iconClassName="search-icon"
+            :size="16"
+            color="#A6ADB6"
+            type="icon-sousuo"
+          ></Icon>
+        </div>
+        <div class="search-input">{{ t('searchText') }}</div>
+      </div>
+    </div>
     <!-- 页面初始化的过程中，sessionList编译到小程序和h5出现sessionList为undefined的情况，即使给了默认值为空数组，故在此处进行判断 -->
     <Empty
       v-if="!conversationList || conversationList.length === 0"
       :text="t('conversationEmptyText')"
     />
     <div v-else class="conversation-list-wrapper">
+      <div class="conversation-search" @click="jumpToSearch">
+        <div class="search-input-wrapper">
+          <div class="search-icon-wrapper">
+            <Icon
+              iconClassName="search-icon"
+              :size="16"
+              color="#A6ADB6"
+              type="icon-sousuo"
+            ></Icon>
+          </div>
+          <div class="search-input">{{ t('searchText') }}</div>
+        </div>
+      </div>
       <!-- 此处的key如果用session.id，会在ios上渲染存在问题，会出现会话列表显示undefined -->
       <div
         v-for="(conversation, index) in conversationList"
@@ -73,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { onHide } from '@dcloudio/uni-app'
 import Icon from '../../../components/Icon.vue'
@@ -195,11 +225,17 @@ const onDropdownClick = (urlType: 'addFriend' | 'createGroup') => {
   })
 }
 
+const jumpToSearch = () => {
+  customNavigateTo({
+    url: '/pages/Conversation/conversation-search/index',
+  })
+}
+
 onHide(() => {
   addDropdownVisible.value = false
 })
 
-autorun(() => {
+const conversationListWatch = autorun(() => {
   conversationList.value = deepClone(uni.$UIKitStore?.uiStore?.conversations)
     ?.map((conversation: V2NIMConversation) => {
       return {
@@ -214,7 +250,7 @@ autorun(() => {
   setTabUnread()
 })
 
-autorun(() => {
+const getTotalUnreadMsgsCountWatch = autorun(() => {
   // 为了监听会触发得留着这个 console
   console.log(
     'unreadSysMsgCount:',
@@ -222,6 +258,10 @@ autorun(() => {
     uni.$UIKitStore?.sysMsgStore?.getTotalUnreadMsgsCount()
   )
   setContactTabUnread()
+})
+onUnmounted(() => {
+  conversationListWatch()
+  getTotalUnreadMsgsCountWatch()
 })
 </script>
 
@@ -247,7 +287,34 @@ autorun(() => {
   opacity: 1;
   z-index: 999;
 }
-
+.conversation-search {
+  display: flex;
+  align-items: center;
+  height: 54px;
+  box-sizing: border-box;
+  overflow: hidden;
+  padding: 10px;
+}
+.search-input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  height: 34px;
+  overflow: hidden;
+  box-sizing: border-box;
+  padding: 8px 10px;
+  background: #f3f5f7;
+  border-radius: 5px;
+}
+.search-input {
+  margin-left: 5px;
+  color: #999999;
+}
+.search-icon-wrapper {
+  height: 22px;
+  display: flex;
+  align-items: center;
+}
 .block {
   height: 60px;
   width: 100%;

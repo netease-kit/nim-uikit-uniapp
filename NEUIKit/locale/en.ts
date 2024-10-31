@@ -104,6 +104,12 @@ export default {
   unpinText: 'Unmark',
   unpinFailedText: 'Unmark Failed',
   noPinListText: 'No Mark',
+  collectionText: 'Add collection',
+  deleteCollectionText: 'Delete collection',
+  addCollectionSuccessText: 'Add collection success',
+  addCollectionFailedText: 'Add collection Failed',
+  deleteCollectionFailedText: 'Delete collection Failed',
+  noCollectionsText: 'No collection',
   teamBannedText: 'Message Banned',
   you: 'You',
   pinThisText: 'Marked this message',
@@ -190,7 +196,8 @@ export default {
   removeBlacklist: 'Unblock',
   forwardSuccessText: 'Forward Success',
   forwardFailText: 'Forward Failed',
-  getMessageFailed: 'Fail to get message ',
+  getMessageFailed: 'Fail to get message',
+  getForwardMessageFailed: 'Fail to get forward message',
   sendFailWithInBlackText:
     'The other party has blocked you, message sending failed',
   sendFailWithDeleteText:
@@ -223,8 +230,16 @@ export default {
   unreadText: 'Unread',
   fileText: 'file',
   allUnReadText: 'All Unread',
+  msgRecallTimeErrorText: 'Message recall time exceeded',
   allReadText: 'All Read',
-
+  searchText: 'Search',
+  searchTitleText: 'Search',
+  friendText: 'Friend',
+  teamText: 'Group',
+  searchResultNullText: 'User does not exist',
+  conversationSendFailText: '[Send Failed]',
+  conversationNotificationText: '[Notification]',
+  fileMsgTitleText: '[File Message]',
   // emoji 不能随便填，要用固定 key
   Laugh: '[Laugh]',
   Happy: '[Happy]',
@@ -316,6 +331,9 @@ export default {
   107320: 'PIN not exist',
   107322: 'PIN already exist',
   107327: 'PIN function disabled',
+  189301: 'collection limit exceeded',
+  189302: 'collection not exist',
+  189449: 'collection concurrent operation failed',
   // 群相关
   109432: 'no permission',
 }

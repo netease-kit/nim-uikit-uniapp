@@ -85,6 +85,22 @@
           ></Icon>
           <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
         </div>
+        <div
+          class="msg-action-btn"
+          v-if="
+            props.msg.messageType !==
+            V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
+          "
+          @tap="handleCollectionMsg"
+        >
+          <Icon
+            :size="18"
+            color="#656A72"
+            class="msg-action-btn-icon"
+            type="icon-collection"
+          ></Icon>
+          <text class="msg-action-btn-text">{{ t('collectionText') }}</text>
+        </div>
       </div>
       <!-- 未知消息体 -->
       <div class="msg-action-groups-unknown" v-else>
@@ -319,11 +335,7 @@
           ></Icon>
           <text class="msg-action-btn-text">{{ t('deleteText') }}</text>
         </div>
-        <div
-          class="msg-action-btn"
-          v-if="props.msg.canRecall"
-          @tap="handleRecallMsg"
-        >
+        <div class="msg-action-btn" @tap="handleRecallMsg">
           <Icon
             :size="18"
             color="#656A72"
@@ -331,6 +343,22 @@
             type="icon-chehui"
           ></Icon>
           <text class="msg-action-btn-text">{{ t('recallText') }}</text>
+        </div>
+        <div
+          class="msg-action-btn"
+          v-if="
+            props.msg.messageType !==
+            V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_CALL
+          "
+          @tap="handleCollectionMsg"
+        >
+          <Icon
+            :size="18"
+            color="#656A72"
+            class="msg-action-btn-icon"
+            type="icon-collection"
+          ></Icon>
+          <text class="msg-action-btn-text">{{ t('collectionText') }}</text>
         </div>
       </div>
       <!-- 未知消息体 -->
@@ -377,7 +405,7 @@ import { autorun } from 'mobx'
 import { deepClone } from '../../../utils'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-
+import { msgRecallTime } from '../../../utils/constants'
 const tooltipRef = ref(null)
 
 const props = withDefaults(
@@ -544,9 +572,56 @@ const handlePinMsg = () => {
   }
   closeTooltip()
 }
-const handleUnPinMsg = () => {
+
+// 收藏消息
+const handleCollectionMsg = () => {
   const _msg = deepClone(props.msg)
 
+  const conversation = uni.$UIKitStore.conversationStore.conversations.get(
+    _msg.conversationId
+  )
+  const collectionDataObj = {
+    message: uni.$UIKitNIM.V2NIMMessageConverter.messageSerialization(_msg), // 序列化
+    avatar: uni.$UIKitStore.userStore.users.get(_msg.senderId)?.avatar,
+    conversationName: conversation?.name,
+    senderName: uni.$UIKitStore.uiStore.getAppellation({
+      account: _msg.senderId,
+      teamId:
+        conversationType ===
+        V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
+          ? _msg.receiverId
+          : '',
+    }),
+  }
+  const addCollectionParams = {
+    collectionType: 1000 + _msg.messageType, // 和移动端对齐
+    collectionData: JSON.stringify(collectionDataObj),
+    uniqueId: _msg.messageServerId,
+  }
+
+  uni.$UIKitStore.msgStore
+    .addCollectionActive(addCollectionParams)
+    .then(() => {
+      uni.showToast({
+        title: t('addCollectionSuccessText'),
+        icon: 'success',
+      })
+    })
+    .catch((err: any) => {
+      if (err?.code && typeof t(`${err.code}`) !== 'undefined') {
+        uni.showToast({
+          title: t(`${err.code}`),
+          icon: 'error',
+          duration: 1000,
+        })
+      } else {
+        uni.showToast({
+          title: t('addCollectionFailedText'),
+          icon: 'error',
+          duration: 1000,
+        })
+      }
+    })
   closeTooltip()
 }
 
@@ -577,6 +652,15 @@ const handleReplyMsg = async () => {
 
 // 撤回消息
 const handleRecallMsg = () => {
+  const diff = Date.now() - props.msg.createTime
+  if (diff > msgRecallTime) {
+    uni.showToast({
+      title: t('msgRecallTimeErrorText'),
+      icon: 'none',
+    })
+    closeTooltip()
+    return
+  }
   uni.showModal({
     title: t('recallText'),
     content: t('recall3'),
