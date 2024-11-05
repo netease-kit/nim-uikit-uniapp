@@ -1,6 +1,5 @@
 <script lang="ts">
-// import RootStore from '@xkit-yx/im-store-v2'
-import RootStore from "./store/dist/index.esm.js";
+import RootStore from "@xkit-yx/im-store-v2";
 import V2NIM, { V2NIMConst } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
 import {
   customRedirectTo,
