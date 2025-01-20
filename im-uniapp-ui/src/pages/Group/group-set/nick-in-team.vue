@@ -48,6 +48,7 @@ const showClearIcon = ref(false)
 const myMemberInfo = ref<V2NIMTeamMember>()
 let teamId = ''
 let uninstallTeamMemberWatch = () => {}
+
 onLoad((option) => {
   teamId = option ? option.id : ''
   uninstallTeamMemberWatch = autorun(() => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="card-wrapper" @tap="navigatorToMyDetail">
+    <div class="card-wrapper" @tap="gotoMyDetail">
       <UserCard
         :account="myUserInfo && myUserInfo.accountId"
         :nick="myUserInfo && myUserInfo.name"
@@ -79,7 +79,7 @@ const gotoCollection = () => {
   })
 }
 
-const navigatorToMyDetail = () => {
+const gotoMyDetail = () => {
   customNavigateTo({
     url: `/pages/user-card/my-detail/index?account=${myUserInfo.value?.accountId}`,
   })

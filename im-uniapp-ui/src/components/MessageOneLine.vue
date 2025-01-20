@@ -6,7 +6,7 @@
       </template>
       <template class="icon" v-else-if="item.type === 'emoji'">
         <Icon
-          :type="emojiMap[item.value]"
+          :type="EMOJI_ICON_MAP_CONFIG[item.value]"
           :size="14"
           :iconStyle="{
             margin: '3px',
@@ -21,7 +21,7 @@
 
 <script lang="ts" setup>
 import Icon from './Icon.vue'
-import { emojiMap, emojiRegExp } from '../utils/emoji'
+import { EMOJI_ICON_MAP_CONFIG, emojiRegExp } from '../utils/emoji'
 import { computed, defineProps, withDefaults } from '../utils/transformVue'
 
 const props = withDefaults(defineProps<{ text: string }>(), {})

@@ -1,23 +1,9 @@
-import { emojiMap } from './emoji'
+import { emojiRegExp } from './emoji'
 
 export interface Match {
   type: 'link' | 'emoji' | 'text' | 'Ait'
   value: string
 }
-
-const emojiRegExp = new RegExp(
-  '(' +
-    Object.keys(emojiMap)
-      .map((item) => {
-        const left = `\\${item.slice(0, 1)}`
-        const right = `\\${item.slice(-1)}`
-        const mid = item.slice(1, -1)
-        return `${left}${mid}${right}`
-      })
-      .join('|') +
-    ')',
-  'g'
-)
 
 /* eslint-disable vars-on-top, no-var, prefer-template */
 // @ts-nocheck
@@ -134,6 +120,8 @@ export function parseText(text: string, ext?: string): Match[] {
       value: item,
     }
   })
+
+  console.log('emojiArr=================', emojiArr)
 
   const emojiAndLinkArr = stringReplace(emojiArr, regexLink, (item: any) => {
     return {

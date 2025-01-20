@@ -26,7 +26,6 @@
 import { defineProps, withDefaults, ref, onMounted, computed } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-import { autorun } from 'mobx'
 import { V2NIMConversationForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 
 const props = withDefaults(
@@ -53,11 +52,14 @@ const p2pMsgRotateDeg = computed(() => {
 
 <style scoped lang="scss">
 .p2p-msg-receipt-wrapper {
-  width: 18px;
-  height: 18px;
-  margin-right: 3px;
+  width: 22px;
+  height: 22px;
   overflow: hidden;
   line-height: 18px;
+  vertical-align: bottom;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .icon-read-wrapper {
   margin: 0px 3px 0px 0;

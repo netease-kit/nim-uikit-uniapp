@@ -58,7 +58,7 @@ import {
   V2NIMTeam,
   V2NIMTeamMember,
 } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 const groupMembers = ref<V2NIMTeamMember[]>([])
 const team = ref<V2NIMTeam>()

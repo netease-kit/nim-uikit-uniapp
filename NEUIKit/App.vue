@@ -1,7 +1,8 @@
 <script lang="ts">
 import RootStore from "@xkit-yx/im-store-v2";
 
-import V2NIM, { V2NIMConst } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
+import V2NIM from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
+import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
 import {
   customRedirectTo,
   customReLaunch,
@@ -10,11 +11,11 @@ import {
 import { getMsgContentTipByType } from "./utils/msg";
 import { STORAGE_KEY } from "./utils/constants";
 import { isWxApp } from "./utils";
+import { setLanguage } from "./utils/i18n";
 import {
   V2NIMMessage,
   V2NIMMessagePushConfig,
-} from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService";
-
+} from "nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService";
 // #ifdef APP-PLUS
 // 推送插件
 const nimPushPlugin = uni.requireNativePlugin("NIMUniPlugin-PluginModule");
@@ -30,6 +31,9 @@ export default {
     plus.navigator.closeSplashscreen();
     plus.screen.lockOrientation("portrait-primary");
     // #endif
+
+    // 设置语言
+    // setLanguage('en')
     if (
       uni?.$UIKitStore?.connectStore?.connectStatus ===
       V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
@@ -91,6 +95,7 @@ export default {
       ));
 
       const store = (uni.$UIKitStore = new RootStore(
+        // @ts-ignore
         nim,
         {
           // 添加好友是否需要验证
@@ -188,90 +193,95 @@ export default {
         "UniApp"
       ));
 
-      // #ifdef APP-PLUS
-      // 注册推送
-      nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
-        miPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        hwPush: {
-          appId: "",
-          certificateName: "",
-        },
-
-        oppoPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-          secret: "",
-        },
-
-        vivoPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        fcmPush: {
-          certificateName: "",
-        },
-
-        mzPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        apns: {
-          certificateName: "",
-        },
-      });
-
-      // 初始化音视频通话插件
-      console.log("-------------callkit init 开始", opts.account, opts.token);
-      nimCallKit.initConfig(
-        {
-          appKey: "", // 请填写你的appkey
-          account: opts.account, // 请填写你的account
-          token: opts.token, // 请填写你的token
-          apnsCername: "",
-          pkCername: "",
-        },
-        (ret: any) => {
-          console.log("-------------callkit 回调", ret);
-          if (ret.code != 200) {
-            console.log("-------------callkit init失败\n错误码：");
-          } else {
-            console.log("-------------callkit 开始登录------------");
-
-            nimCallKit.login(
-              {
-                account: opts.account,
-                token: opts.token,
-              },
-              function (ret: any) {
-                if (ret.code != 200) {
-                  console.log("-------------callkit 登录失败------------", ret);
-                } else {
-                  console.log(
-                    "-------------callkit 登录成功------------ ",
-                    ret
-                  );
-                }
-              }
-            );
-          }
-        }
-      );
-      // #endif
       nim.V2NIMLoginService.login(opts.account, opts.token).then(() => {
+        // #ifdef APP-PLUS
+
+        // 初始化音视频通话插件
+        console.log("-------------callkit init 开始", opts.account, opts.token);
+        nimCallKit.initConfig(
+          {
+            appKey: "3e215d27b6a6a9e27dad7ef36dd5b65c", // 请填写你的appkey
+            account: opts.account, // 请填写你的account
+            token: opts.token, // 请填写你的token
+            apnsCername: "",
+            pkCername: "",
+          },
+          (ret: any) => {
+            console.log("-------------callkit 回调", ret);
+            if (ret.code != 200) {
+              console.log("-------------callkit init失败\n错误码：");
+            } else {
+              console.log("-------------callkit 开始登录------------");
+
+              nimCallKit.login(
+                {
+                  account: opts.account,
+                  token: opts.token,
+                },
+                function (ret: any) {
+                  if (ret.code != 200) {
+                    console.log(
+                      "-------------callkit 登录失败------------",
+                      ret
+                    );
+                  } else {
+                    console.log(
+                      "-------------callkit 登录成功------------ ",
+                      ret
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+        // #endif
         customSwitchTab({
           url: "/pages/Conversation/index",
         });
       });
+      // #ifdef APP-PLUS
+      // 注册推送
+      nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
+        miPush: {
+          appId: "2882303761517864366",
+          appKey: "5991786427366",
+          certificateName: "KIT_UNIAPP_MI_PUSH",
+        },
+
+        hwPush: {
+          appId: "109540237",
+          certificateName: "KIT_UNIAPP_HW_PUSH",
+        },
+
+        oppoPush: {
+          appId: "30795055",
+          appKey: "6ffe2c1198c5448e84b75f3b78b711ce",
+          certificateName: "KIT_OPPO_PUSH",
+          secret: "f55d519d05a04360a8ba3404a24594a0",
+        },
+
+        vivoPush: {
+          appId: "105693306",
+          appKey: "c8ccf661e2aa7895c1a46b3631d5a163",
+          certificateName: "KIT_UNIAPP_VIVO_PUSH",
+        },
+
+        fcmPush: {
+          certificateName: "KIT_UNIAPP_FCM_PUSH",
+        },
+
+        mzPush: {
+          appId: "148192",
+          appKey: "6068c5a8323542deaf83ad5b6d3ca9e2",
+          certificateName: "KIT_MEIZU_PUSH",
+        },
+
+        apns: {
+          certificateName: "dis_im",
+        },
+      });
+      // #endif
     },
     logout() {
       uni.removeStorageSync(STORAGE_KEY);

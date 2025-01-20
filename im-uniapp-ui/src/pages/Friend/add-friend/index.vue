@@ -60,7 +60,7 @@ import { customRedirectTo } from '../../../utils/customNavigate'
 import { autorun } from 'mobx'
 import { deepClone } from '../../../utils'
 import type { Relation } from '@xkit-yx/im-store-v2'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import { V2NIMUser } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMUserService'
 
 // 搜索结果状态

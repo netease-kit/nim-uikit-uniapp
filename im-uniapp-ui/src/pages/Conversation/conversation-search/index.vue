@@ -14,10 +14,10 @@
         <input
           class="input"
           :value="searchText"
-          @input="handleInput"
+          @input="onInput"
           :focus="inputFocus"
-          @focus="handleFocus"
-          @blur="handleBlur"
+          @focus="onInputFocus"
+          @blur="onInputBlur"
           :placeholder="t('searchText')"
         />
         <div v-if="searchText" class="clear-icon" @tap="clearInput()">
@@ -47,6 +47,7 @@
 </template>
 
 <script lang="ts" setup>
+import { autorun } from 'mobx'
 import {
   ref,
   onUnmounted,
@@ -56,9 +57,9 @@ import {
 import { t } from '../../../utils/i18n'
 import NavBar from '../../../components/NavBar.vue'
 import Icon from '../../../components/Icon.vue'
-import { autorun } from 'mobx'
 import SearchResultItem from './search-result-item.vue'
 import Empty from '../../../components/Empty.vue'
+
 const inputFocus = ref(false)
 
 const searchText = ref('')
@@ -105,7 +106,7 @@ const searchResult = computed(() => {
         if (item.id === 'friends') {
           return {
             ...item,
-            list: item.list?.filter((item) => {
+            list: item.list?.filter((item: any) => {
               return (
                 item.alias?.includes(searchText.value) ||
                 item.name?.includes(searchText.value) ||
@@ -118,7 +119,7 @@ const searchResult = computed(() => {
         if (item.id === 'groups') {
           return {
             ...item,
-            list: item.list?.filter((item) => {
+            list: item.list?.filter((item: any) => {
               return (item.name || item.teamId).includes(searchText.value)
             }),
           }
@@ -154,23 +155,18 @@ const searchResult = computed(() => {
       }
     })
   }
-  console.log('==================res', res)
   return res
 })
 
-onMounted(() => {
-  inputFocus.value = true
-})
-
-const handleBlur = () => {
+const onInputBlur = () => {
   inputFocus.value = false
 }
 
-const handleFocus = () => {
+const onInputFocus = () => {
   inputFocus.value = true
 }
 
-const handleInput = (event: any) => {
+const onInput = (event: any) => {
   searchText.value = event.detail.value
 }
 
@@ -179,7 +175,12 @@ const clearInput = () => {
   searchText.value = ''
 }
 
+onMounted(() => {
+  inputFocus.value = true
+})
+
 onUnmounted(() => {
+  // 移除监听
   searchListWatch()
 })
 </script>

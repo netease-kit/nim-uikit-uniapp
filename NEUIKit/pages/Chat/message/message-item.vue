@@ -417,7 +417,6 @@ import {
   onUnmounted,
   defineProps,
   withDefaults,
-  onMounted,
 } from '../../../utils/transformVue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
@@ -433,7 +432,7 @@ import MessageNotification from './message-notification.vue'
 import MessageG2 from './message-g2.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import MessageIsRead from './message-read.vue'
 import Icon from '../../../components/Icon.vue'
 import Appellation from '../../../components/Appellation.vue'
@@ -461,7 +460,7 @@ const accountId = uni.$UIKitStore?.userStore?.myUserInfo.accountId
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
-  )
+  ) as unknown as V2NIMConst.V2NIMConversationType
 // 会话对象
 const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
   props.msg.conversationId

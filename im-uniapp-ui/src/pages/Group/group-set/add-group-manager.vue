@@ -24,7 +24,7 @@ import { debounce } from '@xkit-yx/utils'
 import { deepClone } from '../../../utils'
 import { events } from '../../../utils/constants'
 import { autorun } from 'mobx'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 const teamMemberList = ref<PersonSelectItem[]>([])
 let selectManager: string[] = []

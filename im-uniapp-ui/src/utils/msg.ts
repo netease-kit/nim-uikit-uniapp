@@ -1,6 +1,5 @@
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import { t } from './i18n'
-import { V2NIMMessageType } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
 
 const translate = (key: string): string => {
   const text =
@@ -22,7 +21,7 @@ const translate = (key: string): string => {
 }
 
 export const getMsgContentTipByType = (msg: {
-  messageType?: V2NIMMessageType
+  messageType?: V2NIMConst.V2NIMMessageType
   text?: string
 }): string => {
   const { messageType, text } = msg

@@ -56,7 +56,7 @@ import Modal from '../../../components/Modal.vue'
 import Avatar from '../../../components/Avatar.vue'
 import { deepClone } from '../../../utils'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 interface ForwardToTeamInfo {
   teamId: string

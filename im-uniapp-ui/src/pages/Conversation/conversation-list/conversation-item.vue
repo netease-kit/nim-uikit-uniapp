@@ -42,15 +42,20 @@
             v-if="showSessionUnread"
             :conversation="props.conversation"
           ></ConversationItemIsRead>
-          <span class="conversation-item-desc-content">{{
-            lastMsgContent
-          }}</span>
-          <Icon
-            v-if="isMute"
-            iconClassName="conversation-item-desc-state"
-            type="icon-xiaoximiandarao"
-            color="#ccc"
-          />
+          <span
+            v-if="props.conversation.lastMessage"
+            class="conversation-item-desc-content"
+          >
+            <LastMsgContent :lastMessage="props.conversation.lastMessage" />
+          </span>
+          <span class="conversation-item-desc-ait">
+            <Icon
+              v-if="isMute"
+              iconClassName="conversation-item-desc-state"
+              type="icon-xiaoximiandarao"
+              color="#ccc"
+            />
+          </span>
         </div>
       </div>
     </div>
@@ -71,13 +76,13 @@
 import Avatar from '../../../components/Avatar.vue'
 import Appellation from '../../../components/Appellation.vue'
 import Icon from '../../../components/Icon.vue'
-import { getMsgContentTipByType } from '../../../utils/msg'
 import { computed, onUpdated, withDefaults } from '../../../utils/transformVue'
 import dayjs from 'dayjs'
 import { t } from '../../../utils/i18n'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import { V2NIMConversationForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import ConversationItemIsRead from './conversation-item-isRead.vue'
+import LastMsgContent from './conversation-item-last-msg-content.vue'
 const props = withDefaults(
   defineProps<{
     conversation: V2NIMConversationForUI
@@ -132,53 +137,6 @@ const sessionName = computed(() => {
   return props.conversation.conversationId
 })
 
-// 会话最后一条消息内容
-const lastMsgContent = computed(() => {
-  const lastMsg = props.conversation.lastMessage
-
-  if (lastMsg) {
-    const { sendingState, messageType, lastMessageState } = lastMsg
-
-    if (
-      lastMessageState ===
-      V2NIMConst.V2NIMLastMessageState.V2NIM_MESSAGE_STATUS_REVOKE
-    ) {
-      return t('recall')
-    }
-
-    if (messageType === void 0) {
-      return ''
-    }
-
-    if (
-      messageType ===
-      V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_NOTIFICATION
-    ) {
-      return t('conversationNotificationText')
-    }
-
-    if (
-      sendingState ===
-      V2NIMConst.V2NIMMessageSendingState.V2NIM_MESSAGE_SENDING_STATE_SENDING
-    ) {
-      return ''
-    }
-
-    if (
-      sendingState ===
-      V2NIMConst.V2NIMMessageSendingState.V2NIM_MESSAGE_SENDING_STATE_FAILED
-    ) {
-      return t('conversationSendFailText')
-    }
-
-    return getMsgContentTipByType({
-      messageType: lastMsg.messageType,
-      text: lastMsg.text,
-    })
-  }
-  return ''
-})
-
 const to = computed(() => {
   const res = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
     props.conversation.conversationId
@@ -217,7 +175,7 @@ const isMute = computed(() => {
 })
 
 const beMentioned = computed(() => {
-  return !!props.conversation.beMentioned
+  return !!props.conversation.aitMsgs?.length
 })
 
 const showSessionUnread = computed(() => {
@@ -355,7 +313,6 @@ $cellHeight: 72px;
 }
 
 .conversation-item-top {
-  margin-bottom: 5px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -379,9 +336,9 @@ $cellHeight: 72px;
   font-size: 13px;
   color: #999999;
   display: flex;
-  flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  height: 22px;
 
   .conversation-item-desc-content {
     overflow: hidden; //超出的文本隐藏
@@ -425,5 +382,8 @@ $cellHeight: 72px;
   right: -4px;
   top: -2px;
   z-index: 99;
+}
+.conversation-item-desc-ait {
+  display: inline-block;
 }
 </style>

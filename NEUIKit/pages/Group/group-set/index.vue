@@ -128,8 +128,8 @@ import {
   V2NIMTeam,
   V2NIMTeamMember,
 } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 let teamId = ''
 const teamMembers = ref<V2NIMTeamMember[]>([])
@@ -150,6 +150,7 @@ const isGroupManager = computed(() => {
   return teamMembers.value
     .filter(
       (item) =>
+        //@ts-ignore
         item.memberRole ===
         V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER
     )
@@ -158,6 +159,7 @@ const isGroupManager = computed(() => {
 
 const canAddMember = computed(() => {
   if (
+    //@ts-ignore
     team.value?.inviteMode ===
     V2NIMConst.V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_ALL
   ) {

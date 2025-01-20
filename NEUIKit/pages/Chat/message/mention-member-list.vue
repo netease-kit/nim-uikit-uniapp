@@ -190,6 +190,7 @@ const uninstallTeamMemberWatch = autorun(() => {
   if (props.teamId) {
     teamMembers.value = deepClone(
       sortGroupMembers(
+        //@ts-ignore
         uni.$UIKitStore.teamMemberStore.getTeamMember(props.teamId),
         props.teamId
       )

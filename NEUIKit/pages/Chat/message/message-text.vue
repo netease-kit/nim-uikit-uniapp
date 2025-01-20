@@ -11,7 +11,7 @@
       </template>
       <template v-else-if="item.type === 'emoji'">
         <Icon
-          :type="emojiMap[item.value]"
+          :type="EMOJI_ICON_MAP_CONFIG[item.value]"
           :size="fontSize || 22"
           :style="{ margin: '0 2px 2px 2px', verticalAlign: 'bottom' }"
         />
@@ -34,7 +34,7 @@ import Icon from '../../../components/Icon.vue'
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import { parseText } from '../../../utils/parseText'
-import { emojiMap } from '../../../utils/emoji'
+import { EMOJI_ICON_MAP_CONFIG } from '../../../utils/emoji'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { defineProps, withDefaults } from '../../../utils/transformVue'
 

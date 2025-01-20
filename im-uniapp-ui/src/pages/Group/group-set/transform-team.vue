@@ -48,7 +48,7 @@ import { deepClone } from '../../../utils'
 import { autorun } from 'mobx'
 import { customRedirectTo } from '../../../utils/customNavigate'
 import { V2NIMTeamMember } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 const teamMemberList = ref<V2NIMTeamMember[]>([])
 let teamId = ''

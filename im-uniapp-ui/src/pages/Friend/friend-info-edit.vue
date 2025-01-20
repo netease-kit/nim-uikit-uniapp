@@ -26,7 +26,6 @@ import { onLoad } from '@dcloudio/uni-app'
 import { ref, computed } from '../../utils/transformVue'
 import { t } from '../../utils/i18n'
 import { getUniPlatform } from '../../utils'
-import { customNavigateTo } from '../../utils/customNavigate'
 
 const alias = ref<string>()
 let accountId = ''

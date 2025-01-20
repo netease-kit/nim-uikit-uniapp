@@ -242,19 +242,20 @@ import MentionMemberList from './mention-member-list.vue'
 import { autorun } from 'mobx'
 import Appellation from '../../../components/Appellation.vue'
 import { AT_ALL_ACCOUNT } from '../../../utils/constants'
-import { deepClone } from '../../../utils'
+import { deepClone, replaceEmoji } from '../../../utils'
+
 import {
   V2NIMTeam,
   V2NIMTeamChatBannedMode,
   V2NIMTeamMember,
-} from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
+} from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
 import {
   V2NIMMessageForUI,
   YxServerExt,
   YxAitMsg,
 } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 export type MentionedMember = { accountId: string; appellation: string }
 
 const props = withDefaults(
@@ -333,6 +334,7 @@ const teamMute = ref<V2NIMTeamChatBannedMode>(
 
 const isGroupOwner = ref(false)
 const isGroupManager = ref(false)
+const isTeamMute = ref(false)
 
 // 是否允许@所有人
 const allowAtAll = computed(() => {
@@ -347,26 +349,6 @@ const allowAtAll = computed(() => {
   }
   return true
 })
-
-// 是否是群禁言
-// const isTeamMute = computed(() => {
-//   console.log(
-//     'isGroupOwner, isGroupManager',
-//     isGroupOwner.value,
-//     isGroupManager.value
-//   )
-
-//   if (!teamMute.value) {
-//     return false
-//   }
-//   // 群主或者群管理员在群禁言时，可以发送消息
-//   if (isGroupOwner.value || isGroupManager.value) {
-//     return false
-//   }
-//   return true
-// })
-
-const isTeamMute = ref(false)
 
 const updateTeamMute = () => {
   if (
@@ -479,13 +461,12 @@ const handleInput = (event: any) => {
 const handleSendTextMsg = () => {
   if (inputText.value.trim() === '') return
   const ext = onAtMembersExtHandler()
+  let text = replaceEmoji(inputText.value)
+  const textMsg = uni.$UIKitNIM.V2NIMMessageCreator.createTextMessage(text)
 
-  const textMsg = uni.$UIKitNIM.V2NIMMessageCreator.createTextMessage(
-    inputText.value
-  )
   uni.$UIKitStore.msgStore
     .sendMessageActive({
-      msg: textMsg,
+      msg: textMsg as unknown as V2NIMMessage,
       conversationId,
       serverExtension: selectedAtMembers.value.length && (ext as any),
       sendBefore: () => {
@@ -523,7 +504,7 @@ const handleSendFileMsg = () => {
           fileName
         )
         uni.$UIKitStore.msgStore.sendMessageActive({
-          msg: fileMsg,
+          msg: fileMsg as unknown as V2NIMMessage,
           conversationId,
           sendBefore: () => {
             scrollBottom()
@@ -624,7 +605,7 @@ const handleSendImageMsg = () => {
 
       uni.$UIKitStore.msgStore
         .sendMessageActive({
-          msg: imgMsg,
+          msg: imgMsg as unknown as V2NIMMessage,
           conversationId,
           progress: () => true,
           sendBefore: () => {
@@ -667,7 +648,7 @@ const handleSendVideoMsg = (type: string, event: any) => {
 
       uni.$UIKitStore.msgStore
         .sendMessageActive({
-          msg: videoMsg,
+          msg: videoMsg as unknown as V2NIMMessage,
           conversationId,
           progress: () => true,
           sendBefore: () => {
@@ -697,7 +678,7 @@ const handleSendAudioMsg = (filePath: string, duration: number) => {
 
   uni.$UIKitStore.msgStore
     .sendMessageActive({
-      msg: audioMsg,
+      msg: audioMsg as unknown as V2NIMMessage,
       conversationId,
       progress: () => true,
       sendBefore: (msg) => {
@@ -705,6 +686,7 @@ const handleSendAudioMsg = (filePath: string, duration: number) => {
         uni.$UIKitStore.msgStore.addMsg(msg.conversationId, [
           {
             ...msg,
+            //@ts-ignore
             attachment: {
               duration: duration,
             },

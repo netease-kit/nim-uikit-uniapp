@@ -106,7 +106,7 @@ import Icon from '../../../components/Icon.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import MessageAudio from './message-audio.vue'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 const props = withDefaults(
   defineProps<{ replyMsg: V2NIMMessageForUI | undefined }>(),
@@ -116,6 +116,7 @@ const props = withDefaults(
 const isFullScreen = ref(false)
 const repliedTo = ref('')
 
+//@ts-ignore
 const { name = '', url = '' } = props.replyMsg?.attachment || {}
 
 const downloadUrl =
@@ -150,6 +151,7 @@ const showFullReplyMsg = () => {
     V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE
   ) {
     uni.previewImage({
+      //@ts-ignore
       urls: [props.replyMsg?.attachment?.url as string],
     })
   } else if (
@@ -162,6 +164,7 @@ const showFullReplyMsg = () => {
     props.replyMsg?.messageType ===
     V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO
   ) {
+    //@ts-ignore
     const url = props.replyMsg?.attachment?.url
     stopAllAudio()
     if (url) {
