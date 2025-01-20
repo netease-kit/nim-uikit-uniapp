@@ -92,8 +92,7 @@ import { deepClone } from '../../utils'
 import ForwardModal from './message/message-forward-modal.vue'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-import { V2NIMMessage } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
-
+import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 const friendGroupList = ref<
   { key: string; data: { account: string; appellation: string }[] }[]
 >([])
@@ -108,7 +107,7 @@ let origin = ''
 // 转发相关
 const forwardModalVisible = ref(false)
 const forwardTo = ref('')
-const forwardMsg = ref<V2NIMMessage>()
+const forwardMsg = ref<V2NIMMessageForUI>()
 const forwardToTeamInfo = ref<V2NIMTeam>()
 const moveThrough = computed(() => {
   return forwardModalVisible.value
@@ -210,7 +209,7 @@ const handleItemClick = (_forwardTo: string) => {
     )
     if (origin === 'pin') {
       const curPinMsgsMap = uni.$UIKitStore.msgStore.pinMsgs.get(conversationId)
-
+      //@ts-ignore
       const pinInfo = [...curPinMsgsMap.values()].find((pinInfo) => {
         if (pinInfo.message) {
           return pinInfo.message.messageClientId === msgIdClient

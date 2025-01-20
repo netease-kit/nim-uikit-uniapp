@@ -118,6 +118,8 @@ import { deepClone } from '../../../utils'
 import { V2NIMFriendAddApplicationForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import Appellation from '../../../components/Appellation.vue'
+import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+
 const validMsg = ref<V2NIMFriendAddApplicationForUI[]>([])
 const applyFriendLoading = ref(false)
 
@@ -170,7 +172,8 @@ const handleAcceptApplyFriendClick = async (
 
     const textMsg = uni.$UIKitNIM.V2NIMMessageCreator.createTextMessage(
       t('passFriendAskText')
-    )
+    ) as unknown as V2NIMMessage
+
     await uni.$UIKitStore.msgStore.sendMessageActive({
       msg: textMsg,
       conversationId: uni.$UIKitNIM.V2NIMConversationIdUtil.p2pConversationId(

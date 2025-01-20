@@ -50,9 +50,9 @@ import MessageList from './message/message-list.vue'
 import MessageInput from './message/message-input.vue'
 import { HISTORY_LIMIT } from '../../utils/constants'
 import { t } from '../../utils/i18n'
-import { V2NIMMessage } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-
+import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMConversationService'
 export interface YxReplyMsg {
   messageClientId: string
   scene: V2NIMConst.V2NIMConversationType
@@ -69,7 +69,9 @@ const title = ref('')
 
 const conversationId = uni.$UIKitStore.uiStore.selectedConversation
 const conversationType =
-  uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(conversationId)
+  uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
+    conversationId
+  ) as unknown as V2NIMConversationType
 const to =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
     conversationId
@@ -377,6 +379,7 @@ const msgsWatch = autorun(() => {
     if (reqMsgs.length > 0) {
       // 从服务器拉取被回复消息, 但是有频率控制
       uni.$UIKitNIM.V2NIMMessageService.getMessageListByRefers(
+        //@ts-ignore
         reqMsgs.map((item) => ({
           senderId: item.from,
           receiverId: item.receiverId,
@@ -389,7 +392,7 @@ const msgsWatch = autorun(() => {
       )
         .then((res) => {
           if (res?.length > 0) {
-            res.forEach((item: V2NIMMessage) => {
+            res.forEach((item) => {
               if (item.messageServerId) {
                 _replyMsgsMap[messageClientIds[item.messageServerId]] = item
               }
@@ -458,6 +461,7 @@ onMounted(() => {
 
   uni.$UIKitNIM.V2NIMMessageService.on(
     'onReceiveMessages',
+    //@ts-ignore
     handleReceiveMessages
   )
 
@@ -478,6 +482,7 @@ onUnmounted(() => {
 
   uni.$UIKitNIM.V2NIMMessageService.off(
     'onReceiveMessages',
+    //@ts-ignore
     handleReceiveMessages
   )
 

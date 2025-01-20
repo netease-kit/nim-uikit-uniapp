@@ -12,8 +12,6 @@ trackInit('ConversationUIKit')
 onShow(() => {
   // 重置选中会话
   uni.$UIKitStore?.uiStore.selectConversation('')
-  // setTabUnread()
-  // setContactTabUnread()
   setTimeout(() => {
     const unread = uni.$UIKitNIM.V2NIMConversationService.getTotalUnreadCount()
     if (unread === 0) {
@@ -26,7 +24,7 @@ onShow(() => {
         index: 0, //tabbar下标
       })
     }
-  }, 1000)
+  }, 800)
 })
 </script>
 

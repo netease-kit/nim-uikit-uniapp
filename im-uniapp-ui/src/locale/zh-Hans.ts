@@ -284,6 +284,7 @@ export default {
   conversationNotificationText: '[通知消息]',
   getForwardMessageFailed: '该消息已撤回或删除',
   fileMsgTitleText: '[文件消息]',
+  collectionFromText: '来自',
   // emoji 不能随便填，要用固定 key
   Laugh: '[大笑]',
   Happy: '[开心]',

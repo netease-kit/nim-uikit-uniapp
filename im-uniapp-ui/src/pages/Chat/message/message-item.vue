@@ -178,7 +178,7 @@
           <div
             @tap="
               () => {
-                handleImageTouch(props.msg.attachment.url)
+                handleImageTouch(props.msg.attachment?.url)
               }
             "
           >
@@ -403,7 +403,7 @@
             : ''
         "
         color="#3EAF96"
-        fontSize="11"
+        :fontSize="11"
       ></Appellation
       >&nbsp;{{ `${t('pinThisText')}` }}
     </div>
@@ -417,7 +417,6 @@ import {
   onUnmounted,
   defineProps,
   withDefaults,
-  onMounted,
 } from '../../../utils/transformVue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
@@ -433,7 +432,7 @@ import MessageNotification from './message-notification.vue'
 import MessageG2 from './message-g2.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import MessageIsRead from './message-read.vue'
 import Icon from '../../../components/Icon.vue'
 import Appellation from '../../../components/Appellation.vue'
@@ -461,7 +460,7 @@ const accountId = uni.$UIKitStore?.userStore?.myUserInfo.accountId
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
-  )
+  ) as unknown as V2NIMConst.V2NIMConversationType
 // 会话对象
 const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
   props.msg.conversationId
@@ -469,6 +468,7 @@ const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
 
 // 获取视频首帧
 const videoFirstFrameDataUrl = computed(() => {
+  //@ts-ignore
   const url = props.msg.attachment?.url
   return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
 })
@@ -479,6 +479,7 @@ const imageUrl = computed(() => {
   if (props.msg.errorCode == 102426) {
     return 'https://yx-web-nosdn.netease.im/common/c1f278b963b18667ecba4ee9a6e68047/img-fail.png'
   }
+  //@ts-ignore
   return props.msg?.attachment?.url || props.msg.attachment?.file
 })
 
@@ -494,6 +495,7 @@ const handleImageTouch = (url: string) => {
 // 点击视频播放
 const handleVideoTouch = (msg: V2NIMMessageForUI) => {
   stopAllAudio()
+  //@ts-ignore
   const url = msg.attachment?.url
   if (url) {
     customNavigateTo({

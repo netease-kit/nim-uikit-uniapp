@@ -1,30 +1,37 @@
 <template>
   <div class="video-wrapper">
-    <NavBar title="视频播放" />
+    <NavBar :title="t('videoPlayText')" />
     <div class="video-box">
-      <video v-if="show" class="video" :src="videoUrl" id="videoEle" controls autoplay></video>
+      <video
+        v-if="show"
+        class="video"
+        :src="videoUrl"
+        id="videoEle"
+        controls
+        autoplay
+      ></video>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "../../utils/transformVue";
-import { onLoad, onReady } from "@dcloudio/uni-app";
-import NavBar from "./message/nav-bar.vue";
-
-const videoUrl = ref();
-const show = ref(false);
+import { ref } from '../../utils/transformVue'
+import { onLoad, onReady } from '@dcloudio/uni-app'
+import NavBar from './message/nav-bar.vue'
+import { t } from '../../utils/i18n'
+const videoUrl = ref()
+const show = ref(false)
 onLoad((option: any) => {
-  videoUrl.value = decodeURIComponent(option.videoUrl);
-  show.value = true;
-});
+  videoUrl.value = decodeURIComponent(option.videoUrl)
+  show.value = true
+})
 
 onReady(() => {
-  show.value = true;
-});
+  show.value = true
+})
 </script>
 <style lang="scss" scoped>
-.video-wrapper{
+.video-wrapper {
   overflow: hidden;
   width: 100vw;
   height: 100vh;

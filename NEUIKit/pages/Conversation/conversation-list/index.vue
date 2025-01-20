@@ -48,7 +48,7 @@
     <div
       v-if="!conversationList || conversationList.length === 0"
       class="conversation-search"
-      @click="jumpToSearch"
+      @tap="goToSearchPage"
     >
       <div class="search-input-wrapper">
         <div class="search-icon-wrapper">
@@ -68,7 +68,7 @@
       :text="t('conversationEmptyText')"
     />
     <div v-else class="conversation-list-wrapper">
-      <div class="conversation-search" @click="jumpToSearch">
+      <div class="conversation-search" @click="goToSearchPage">
         <div class="search-input-wrapper">
           <div class="search-icon-wrapper">
             <Icon
@@ -114,7 +114,8 @@ import { setContactTabUnread, setTabUnread } from '../../../utils/msg'
 import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { deepClone } from '../../../utils'
-import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import { V2NIMConversation } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMConversationService'
 
 const conversationList = ref<V2NIMConversation[]>([])
 const addDropdownVisible = ref(false)
@@ -142,6 +143,17 @@ const handleSessionItemClick = async (conversation: V2NIMConversation) => {
   currentMoveSessionId.value = ''
   try {
     flag = true
+    // 处理@消息相关
+    if (
+      conversation.type ===
+        V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM ||
+      conversation.type ===
+        V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_SUPER_TEAM
+    ) {
+      await uni.$UIKitStore.conversationStore.markConversationReadActive(
+        conversation.conversationId
+      )
+    }
 
     await uni.$UIKitStore.uiStore.selectConversation(
       conversation.conversationId
@@ -158,6 +170,7 @@ const handleSessionItemClick = async (conversation: V2NIMConversation) => {
     flag = false
   }
 }
+
 // 删除会话
 const handleSessionItemDeleteClick = async (
   conversation: V2NIMConversation
@@ -173,6 +186,7 @@ const handleSessionItemDeleteClick = async (
     })
   }
 }
+
 // 置顶会话
 const handleSessionItemStickTopChange = async (
   conversation: V2NIMConversation
@@ -225,7 +239,7 @@ const onDropdownClick = (urlType: 'addFriend' | 'createGroup') => {
   })
 }
 
-const jumpToSearch = () => {
+const goToSearchPage = () => {
   customNavigateTo({
     url: '/pages/Conversation/conversation-search/index',
   })
@@ -259,6 +273,7 @@ const getTotalUnreadMsgsCountWatch = autorun(() => {
   )
   setContactTabUnread()
 })
+
 onUnmounted(() => {
   conversationListWatch()
   getTotalUnreadMsgsCountWatch()

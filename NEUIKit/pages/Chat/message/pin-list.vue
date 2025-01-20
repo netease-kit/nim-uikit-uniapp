@@ -29,18 +29,11 @@
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
 import { onUnmounted, ref } from '../../../utils/transformVue'
-import Icon from '../../../components/Icon.vue'
 import NavBar from '../../../components/NavBar.vue'
 import PinCard from '../../../components/PinCard.vue'
 import { t } from '../../../utils/i18n'
-import { getUniPlatform } from '../../../utils'
-import { deepClone } from '../../../utils'
-import { V2NIMTeamMember } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
 import Empty from '../../../components/Empty.vue'
-const inputValue = ref('')
-const showClearIcon = ref(false)
-const myMemberInfo = ref<V2NIMTeamMember>()
-let teamId = ''
+import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 let conversationId = ''
 let pinInfos = ref([])
 let uninstallPinInfosWatch = () => {}
@@ -50,14 +43,14 @@ onLoad((option) => {
   uninstallPinInfosWatch = autorun(() => {
     const curPinMsgsMap =
       uni.$UIKitStore.msgStore.pinMsgs.map.get(conversationId)
-
+    //@ts-ignore
     pinInfos.value = [...curPinMsgsMap.values()]
       .filter((pinInfo) => pinInfo.pinState > 0 && pinInfo.message)
       .sort((a, b) => b.message!.createTime - a.message!.createTime)
   })
 })
 
-const handleUnPinMsg = (msg) => {
+const handleUnPinMsg = (msg: V2NIMMessage) => {
   return () => {
     // 不用进行 catch 处理，因为 store 里面的 pin 相关方法处理过了，并且会将错误日志输出到控制台
     return uni.$UIKitStore.msgStore

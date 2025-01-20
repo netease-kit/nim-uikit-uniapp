@@ -206,6 +206,7 @@ const onUpdateTeamInfo = async (
   }
 
   try {
+    //@ts-ignore
     await uni.$UIKitStore.teamStore.updateTeamActive({ teamId, info: params })
   } catch (error: any) {
     switch (error?.code) {

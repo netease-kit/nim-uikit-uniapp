@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <NavBar />
+    <NavBar title="关于" />
     <div class="logo-box">
       <image
         src="https://yx-web-nosdn.netease.im/common/fcd2d5e8d2897d4b2d965e06509f47d2/about-logo.png"
@@ -11,7 +11,7 @@
     <div class="aboutInfo-item-wrapper">
       <div class="item">
         <div>版本号</div>
-        <div>10.2.0</div>
+        <div>10.2.1</div>
       </div>
       <div class="item">
         <div>IM 版本</div>
@@ -19,7 +19,7 @@
       </div>
       <uni-link
         v-if="!isWxApp"
-        :href="gotoUrl"
+        :href="yunxinWebsite"
         :showUnderLine="false"
         color="#000000"
       >
@@ -28,7 +28,7 @@
           <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
         </div>
       </uni-link>
-      <div v-else @click="mpDownload">
+      <div v-else @click="wxDownload">
         <div class="item">
           <div>产品介绍</div>
           <Icon iconClassName="icon-arrow" type="icon-jiantou"></Icon>
@@ -42,17 +42,18 @@
 import NavBar from '../../../components/NavBar.vue'
 import { t } from '../../../utils/i18n'
 import { isWxApp } from '../../../utils'
+//@ts-ignore
 import imPkg from 'nim-web-sdk-ng/package.json'
 
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import Icon from '../../../components/Icon.vue'
 
-const gotoUrl = 'https://yunxin.163.com/'
+const yunxinWebsite = 'https://yunxin.163.com/'
 
-const mpDownload = () => {
+const wxDownload = () => {
   uni.setClipboardData({
-    data: gotoUrl,
+    data: yunxinWebsite,
   })
   uni.showModal({
     content: t('wxAppFileCopyText'),

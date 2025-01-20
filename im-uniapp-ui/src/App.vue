@@ -13,6 +13,7 @@ import {
   V2NIMMessage,
   V2NIMMessagePushConfig,
 } from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService";
+import { setLanguage } from "./utils/i18n";
 
 // #ifdef APP-PLUS
 // 推送插件
@@ -35,6 +36,9 @@ export default {
     ) {
       return;
     }
+    // 设置语言
+    // setLanguage('en')
+
     const imOptions = {
       appkey: "", // 请填写你的appkey
       account: "", // 请填写你的account
@@ -232,44 +236,49 @@ export default {
         },
       });
 
-      // 初始化音视频通话插件
-      console.log("-------------callkit init 开始", opts.account, opts.token);
-      nimCallKit.initConfig(
-        {
-          appKey: opts.appkey, // 请填写你的appkey
-          account: opts.account, // 请填写你的account
-          token: opts.token, // 请填写你的token
-          apnsCername: "",
-          pkCername: "",
-        },
-        (ret: any) => {
-          console.log("-------------callkit 回调", ret);
-          if (ret.code != 200) {
-            console.log("-------------callkit init失败\n错误码：");
-          } else {
-            console.log("-------------callkit 开始登录------------");
-
-            nimCallKit.login(
-              {
-                account: opts.account,
-                token: opts.token,
-              },
-              function (ret: any) {
-                if (ret.code != 200) {
-                  console.log("-------------callkit 登录失败------------", ret);
-                } else {
-                  console.log(
-                    "-------------callkit 登录成功------------ ",
-                    ret
-                  );
-                }
-              }
-            );
-          }
-        }
-      );
       // #endif
       nim.V2NIMLoginService.login(opts.account, opts.token).then(() => {
+        // #ifdef APP-PLUS
+        // 初始化音视频通话插件
+        console.log("-------------callkit init 开始", opts.account, opts.token);
+        nimCallKit.initConfig(
+          {
+            appKey: opts.appkey, // 请填写你的appkey
+            account: opts.account, // 请填写你的account
+            token: opts.token, // 请填写你的token
+            apnsCername: "",
+            pkCername: "",
+          },
+          (ret: any) => {
+            console.log("-------------callkit 回调", ret);
+            if (ret.code != 200) {
+              console.log("-------------callkit init失败\n错误码：");
+            } else {
+              console.log("-------------callkit 开始登录------------");
+
+              nimCallKit.login(
+                {
+                  account: opts.account,
+                  token: opts.token,
+                },
+                function (ret: any) {
+                  if (ret.code != 200) {
+                    console.log(
+                      "-------------callkit 登录失败------------",
+                      ret
+                    );
+                  } else {
+                    console.log(
+                      "-------------callkit 登录成功------------ ",
+                      ret
+                    );
+                  }
+                }
+              );
+            }
+          }
+        );
+        // #endif
         customSwitchTab({
           url: "/pages/Conversation/index",
         });

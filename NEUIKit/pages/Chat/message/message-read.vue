@@ -60,7 +60,8 @@ import {
 } from 'vue'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import Icon from '../../../components/Icon.vue'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+
 import { autorun } from 'mobx'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { t } from '../../../utils/i18n'
@@ -79,7 +80,7 @@ const p2pMsgReceiptVisible = uni.$UIKitStore.localOptions.p2pMsgReceiptVisible
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
-  )
+  ) as unknown as V2NIMConst.V2NIMConversationType
 const p2pMsgRotateDeg = ref(0)
 
 const setP2pMsgRotateDeg = () => {

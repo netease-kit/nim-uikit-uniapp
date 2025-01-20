@@ -404,7 +404,7 @@ import { events } from '../../../utils/constants'
 import { autorun } from 'mobx'
 import { deepClone } from '../../../utils'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import { msgRecallTime } from '../../../utils/constants'
 const tooltipRef = ref(null)
 
@@ -420,7 +420,7 @@ const props = withDefaults(
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
-  )
+  ) as unknown as V2NIMConst.V2NIMConversationType
 
 onMounted(() => {
   // 当前版本仅支持文本、图片、文件、语音、视频 话单消息，其他消息类型统一为未知消息

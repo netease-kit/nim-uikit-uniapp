@@ -20,10 +20,10 @@ import {
   computed,
 } from '../../../utils/transformVue'
 import { t } from '../../../utils/i18n'
+import { customNavigateTo } from '../../../utils/customNavigate'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import Avatar from '../../../components/Avatar.vue'
 import Appellation from '../../../components/Appellation.vue'
-import { customNavigateTo } from '../../../utils/customNavigate'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 
 const props = withDefaults(
   defineProps<{
@@ -62,12 +62,13 @@ const teamName = computed(() => {
 
 let flag = false
 
+// 点击搜索结果
 const handleItemClick = async () => {
   if (flag) return
   try {
     flag = true
-    let conversationType = ''
-    let receiverId = ''
+    let conversationType
+    let receiverId
     let item = props.item
     if (item.accountId) {
       conversationType =

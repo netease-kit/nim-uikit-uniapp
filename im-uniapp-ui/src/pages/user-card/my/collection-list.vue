@@ -10,7 +10,6 @@
         v-if="collectionList.length === 0"
         :text="t('noCollectionsText')"
       />
-
       <div
         v-else
         v-for="(item, index) in collectionList"
@@ -20,13 +19,13 @@
           :data="item"
           :index="index"
           :key="item.collectionId"
-          :handleRemoveCollection="handleRemoveCollection(item)"
+          :handleRemoveCollection="removeCollection(item)"
         >
         </CollectionCard>
       </div>
       <div
         v-show="collectionList.length !== 0 && !noMore"
-        @click="onLoadMore"
+        @click="loadMoreContent"
         class="view-more-text"
       >
         {{ t('viewMoreText') }}
@@ -40,15 +39,14 @@
 
 <script lang="ts" setup>
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, onUnmounted } from '../../../utils/transformVue'
-import Icon from '../../../components/Icon.vue'
+import { ref } from '../../../utils/transformVue'
+import { t } from '../../../utils/i18n'
+import { V2NIMCollection } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+import Empty from '../../../components/Empty.vue'
 import NavBar from '../../../components/NavBar.vue'
 import CollectionCard from '../my/collection-card.vue'
-import { t } from '../../../utils/i18n'
 
-import Empty from '../../../components/Empty.vue'
-
-let collectionList = ref([])
+let collectionList = ref<V2NIMCollection[]>([])
 let noMore = ref(false)
 
 onLoad(() => {
@@ -57,7 +55,7 @@ onLoad(() => {
   })
 })
 
-const handleRemoveCollection = (collection) => {
+const removeCollection = (collection: V2NIMCollection) => {
   return () => {
     return uni.$UIKitStore.msgStore
       .removeCollectionsActive([collection])
@@ -84,7 +82,7 @@ const handleRemoveCollection = (collection) => {
   }
 }
 
-const onLoadMore = () => {
+const loadMoreContent = () => {
   let length = collectionList.value.length
   const anchorCollection = collectionList.value[length - 1]
 
@@ -101,7 +99,6 @@ const onLoadMore = () => {
       collectionList.value = collectionList.value.concat(data)
     })
 }
-onUnmounted(() => {})
 </script>
 
 <style lang="scss" scoped>

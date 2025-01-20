@@ -43,7 +43,7 @@ import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { deepClone } from '../../../utils'
 import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 const myNick = ref('')
 const conversation = ref<V2NIMConversation>()

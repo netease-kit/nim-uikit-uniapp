@@ -7,13 +7,13 @@
 <script lang="ts" setup>
 import { ALLOW_AT } from '../../../utils/constants'
 import { t } from '../../../utils/i18n'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import { V2NIMTeam } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
 import {
   V2NIMMessageForUI,
   YxServerExt,
 } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMMessageNotificationAttachment } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
+import { V2NIMMessageNotificationAttachment } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 import {
   defineProps,
   onUnmounted,

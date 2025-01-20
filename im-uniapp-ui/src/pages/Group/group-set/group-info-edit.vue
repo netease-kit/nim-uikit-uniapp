@@ -34,54 +34,21 @@ import NavBar from '../../../components/NavBar.vue'
 import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed, onUnmounted } from '../../../utils/transformVue'
+import { ref, onUnmounted } from '../../../utils/transformVue'
 import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
 import { deepClone } from '../../../utils'
-import {
-  customNavigateTo,
-  customSwitchTab,
-} from '../../../utils/customNavigate'
+import { customNavigateTo } from '../../../utils/customNavigate'
 import {
   V2NIMTeam,
   V2NIMTeamMember,
 } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 import { V2NIMConversation } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMConversationService'
 
 let teamId = ''
 const team = ref<V2NIMTeam>()
 const teamMembers = ref<V2NIMTeamMember[]>([])
 const conversation = ref<V2NIMConversation>()
-
-const isGroupOwner = computed(() => {
-  const myUser = uni.$UIKitStore.userStore.myUserInfo
-  return (
-    (team.value ? team.value.ownerAccountId : '') ===
-    (myUser ? myUser.accountId : '')
-  )
-})
-
-const isGroupManager = computed(() => {
-  const myUser = uni.$UIKitStore.userStore.myUserInfo
-  return teamMembers.value
-    .filter(
-      (item) =>
-        item.memberRole ===
-        V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER
-    )
-    .some((member) => member.accountId === (myUser ? myUser.accountId : ''))
-})
-
-const canAddMember = computed(() => {
-  if (
-    team.value?.inviteMode ===
-    V2NIMConst.V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_ALL
-  ) {
-    return true
-  }
-  return isGroupOwner.value || isGroupManager.value
-})
 
 const handleAvatarClick = () => {
   customNavigateTo({
@@ -101,100 +68,6 @@ const handleIntroClick = () => {
   })
 }
 
-const goBackChat = () => {
-  customSwitchTab({
-    url: '/pages/Conversation/index',
-  })
-}
-
-const goTeamManage = () => {
-  customNavigateTo({
-    url: `/pages/Group/group-set/group-manage?id=${teamId}`,
-  })
-}
-
-const goNickInTeam = () => {
-  customNavigateTo({
-    url: `/pages/Group/group-set/nick-in-team?id=${teamId}`,
-  })
-}
-
-const addTeamMember = () => {
-  if (!canAddMember.value) {
-    uni.showToast({
-      title: t('noPermission'),
-      icon: 'error',
-    })
-    return
-  }
-  customNavigateTo({
-    url: `/pages/Group/group-add/index?teamId=${teamId}`,
-  })
-}
-
-const gotoTeamMember = () => {
-  customNavigateTo({
-    url: `/pages/Group/group-member/index?teamId=${teamId}`,
-  })
-}
-
-const showDismissConfirm = () => {
-  uni.showModal({
-    title: t('dismissTeamText'),
-    content: t('dismissTeamConfirmText'),
-    cancelText: t('cancelText'),
-    confirmText: t('okText'),
-    showCancel: true,
-    success: function (res) {
-      if (res.confirm) {
-        uni.$UIKitStore.teamStore
-          .dismissTeamActive(teamId)
-          .then(() => {
-            uni.showToast({
-              title: t('dismissTeamSuccessText'),
-              icon: 'success',
-            })
-            // customSwitchTab({ url: '/pages/Conversation/index' })
-          })
-          .catch(() => {
-            uni.showToast({
-              title: t('dismissTeamFailedText'),
-              icon: 'error',
-            })
-          })
-      }
-    },
-  })
-}
-
-const showLeaveConfirm = () => {
-  uni.showModal({
-    title: t('leaveTeamTitle'),
-    content: t('leaveTeamConfirmText'),
-    cancelText: t('cancelText'),
-    confirmText: t('okText'),
-    showCancel: true,
-    success: function (res) {
-      if (res.confirm) {
-        uni.$UIKitStore.teamStore
-          .leaveTeamActive(teamId)
-          .then(() => {
-            uni.showToast({
-              title: t('leaveTeamSuccessText'),
-              icon: 'success',
-            })
-            goBackChat()
-          })
-          .catch(() => {
-            uni.showToast({
-              title: t('leaveTeamFailedText'),
-              icon: 'error',
-            })
-          })
-      }
-    },
-  })
-}
 let uninstallTeamWatch = () => {}
 let uninstallSessionsWatch = () => {}
 onLoad((option) => {
@@ -216,54 +89,6 @@ onLoad((option) => {
     )
   })
 })
-
-const changeStickTopInfo = async (e: any) => {
-  const checked = e.detail.value
-  const conversationId =
-    uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(teamId)
-  try {
-    await uni.$UIKitStore.conversationStore.stickTopConversationActive(
-      conversationId,
-      checked
-    )
-  } catch (error) {
-    uni.showToast({
-      title: checked ? t('addStickTopFailText') : t('deleteStickTopFailText'),
-      icon: 'error',
-    })
-  }
-}
-
-const changeTeamMute = async (e: any) => {
-  const checked = e.detail.value
-  try {
-    await uni.$UIKitStore.teamStore.setTeamChatBannedActive({
-      teamId,
-      chatBannedMode: checked
-        ? V2NIMConst.V2NIMTeamChatBannedMode
-            .V2NIM_TEAM_CHAT_BANNED_MODE_BANNED_NORMAL
-        : V2NIMConst.V2NIMTeamChatBannedMode.V2NIM_TEAM_CHAT_BANNED_MODE_UNBAN,
-    })
-  } catch (error: any) {
-    switch (error?.code) {
-      // 无权限
-      case 109432:
-        uni.showToast({
-          title: t('noPermission'),
-          icon: 'error',
-        })
-        break
-      default:
-        uni.showToast({
-          title: checked
-            ? t('muteAllTeamFailedText')
-            : t('unmuteAllTeamFailedText'),
-          icon: 'error',
-        })
-        break
-    }
-  }
-}
 
 onUnmounted(() => {
   uninstallTeamWatch()

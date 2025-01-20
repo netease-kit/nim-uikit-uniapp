@@ -1,7 +1,7 @@
 <template>
   <div class="collection-card-wrapper">
     <div class="info-wrapper">
-      <div class="info" @tap="gotoChat">
+      <div class="info">
         <div class="info-left">
           <image
             :lazy-load="true"
@@ -16,7 +16,7 @@
             {{ collectionData.senderName }}
           </div>
           <div class="conversation">
-            来自于 {{ collectionData.conversationName }}
+            {{ t('collectionFromText') }} {{ collectionData.conversationName }}
           </div>
         </div>
       </div>
@@ -54,7 +54,7 @@
           V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO
         "
       >
-        <div class="video-msg-wrapper" @tap="() => handleVideoTouch(msg)">
+        <div class="video-msg-wrapper" @tap="() => handleVideoPlay(msg)">
           <div class="video-play-button">
             <div class="video-play-icon"></div>
           </div>
@@ -100,7 +100,7 @@
 
           <template v-else-if="item.type === 'emoji'">
             <Icon
-              :type="emojiMap[item.value]"
+              :type="EMOJI_ICON_MAP_CONFIG[item.value]"
               :size="fontSize || 22"
               :style="{ margin: '0 2px 2px 2px', verticalAlign: 'bottom' }"
             />
@@ -111,29 +111,28 @@
       <div v-else>[{{ t('unknowMsgText') }}]</div>
     </div>
     <div class="updatetime">
-      {{ timeFormat() }}
+      {{ formatTime() }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed } from '../../../utils/transformVue'
 import { stopAllAudio } from '../../../utils'
-import Avatar from '../../../components/Avatar.vue'
-import Icon from '../../../components/Icon.vue'
 import { defineProps, withDefaults } from '../../../utils/transformVue'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
+import { computed } from '../../../utils/transformVue'
 
-import dayjs from 'dayjs'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import MessageFile from '../../../pages/Chat/message/message-file.vue'
 import MessageAudio from '../../../pages/Chat/message/message-audio.vue'
+import Icon from '../../../components/Icon.vue'
+
 import { t } from '../../../utils/i18n'
-import { customRedirectTo } from '../../../utils/customNavigate'
 import { parseText } from '../../../utils/parseText'
-import { emojiMap } from '../../../utils/emoji'
+import { EMOJI_ICON_MAP_CONFIG } from '../../../utils/emoji'
 import { V2NIMCollection } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
+import dayjs from 'dayjs'
 
 const props = withDefaults(
   defineProps<{
@@ -153,6 +152,16 @@ collectionData.message =
 const msg = collectionData.message
 
 const textArr = parseText(msg?.text || '')
+
+const imageUrl = computed(() => {
+  return msg?.attachment?.url || msg.attachment?.file
+})
+
+// 获取视频首帧
+const videoFirstFrameDataUrl = computed(() => {
+  const url = msg.attachment?.url
+  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
+})
 
 const handleCopy = () => {
   uni.setClipboardData({
@@ -219,15 +228,6 @@ const handleCollection = () => {
   })
 }
 
-const imageUrl = computed(() => {
-  return msg?.attachment?.url || msg.attachment?.file
-})
-
-// 获取视频首帧
-const videoFirstFrameDataUrl = computed(() => {
-  const url = msg.attachment?.url
-  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
-})
 // 点击图片预览
 const handleImageTouch = (url: string) => {
   if (url) {
@@ -238,8 +238,9 @@ const handleImageTouch = (url: string) => {
 }
 
 // 点击视频播放
-const handleVideoTouch = (msg: V2NIMMessageForUI) => {
+const handleVideoPlay = (msg: V2NIMMessageForUI) => {
   stopAllAudio()
+  //@ts-ignore
   const url = msg.attachment?.url
   if (url) {
     customNavigateTo({
@@ -248,7 +249,7 @@ const handleVideoTouch = (msg: V2NIMMessageForUI) => {
   }
 }
 
-const isToday = (time) => {
+const isCurrentDay = (time: number) => {
   const createTime = new Date(time)
   const now = new Date()
   return (
@@ -257,17 +258,18 @@ const isToday = (time) => {
     createTime.getDate() === now.getDate()
   )
 }
-const isThisYear = (time) => {
+const isCurrentYear = (time: number) => {
   const createTime = new Date(time)
   const now = new Date()
   return createTime.getFullYear() === now.getFullYear()
 }
-const timeFormat = () => {
+
+const formatTime = () => {
   const updateTime = props.data.updateTime
 
-  if (isToday(updateTime)) {
+  if (isCurrentDay(updateTime)) {
     return dayjs(updateTime).format('HH:mm')
-  } else if (isThisYear(updateTime)) {
+  } else if (isCurrentYear(updateTime)) {
     return dayjs(updateTime).format('MM月DD日 HH:mm')
   } else {
     return dayjs(updateTime).format('YYYY年MM月DD日 HH:mm')

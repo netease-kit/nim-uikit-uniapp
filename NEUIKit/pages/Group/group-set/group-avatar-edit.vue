@@ -78,7 +78,7 @@
 <script lang="ts" setup>
 import NavBar from '../../../components/NavBar.vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { ref, computed } from '../../../utils/transformVue'
+import { ref } from '../../../utils/transformVue'
 import { t } from '../../../utils/i18n'
 import { getUniPlatform } from '../../../utils'
 
@@ -87,7 +87,6 @@ import Icon from '../../../components/Icon.vue'
 
 const avatar = ref<string>()
 let hasPermission = ref<boolean>(false)
-const inputFocus = ref(false)
 
 const avatarArr = [
   'https://yx-web-nosdn.netease.im/common/2425b4cc058e5788867d63c322feb7ac/groupAvatar1.png',
@@ -151,7 +150,7 @@ const onChangeAvatar = () => {
   }
 }
 
-const setAvatar = (index) => {
+const setAvatar = (index: number) => {
   avatar.value = avatarArr[index]
 }
 // 保存群头像
