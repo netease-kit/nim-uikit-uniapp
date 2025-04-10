@@ -1,0 +1,318 @@
+Ôr@Ÿªassertions¤code´customTransformCache¬dependencies¢id¤meta±moduleSideEffects¬originalCode±originalSourcemap«resolvedIds®sourcemapChainµsyntheticNamedExportsµtransformDependencies®transformFiles¨cacheAstÔrAÚOif (!("finalizeConstruction" in ViewPU.prototype)) {
+    Reflect.set(ViewPU.prototype, "finalizeConstruction", () => { });
+}
+import { SafeAreaOffset } from './SafeAreaOffset';
+export class NavBar extends ViewPU {
+    constructor(parent, params, __localStorage, elmtId = -1, paramsLambda = undefined, extraInfo) {
+        super(parent, __localStorage, elmtId, extraInfo);
+        if (typeof paramsLambda === "function") {
+            this.paramsGenerator_ = paramsLambda;
+        }
+        this.onBackClick = undefined;
+        this.__titleNView = new SynchedPropertyObjectOneWayPU(params.titleNView, this, "titleNView");
+        this.setInitiallyProvidedValue(params);
+        this.finalizeConstruction();
+    }
+    setInitiallyProvidedValue(params) {
+        if (params.onBackClick !== undefined) {
+            this.onBackClick = params.onBackClick;
+        }
+    }
+    updateStateVars(params) {
+        this.__titleNView.reset(params.titleNView);
+    }
+    purgeVariableDependenciesOnElmtId(rmElmtId) {
+        this.__titleNView.purgeDependencyOnElmtId(rmElmtId);
+    }
+    aboutToBeDeleted() {
+        this.__titleNView.aboutToBeDeleted();
+        SubscriberManager.Get().delete(this.id__());
+        this.aboutToBeDeletedInternal();
+    }
+    get titleNView() {
+        return this.__titleNView.get();
+    }
+    set titleNView(newValue) {
+        this.__titleNView.set(newValue);
+    }
+    initialRender() {
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Column.create();
+            Column.backgroundColor(this.titleNView.backgroundColor || '#F8F8F8');
+            Column.expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP]);
+        }, Column);
+        {
+            this.observeComponentCreation2((elmtId, isInitialRender) => {
+                if (isInitialRender) {
+                    let componentCall = new SafeAreaOffset(this, { type: 'top' }, undefined, elmtId, () => { }, { page: "oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/NavBar.ets", line: 18, col: 7 });
+                    ViewPU.create(componentCall);
+                    let paramsLambda = () => {
+                        return {
+                            type: 'top'
+                        };
+                    };
+                    componentCall.paramsGenerator_ = paramsLambda;
+                }
+                else {
+                    this.updateStateVarsOfChildByElmtId(elmtId, {
+                        type: 'top'
+                    });
+                }
+            }, { name: "SafeAreaOffset" });
+        }
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            Flex.create({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start });
+            Flex.height(56);
+        }, Flex);
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            if (this.titleNView.autoBackButton) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Stack.create();
+                        Stack.width(40);
+                        Stack.height(40);
+                        Stack.onClick(() => {
+                            this.onBackClick?.();
+                        });
+                    }, Stack);
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create(' ');
+                        Text.fontSize(24);
+                        Text.fontColor(this.titleNView.titleColor);
+                        Text.margin({ left: 16, right: 16 });
+                        Text.width(15);
+                        Text.height(15);
+                        Text.border({
+                            width: {
+                                left: 2,
+                                bottom: 2,
+                                top: 0,
+                                right: 0
+                            },
+                            color: this.titleNView.titleColor,
+                            style: BorderStyle.Solid,
+                            radius: {
+                                bottomLeft: 2
+                            }
+                        });
+                        Text.rotate({
+                            angle: 45
+                        });
+                    }, Text);
+                    Text.pop();
+                    Stack.pop();
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            if (this.titleNView.titleText) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        Text.create(this.titleNView.titleText);
+                        Text.fontSize(20);
+                        Text.fontColor(this.titleNView.titleColor);
+                        Text.maxLines(1);
+                        Text.textOverflow({
+                            overflow: TextOverflow.Ellipsis
+                        });
+                        Text.margin({ left: this.titleNView.autoBackButton ? 0 : 16 });
+                    }, Text);
+                    Text.pop();
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        this.observeComponentCreation2((elmtId, isInitialRender) => {
+            If.create();
+            if (this.titleNView.loading) {
+                this.ifElseBranchUpdateFunction(0, () => {
+                    this.observeComponentCreation2((elmtId, isInitialRender) => {
+                        LoadingProgress.create();
+                        LoadingProgress.width(32);
+                        LoadingProgress.margin(4);
+                        LoadingProgress.color(this.titleNView.titleColor);
+                    }, LoadingProgress);
+                });
+            }
+            else {
+                this.ifElseBranchUpdateFunction(1, () => {
+                });
+            }
+        }, If);
+        If.pop();
+        Flex.pop();
+        Column.pop();
+    }
+    rerender() {
+        this.updateDirtyElements();
+    }
+}
+//# sourceMappingURL=NavBar.js.mapÂ‘Ú/Users/yaoshun/Desktop/Uniapp-UIKit/xkit-uniapp/packages/im-uniapp-ui/unpackage/debug/app-harmony-b82962ff/oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/SafeAreaOffset.etsÚ/Users/yaoshun/Desktop/Uniapp-UIKit/xkit-uniapp/packages/im-uniapp-ui/unpackage/debug/app-harmony-b82962ff/oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/NavBar.etsÔrB™±isLocalDependency¯isNodeEntryFile§pkgPath§pkgNameªpkgVersion±belongProjectPath±dependencyPkgInfo¬shouldEmitJs¯hostModulesInfoÂÂÙÿ/Users/yaoshun/Desktop/Uniapp-UIKit/xkit-uniapp/packages/im-uniapp-ui/unpackage/debug/app-harmony-b82962ff/oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk´@dcloudio/uni-mp-sdk¥1.0.0Ùj/Users/yaoshun/Desktop/Uniapp-UIKit/xkit-uniapp/packages/im-uniapp-ui/unpackage/debug/app-harmony-b82962ffÔrC’§pkgNameªpkgVersion´@dcloudio/uni-mp-sdk¥1.0.0ÃÃÚimport { SafeAreaOffset } from './SafeAreaOffset'
+
+export interface ITitleNView {
+  titleText?: string;
+  backgroundColor?: string;
+  titleColor?: string;
+  autoBackButton?: boolean;
+  loading?: boolean
+}
+
+@Component
+export struct NavBar {
+  onBackClick?: () => void;
+  @Prop titleNView: ITitleNView;
+
+  build() {
+    Column() {
+      SafeAreaOffset({ type: 'top' })
+      Flex({ direction: FlexDirection.Row, alignItems: ItemAlign.Center, justifyContent: FlexAlign.Start }) {
+        if (this.titleNView.autoBackButton) {
+          Stack() {
+            Text(' ')
+              .fontSize(24)
+              .fontColor(this.titleNView.titleColor)
+              .margin({ left: 16, right: 16 })
+              .width(15)
+              .height(15)
+              .border({
+                width: {
+                  left: 2,
+                  bottom: 2,
+                  top: 0,
+                  right: 0
+                },
+                color: this.titleNView.titleColor,
+                style: BorderStyle.Solid,
+                radius: {
+                  bottomLeft: 2
+                }
+              })
+              .rotate({
+                angle: 45
+              })
+          }
+          .width(40)
+          .height(40)
+          .onClick(() => {
+            this.onBackClick?.();
+          });
+        }
+        if (this.titleNView.titleText) {
+          Text(this.titleNView.titleText)
+            .fontSize(20)
+            .fontColor(this.titleNView.titleColor)
+            .maxLines(1)
+            .textOverflow({
+              overflow: TextOverflow.Ellipsis
+            })
+            .margin({ left: this.titleNView.autoBackButton ? 0 : 16 });
+        }
+        if (this.titleNView.loading) {
+          LoadingProgress()
+            .width(32)
+            .margin(4)
+            .color(this.titleNView.titleColor)
+        }
+      }.height(56)
+    }
+    .backgroundColor(this.titleNView.backgroundColor || '#F8F8F8').expandSafeArea([SafeAreaType.SYSTEM], [SafeAreaEdge.TOP])
+  }
+}
+ÀÔrD‘°./SafeAreaOffsetÔrE—ªassertions¨external¢id¤meta±moduleSideEffectsªresolvedByµsyntheticNamedExportsAÂÚ/Users/yaoshun/Desktop/Uniapp-UIKit/xkit-uniapp/packages/im-uniapp-ui/unpackage/debug/app-harmony-b82962ff/oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/SafeAreaOffset.etsAÃªoh-resolveÂ“ÔrF–§version¤fileªsourceRoot§sources¥names¨mappings©NavBar.js ‘ªNavBar.etsÜ œ˜”    ”  ”	  	”  ”  ”  ”1  1”2  1””   ” ” ” ‘” 
+ ‘” ’”' ”1 ’” ” ’” ” ‘” ’” ” 
+œ” ” 
+” ÌD”" ÌD”# ÌD”' ÌD”( ÌD”2 ÌD$”3 ÌD%”ÌB ÌD4”ÌF ÌD8”ÌO ÌDÌAÜ ” ” 
+” ÌDÌC”! ÌDÌQ”" ÌDÌR”# ÌDÌS”/ ÌDÌ_”0 ÌDÌ`”6 ÌDÌf”7 ÌDÌg”9 ÌDÌi”: ÌDÌj”ÌF ÌDÌv”ÌG ÌDÌw”ÌJ ÌDÌz”ÌK ÌDÌ{˜”, ”: ”ÌA ”ÌC ”ÌG ”ÌI ”ÌN "”ÌP $”” ”  ”" ”' "”” ” ” ”# "Ü ” ” 
+” ” ”# ”% ”2 %”3 &”6 )”8 +”ÌB 5”ÌD 7”ÌM Ì@”ÌN ÌA”ÌT ÌG”ÌV ÌI”Ìd ÌW”Ìf ÌY”Ìo Ìb”Ìp Ìc”Ìu Ìh”Ìw Ìj–” ” 
+” ÌB” ÌB” ÌB” ÌB˜” ” ” ” ” ”  ”. *”0 ,’” 
+” –” 
+” ” ,”# ,”$ ,”& ,–” 
+” ” -”$ -”% -”' -—” 
+” ” .”% .”& .”) .”+ .—” /”  /”! /”, /”. /”0 / ”1 /!’” 0
+” 0”” ” ”$ ”' –” ” ” ”% ”& ”( š” ” ” ”& ”' ”+ ”, ”6 (”7 )”ÌA 3” ” ” ”# ”$ ”& ”* ”, ”.  ”0 "”5 '”7 )”9 +”; -–” ” ” ”" ”# ”% –” ” ” ”# ”$ ”& •” ” ” ”# ”$ “” ”! ”# ””  ”$ ”& ”' ””  ”& ”( ”) ””  ”# ”% ”& ””   ”%  ”'  ”(  ‘” !˜” "”! "”# "”' "”( "”2 "&”3 "'”= "1–” #”! #”# #”. #"”/ ##”4 #(“” $”" $”$ $””  %”* %”, %”- %‘” &‘” '•” ” ” (”# (”$ (”” )”! )”# )”% )‘” *’” ” ’” 
+” ‘” 1	‘” 1	˜” 2” 2” 2” 2” 2”  2”) 2%”+ 2'˜” 3
+” 3”$ 3”( 3”) 3”3 3”4 3”= 3(–” 3
+” 3” 4”% 4”& 4”( 4š” 3
+” 3” 5”& 5”' 5”+ 5”, 5”6 5&”7 5'”ÌA 51–” 3
+” 3” 6”% 6”& 6”' 6•” 3
+” 3” 7”) 7”* 7–” 8”$ 8”& 8”2 8$”3 8%”; 8-‘” 9Ü ” 3
+” 3” :”# :”$ :”& :”* :”, :”0 : ”1 :!”; :+”< :,”ÌJ ::”ÌK :;”ÌL :<”ÌM :=”ÌN :>”ÌO :?”ÌP :Ì@”ÌQ :ÌA”ÌS :ÌC”ÌU :ÌE’” 3
+” 3‘” ;	‘” ;	˜” <” <” <” <” <”  <”' <#”) <%’” =
+”' =–” =
+”' =”( >”- >”. >”0 >–” =
+”' =”( ?”. ?”/ ?”0 ?š” =
+”' =”( Ì@”- Ì@”. Ì@”2 Ì@”3 Ì@”= Ì@"”> Ì@#”ÌH Ì@-‘” ÌA	‘” ÌA	’” ” 
+’” ” 
+‘” ÌEÔrG–§version¤file§sources®sourcesContent¥names¨mappingsÀ‘À‘ÀÜ ¡‘”    ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”  	 ‘”  
+ ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”   ‘”    ‘”  ! ‘”  " ‘”  # ‘”  $ ‘”  % ‘”  & ‘”  ' ‘”  ( ‘”  ) ‘”  * ‘”  + ‘”  , ‘”  - ‘”  . ‘”  / ‘”  0 ‘”  1 ‘”  2 ‘”  3 ‘”  4 ‘”  5 ‘”  6 ‘”  7 ‘”  8 ‘”  9 ‘”  : ‘”  ; ‘”  < ‘”  = ‘”  > ‘”  ? ‘”  Ì@ ‘”  ÌA ‘”  ÌB ‘”  ÌC ‘”  ÌD ‘”  ÌE ‘”  ÌF ‘”  ÌG ‘”  ÌH ‘”  ÌI ‘”  ÌJ ‘”  ÌK ‘”  ÌL ‘”  ÌM ‘”  ÌN ‘”  ÌO ‘”  ÌP ‘”  ÌQ ‘”  ÌR ‘”  ÌS ‘”  ÌT ‘”  ÌU ‘”  ÌV ‘”  ÌW ‘”  ÌX ‘”  ÌY ‘”  ÌZ ‘”  Ì[ ‘”  Ì\ ‘”  Ì] ‘”  Ì^ ‘”  Ì_ ‘”  Ì` ‘”  Ìa ‘”  Ìb ‘”  Ìc ‘”  Ìd ‘”  Ìe ‘”  Ìf ‘”  Ìg ‘”  Ìh ‘”  Ìi ‘”  Ìj ‘”  Ìk ‘”  Ìl ‘”  Ìm ‘”  Ìn ‘”  Ìo ‘”  Ìp ‘”  Ìq ‘”  Ìr ‘”  Ìs ‘”  Ìt ‘”  Ìu ‘”  Ìv ‘”  Ìw ‘”  Ìx ‘”  Ìy ‘”  Ìz ‘”  Ì{ ‘”  Ì| ‘”  Ì} ‘”  Ì~ ‘”  Ì ‘”  Ì€ ‘”  Ì ‘”  Ì‚ ‘”  Ìƒ ‘”  Ì„ ‘”  Ì… ‘”  Ì† ‘”  Ì‡ ‘”  Ìˆ ‘”  Ì‰ ‘”  ÌŠ ‘”  Ì‹ ‘”  ÌŒ ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì ‘”  Ì‘ ‘”  Ì’ ‘”  Ì“ ‘”  Ì” ‘”  Ì• ‘”  Ì– ‘”  Ì— ‘”  Ì˜ ‘”  Ì™ ‘”  Ìš ‘”  Ì› ‘”  Ìœ ‘”  Ì ‘”  Ì ‘”  ÌŸ ‘”  Ì  ÔrH’§missing¦pluginÃ¦genAbcÂÔ  ÔrI”²dynamicImportCache¹exportAllDeclarationCache»exportNamedDeclarationCache«importCache‘ÔrJ–¤type¥start£end«declarationªspecifiers¦source¶ExportNamedDeclarationÌ´Í+ÔrK–¤type¥start£end¢idªsuperClass¤body°ClassDeclarationÌ»Í+ÔrL”¤type¥start£end¤nameªIdentifierÌÁÌÇ¦NavBarLªIdentifierÌĞÌÖ¦ViewPUÔrM”¤type¥start£end¤body©ClassBodyÌ×Í+™ÔrN˜¤type¥start£end¦static¨computed£key¤kind¥value°MethodDefinitionÌŞÍÕÂÂLªIdentifierÌŞÌé«constructor«constructorÔrO™¤type¥start£end¢idªexpression©generator¥async¦params¤body²FunctionExpressionÌéÍÕÀÂÂÂ–LªIdentifierÌêÌğ¦parentLªIdentifierÌòÌø¦paramsLªIdentifierÌúÍ®__localStorageÔrP•¤type¥start£end¤left¥right±AssignmentPatternÍ
+ÍLªIdentifierÍ
+Í¦elmtIdÔrQ–¤type¥start£end¨operator¦prefix¨argument¯UnaryExpressionÍÍ¡-ÃÔrR•¤type¥start£end¥value£raw§LiteralÍÍ¡1P±AssignmentPatternÍÍ/LªIdentifierÍÍ#¬paramsLambdaLªIdentifierÍ&Í/©undefinedLªIdentifierÍ1Í:©extraInfoM®BlockStatementÍ<ÍÕ–ÔrS”¤type¥start£endªexpression³ExpressionStatementÍGÍxÔrT–¤type¥start£end¦callee©arguments¨optional®CallExpressionÍGÍwÔrU“¤type¥start£end¥SuperÍGÍL”LªIdentifierÍMÍS¦parentLªIdentifierÍUÍc®__localStorageLªIdentifierÍeÍk¦elmtIdLªIdentifierÍmÍv©extraInfoÂÔrV–¤type¥start£end¤testªconsequent©alternate«IfStatementÍ‚ÍéÔrW–¤type¥start£end¤left¨operator¥right°BinaryExpressionÍ†Í¨Q¯UnaryExpressionÍ†Í™¦typeofÃLªIdentifierÍÍ™¬paramsLambda£===R§LiteralÍÍ¨¨functionª"function"M®BlockStatementÍªÍé‘S³ExpressionStatementÍ¹ÍŞÔrX–¤type¥start£end¨operator¤left¥right´AssignmentExpressionÍ¹Íİ¡=ÔrY—¤type¥start£end¦object¨property¨computed¨optional°MemberExpressionÍ¹ÍÎU®ThisExpressionÍ¹Í½LªIdentifierÍ¾ÍÎ°paramsGenerator_ÂÂLªIdentifierÍÑÍİ¬paramsLambdaÀS³ExpressionStatementÍóÍX´AssignmentExpressionÍóÍ¡=Y°MemberExpressionÍóÍU®ThisExpressionÍóÍ÷LªIdentifierÍøÍ«onBackClickÂÂLªIdentifierÍÍ©undefinedS³ExpressionStatementÍÍwX´AssignmentExpressionÍÍv¡=Y°MemberExpressionÍÍ+U®ThisExpressionÍÍLªIdentifierÍÍ+¬__titleNViewÂÂÔrZ•¤type¥start£end¦callee©arguments­NewExpressionÍ.ÍvLªIdentifierÍ2ÍO½SynchedPropertyObjectOneWayPU“Y°MemberExpressionÍPÍaLªIdentifierÍPÍV¦paramsLªIdentifierÍWÍaªtitleNViewÂÂU®ThisExpressionÍcÍgR§LiteralÍiÍuªtitleNView¬"titleNView"S³ExpressionStatementÍÍ¨T®CallExpressionÍÍ§Y°MemberExpressionÍÍŸU®ThisExpressionÍÍ…LªIdentifierÍ†ÍŸ¹setInitiallyProvidedValueÂÂ‘LªIdentifierÍ Í¦¦paramsÂS³ExpressionStatementÍ²ÍÎT®CallExpressionÍ²ÍÍY°MemberExpressionÍ²ÍËU®ThisExpressionÍ²Í¶LªIdentifierÍ·ÍË´finalizeConstructionÂÂÂN°MethodDefinitionÍÛÍuÂÂLªIdentifierÍÛÍô¹setInitiallyProvidedValue¦methodO²FunctionExpressionÍôÍuÀÂÂÂ‘LªIdentifierÍõÍû¦paramsM®BlockStatementÍıÍu‘V«IfStatementÍÍnW°BinaryExpressionÍÍ,Y°MemberExpressionÍÍLªIdentifierÍÍ¦paramsLªIdentifierÍÍ«onBackClickÂÂ£!==LªIdentifierÍ#Í,©undefinedM®BlockStatementÍ.Ín‘S³ExpressionStatementÍ=ÍcX´AssignmentExpressionÍ=Íb¡=Y°MemberExpressionÍ=ÍMU®ThisExpressionÍ=ÍALªIdentifierÍBÍM«onBackClickÂÂY°MemberExpressionÍPÍbLªIdentifierÍPÍV¦paramsLªIdentifierÍWÍb«onBackClickÂÂÀN°MethodDefinitionÍ{ÍĞÂÂLªIdentifierÍ{ÍŠ¯updateStateVars¦methodO²FunctionExpressionÍŠÍĞÀÂÂÂ‘LªIdentifierÍ‹Í‘¦paramsM®BlockStatementÍ“ÍĞ‘S³ExpressionStatementÍÍÉT®CallExpressionÍÍÈY°MemberExpressionÍÍµY°MemberExpressionÍÍ¯U®ThisExpressionÍÍ¢LªIdentifierÍ£Í¯¬__titleNViewÂÂLªIdentifierÍ°Íµ¥resetÂÂ‘Y°MemberExpressionÍ¶ÍÇLªIdentifierÍ¶Í¼¦paramsLªIdentifierÍ½ÍÇªtitleNViewÂÂÂN°MethodDefinitionÍÖÍHÂÂLªIdentifierÍÖÍ÷Ù!purgeVariableDependenciesOnElmtId¦methodO²FunctionExpressionÍ÷ÍHÀÂÂÂ‘LªIdentifierÍøÍ ¨rmElmtIdM®BlockStatementÍÍH‘S³ExpressionStatementÍÍAT®CallExpressionÍÍ@Y°MemberExpressionÍÍ6Y°MemberExpressionÍÍU®ThisExpressionÍÍLªIdentifierÍÍ¬__titleNViewÂÂLªIdentifierÍÍ6·purgeDependencyOnElmtIdÂÂ‘LªIdentifierÍ7Í?¨rmElmtIdÂN°MethodDefinitionÍNÍøÂÂLªIdentifierÍNÍ^°aboutToBeDeleted¦methodO²FunctionExpressionÍ^ÍøÀÂÂÂM®BlockStatementÍaÍø“S³ExpressionStatementÍlÍ‘T®CallExpressionÍlÍY°MemberExpressionÍlÍY°MemberExpressionÍlÍ}U®ThisExpressionÍlÍpLªIdentifierÍqÍ}¬__titleNViewÂÂLªIdentifierÍ~Í°aboutToBeDeletedÂÂÂS³ExpressionStatementÍ›ÍÇT®CallExpressionÍ›ÍÆY°MemberExpressionÍ›Í¹T®CallExpressionÍ›Í²Y°MemberExpressionÍ›Í°LªIdentifierÍ›Í¬±SubscriberManagerLªIdentifierÍ­Í°£GetÂÂÂLªIdentifierÍ³Í¹¦deleteÂÂ‘T®CallExpressionÍºÍÅY°MemberExpressionÍºÍÃU®ThisExpressionÍºÍ¾LªIdentifierÍ¿ÍÃ¤id__ÂÂÂÂS³ExpressionStatementÍÑÍñT®CallExpressionÍÑÍğY°MemberExpressionÍÑÍîU®ThisExpressionÍÑÍÕLªIdentifierÍÖÍî¸aboutToBeDeletedInternalÂÂÂN°MethodDefinitionÍşÍ@ÂÂLªIdentifierÍÍªtitleNView£getO²FunctionExpressionÍÍ@ÀÂÂÂM®BlockStatementÍÍ@‘Ôr[”¤type¥start£end¨argument¯ReturnStatementÍÍ9T®CallExpressionÍ!Í8Y°MemberExpressionÍ!Í6Y°MemberExpressionÍ!Í2U®ThisExpressionÍ!Í%LªIdentifierÍ&Í2¬__titleNViewÂÂLªIdentifierÍ3Í6£getÂÂÂN°MethodDefinitionÍFÍ‘ÂÂLªIdentifierÍJÍTªtitleNView£setO²FunctionExpressionÍTÍ‘ÀÂÂÂ‘LªIdentifierÍUÍ]¨newValueM®BlockStatementÍ_Í‘‘S³ExpressionStatementÍjÍŠT®CallExpressionÍjÍ‰Y°MemberExpressionÍjÍY°MemberExpressionÍjÍ{U®ThisExpressionÍjÍnLªIdentifierÍoÍ{¬__titleNViewÂÂLªIdentifierÍ|Í£setÂÂ‘LªIdentifierÍ€Íˆ¨newValueÂN°MethodDefinitionÍ—ÍêÂÂLªIdentifierÍ—Í¤­initialRender¦methodO²FunctionExpressionÍ¤ÍêÀÂÂÂM®BlockStatementÍ§Íê›S³ExpressionStatementÍ²ÍÄT®CallExpressionÍ²ÍÃY°MemberExpressionÍ²ÍĞU®ThisExpressionÍ²Í¶LªIdentifierÍ·ÍĞ¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍÑÍºÀÂÂÂ’LªIdentifierÍÒÍØ¦elmtIdLªIdentifierÍÚÍé¯isInitialRenderM®BlockStatementÍîÍº“S³ExpressionStatementÍıÍT®CallExpressionÍıÍY°MemberExpressionÍıÍ
+LªIdentifierÍıÍ¦ColumnLªIdentifierÍÍ
+¦createÂÂÂS³ExpressionStatementÍÍ`T®CallExpressionÍÍ_Y°MemberExpressionÍÍ1LªIdentifierÍÍ!¦ColumnLªIdentifierÍ"Í1¯backgroundColorÂÂ‘W±LogicalExpressionÍ2Í^Y°MemberExpressionÍ2ÍQY°MemberExpressionÍ2ÍAU®ThisExpressionÍ2Í6LªIdentifierÍ7ÍAªtitleNViewÂÂLªIdentifierÍBÍQ¯backgroundColorÂÂ¢||R§LiteralÍUÍ^§#F8F8F8©'#F8F8F8'ÂS³ExpressionStatementÍnÍ¯T®CallExpressionÍnÍ®Y°MemberExpressionÍnÍƒLªIdentifierÍnÍt¦ColumnLªIdentifierÍuÍƒ®expandSafeAreaÂÂ’Ôr\”¤type¥start£end¨elements¯ArrayExpressionÍ„Í™‘Y°MemberExpressionÍ…Í˜LªIdentifierÍ…Í‘¬SafeAreaTypeLªIdentifierÍ’Í˜¦SYSTEMÂÂ\¯ArrayExpressionÍ›Í­‘Y°MemberExpressionÍœÍ¬LªIdentifierÍœÍ¨¬SafeAreaEdgeLªIdentifierÍ©Í¬£TOPÂÂÂLªIdentifierÍ¼ÍÂ¦ColumnÂM®BlockStatementÍÎÍ
+›‘S³ExpressionStatementÍİÍ
+T®CallExpressionÍİÍ
+Y°MemberExpressionÍİÍûU®ThisExpressionÍİÍáLªIdentifierÍâÍû¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍüÍ
+rÀÂÂÂ’LªIdentifierÍıÍ¦elmtIdLªIdentifierÍÍ¯isInitialRenderM®BlockStatementÍÍ
+r‘V«IfStatementÍ,Í
+cLªIdentifierÍ0Í?¯isInitialRenderM®BlockStatementÍAÍ	·”Ôr]•¤type¥start£end¬declarations¤kind³VariableDeclarationÍXÍ~‘Ôr^•¤type¥start£end¢id¤init²VariableDeclaratorÍ\Í}LªIdentifierÍ\Íi­componentCallZ­NewExpressionÍlÍ}LªIdentifierÍpÍ~®SafeAreaOffset–U®ThisExpressionÍÍƒÔr_”¤type¥start£endªproperties°ObjectExpressionÍ…Í”‘Ôr`™¤type¥start£end¦method©shorthand¨computed£key¥value¤kind¨PropertyÍ‡Í’ÂÂÂLªIdentifierÍ‡Í‹¤typeR§LiteralÍÍ’£top¥'top'¤initLªIdentifierÍ–ÍŸ©undefinedLªIdentifierÍ¡Í§¦elmtIdO·ArrowFunctionExpressionÍ©Í²ÀÂÂÂM®BlockStatementÍ¯Í²_°ObjectExpressionÍ´Í|“`¨PropertyÍ¶ÍhÂÂÂLªIdentifierÍ¶Íº¤pageR§LiteralÍ¼ÍhÙªoh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/NavBar.etsÙ¬"oh_modules/.ohpm/@dcloudio+uni-app-runtime@idazlhvgikh3aw++r+ncdsd8lhisx+iuufxvzpgrtyy=/oh_modules/@dcloudio/uni-app-runtime/src/main/ets/uni-mp-sdk/components/NavBar.ets"¤init`¨PropertyÍjÍrÂÂÂLªIdentifierÍjÍn¤lineR§LiteralÍpÍr¢18¤init`¨PropertyÍtÍzÂÂÂLªIdentifierÍtÍw£colR§LiteralÍyÍz¡7¤init£letS³ExpressionStatementÍ”Í±T®CallExpressionÍ”Í°Y°MemberExpressionÍ”Í¡LªIdentifierÍ”Íš¦ViewPULªIdentifierÍ›Í¡¦createÂÂ‘LªIdentifierÍ¢Í¯­componentCallÂ]³VariableDeclarationÍÇÍ	`‘^²VariableDeclaratorÍËÍ	_LªIdentifierÍËÍ×¬paramsLambdaO·ArrowFunctionExpressionÍÚÍ	_ÀÂÂÂM®BlockStatementÍàÍ	_‘[¯ReturnStatementÍûÍ	H_°ObjectExpressionÍ	Í	G‘`¨PropertyÍ	!Í	,ÂÂÂLªIdentifierÍ	!Í	%¤typeR§LiteralÍ	'Í	,£top¥'top'¤init£letS³ExpressionStatementÍ	vÍ	¤X´AssignmentExpressionÍ	vÍ	£¡=Y°MemberExpressionÍ	vÍ	”LªIdentifierÍ	vÍ	ƒ­componentCallLªIdentifierÍ	„Í	”°paramsGenerator_ÂÂLªIdentifierÍ	—Í	£¬paramsLambdaM®BlockStatementÍ	ÎÍ
+c‘S³ExpressionStatementÍ	åÍ
+PT®CallExpressionÍ	åÍ
+OY°MemberExpressionÍ	åÍ
+U®ThisExpressionÍ	åÍ	éLªIdentifierÍ	êÍ
+¾updateStateVarsOfChildByElmtIdÂÂ’LªIdentifierÍ
+	Í
+¦elmtId_°ObjectExpressionÍ
+Í
+N‘`¨PropertyÍ
+,Í
+7ÂÂÂLªIdentifierÍ
+,Í
+0¤typeR§LiteralÍ
+2Í
+7£top¥'top'¤initÂ_°ObjectExpressionÍ
+tÍ
+‘`¨PropertyÍ
+vÍ
+ŒÂÂÂLªIdentifierÍ
+vÍ
+z¤nameR§LiteralÍ
+|Í
+Œ®SafeAreaOffset°"SafeAreaOffset"¤initÂS³ExpressionStatementÍ
+¥ÍT®CallExpressionÍ
+¥ÍY°MemberExpressionÍ
+¥Í
+ÃU®ThisExpressionÍ
+¥Í
+©LªIdentifierÍ
+ªÍ
+Ã¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ
+ÄÍ†ÀÂÂÂ’LªIdentifierÍ
+ÅÍ
+Ë¦elmtIdLªIdentifierÍ
+ÍÍ
+Ü¯isInitialRenderM®BlockStatementÍ
+áÍ†’S³ExpressionStatementÍ
+ğÍ]T®CallExpressionÍ
+ğÍ\Y°MemberExpressionÍ
+ğÍ
+ûLªIdentifierÍ
+ğÍ
+ô¤FlexLªIdentifierÍ
+õÍ
+û¦createÂÂ‘_°ObjectExpressionÍ
+üÍ[“`¨PropertyÍ
+şÍÂÂÂLªIdentifierÍ
+şÍ©directionY°MemberExpressionÍ	ÍLªIdentifierÍ	Í­FlexDirectionLªIdentifierÍÍ£RowÂÂ¤init`¨PropertyÍÍ8ÂÂÂLªIdentifierÍÍ&ªalignItemsY°MemberExpressionÍ(Í8LªIdentifierÍ(Í1©ItemAlignLªIdentifierÍ2Í8¦CenterÂÂ¤init`¨PropertyÍ:ÍYÂÂÂLªIdentifierÍ:ÍH®justifyContentY°MemberExpressionÍJÍYLªIdentifierÍJÍS©FlexAlignLªIdentifierÍTÍY¥StartÂÂ¤initÂS³ExpressionStatementÍkÍ{T®CallExpressionÍkÍzY°MemberExpressionÍkÍvLªIdentifierÍkÍo¤FlexLªIdentifierÍpÍv¦heightÂÂ‘R§LiteralÍwÍy8¢56ÂLªIdentifierÍˆÍŒ¤FlexÂS³ExpressionStatementÍ˜ÍäT®CallExpressionÍ˜ÍãY°MemberExpressionÍ˜Í¶U®ThisExpressionÍ˜ÍœLªIdentifierÍÍ¶¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ·ÍŞÀÂÂÂ’LªIdentifierÍ¸Í¾¦elmtIdLªIdentifierÍÀÍÏ¯isInitialRenderM®BlockStatementÍÔÍŞ’S³ExpressionStatementÍãÍïT®CallExpressionÍãÍîY°MemberExpressionÍãÍìLªIdentifierÍãÍå¢IfLªIdentifierÍæÍì¦createÂÂÂV«IfStatementÍıÍÓY°MemberExpressionÍÍY°MemberExpressionÍÍU®ThisExpressionÍÍLªIdentifierÍÍªtitleNViewÂÂLªIdentifierÍÍ®autoBackButtonÂÂM®BlockStatementÍ!Í_‘S³ExpressionStatementÍ4ÍPT®CallExpressionÍ4ÍOY°MemberExpressionÍ4ÍSU®ThisExpressionÍ4Í8LªIdentifierÍ9ÍSºifElseBranchUpdateFunctionÂÂ’R§LiteralÍTÍU ¡0O·ArrowFunctionExpressionÍWÍNÀÂÂÂM®BlockStatementÍ]ÍN”S³ExpressionStatementÍtÍÎT®CallExpressionÍtÍÍY°MemberExpressionÍtÍ’U®ThisExpressionÍtÍxLªIdentifierÍyÍ’¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ“ÍÅÀÂÂÂ’LªIdentifierÍ”Íš¦elmtIdLªIdentifierÍœÍ«¯isInitialRenderM®BlockStatementÍ°ÍÅ”S³ExpressionStatementÍËÍÚT®CallExpressionÍËÍÙY°MemberExpressionÍËÍ×LªIdentifierÍËÍĞ¥StackLªIdentifierÍÑÍ×¦createÂÂÂS³ExpressionStatementÍôÍT®CallExpressionÍôÍY°MemberExpressionÍôÍÿLªIdentifierÍôÍù¥StackLªIdentifierÍúÍÿ¥widthÂÂ‘R§LiteralÍ Í(¢40ÂS³ExpressionStatementÍÍ/T®CallExpressionÍÍ.Y°MemberExpressionÍÍ*LªIdentifierÍÍ#¥StackLªIdentifierÍ$Í*¦heightÂÂ‘R§LiteralÍ+Í-(¢40ÂS³ExpressionStatementÍIÍ®T®CallExpressionÍIÍ­Y°MemberExpressionÍIÍVLªIdentifierÍIÍN¥StackLªIdentifierÍOÍV§onClickÂÂ‘O·ArrowFunctionExpressionÍWÍ¬ÀÂÂÂM®BlockStatementÍ]Í¬‘S³ExpressionStatementÍ|Í‘S¯ChainExpressionÍ|ÍT®CallExpressionÍ|ÍY°MemberExpressionÍ|ÍŒU®ThisExpressionÍ|Í€LªIdentifierÍÍŒ«onBackClickÂÂÃÂLªIdentifierÍÇÍÌ¥StackÂS³ExpressionStatementÍäÍøT®CallExpressionÍäÍ÷Y°MemberExpressionÍäÍU®ThisExpressionÍäÍèLªIdentifierÍéÍ¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍÍğÀÂÂÂ’LªIdentifierÍÍ
+¦elmtIdLªIdentifierÍÍ¯isInitialRenderM®BlockStatementÍ Íğ˜S³ExpressionStatementÍ;ÍLT®CallExpressionÍ;ÍKY°MemberExpressionÍ;ÍFLªIdentifierÍ;Í?¤TextLªIdentifierÍ@ÍF¦createÂÂ‘R§LiteralÍGÍJ¡ £' 'ÂS³ExpressionStatementÍfÍxT®CallExpressionÍfÍwY°MemberExpressionÍfÍsLªIdentifierÍfÍj¤TextLªIdentifierÍkÍs¨fontSizeÂÂ‘R§LiteralÍtÍv¢24ÂS³ExpressionStatementÍ’Í½T®CallExpressionÍ’Í¼Y°MemberExpressionÍ’Í LªIdentifierÍ’Í–¤TextLªIdentifierÍ—Í ©fontColorÂÂ‘Y°MemberExpressionÍ¡Í»Y°MemberExpressionÍ¡Í°U®ThisExpressionÍ¡Í¥LªIdentifierÍ¦Í°ªtitleNViewÂÂLªIdentifierÍ±Í»ªtitleColorÂÂÂS³ExpressionStatementÍ×ÍüT®CallExpressionÍ×ÍûY°MemberExpressionÍ×ÍâLªIdentifierÍ×ÍÛ¤TextLªIdentifierÍÜÍâ¦marginÂÂ‘_°ObjectExpressionÍãÍú’`¨PropertyÍåÍíÂÂÂLªIdentifierÍåÍé¤leftR§LiteralÍëÍí¢16¤init`¨PropertyÍïÍøÂÂÂLªIdentifierÍïÍô¥rightR§LiteralÍöÍø¢16¤initÂS³ExpressionStatementÍÍ%T®CallExpressionÍÍ$Y°MemberExpressionÍÍ LªIdentifierÍÍ¤TextLªIdentifierÍÍ ¥widthÂÂ‘R§LiteralÍ!Í#¢15ÂS³ExpressionStatementÍ?ÍOT®CallExpressionÍ?ÍNY°MemberExpressionÍ?ÍJLªIdentifierÍ?ÍC¤TextLªIdentifierÍDÍJ¦heightÂÂ‘R§LiteralÍKÍM¢15ÂS³ExpressionStatementÍiÍnT®CallExpressionÍiÍmY°MemberExpressionÍiÍtLªIdentifierÍiÍm¤TextLªIdentifierÍnÍt¦borderÂÂ‘_°ObjectExpressionÍuÍl”`¨PropertyÍ”ÍdÂÂÂLªIdentifierÍ”Í™¥width_°ObjectExpressionÍ›Íd”`¨PropertyÍ¾ÍÅÂÂÂLªIdentifierÍ¾ÍÂ¤leftR§LiteralÍÄÍÅ¡2¤init`¨PropertyÍèÍñÂÂÂLªIdentifierÍèÍî¦bottomR§LiteralÍğÍñ¡2¤init`¨PropertyÍÍÂÂÂLªIdentifierÍÍ£topR§LiteralÍÍ ¡0¤init`¨PropertyÍ=ÍEÂÂÂLªIdentifierÍ=ÍB¥rightR§LiteralÍDÍE ¡0¤init¤init`¨PropertyÍƒÍ¤ÂÂÂLªIdentifierÍƒÍˆ¥colorY°MemberExpressionÍŠÍ¤Y°MemberExpressionÍŠÍ™U®ThisExpressionÍŠÍLªIdentifierÍÍ™ªtitleNViewÂÂLªIdentifierÍšÍ¤ªtitleColorÂÂ¤init`¨PropertyÍÃÍÛÂÂÂLªIdentifierÍÃÍÈ¥styleY°MemberExpressionÍÊÍÛLªIdentifierÍÊÍÕ«BorderStyleLªIdentifierÍÖÍÛ¥SolidÂÂ¤init`¨PropertyÍúÍQÂÂÂLªIdentifierÍúÍ ¦radius_°ObjectExpressionÍÍQ‘`¨PropertyÍ%Í2ÂÂÂLªIdentifierÍ%Í/ªbottomLeftR§LiteralÍ1Í2¡2¤init¤initÂS³ExpressionStatementÍˆÍÙT®CallExpressionÍˆÍØY°MemberExpressionÍˆÍ“LªIdentifierÍˆÍŒ¤TextLªIdentifierÍÍ“¦rotateÂÂ‘_°ObjectExpressionÍ”Í×‘`¨PropertyÍ³Í¼ÂÂÂLªIdentifierÍ³Í¸¥angleR§LiteralÍºÍ¼-¢45¤initÂLªIdentifierÍòÍö¤TextÂS³ExpressionStatementÍÍT®CallExpressionÍÍY°MemberExpressionÍÍLªIdentifierÍÍ¤TextLªIdentifierÍÍ£popÂÂÂS³ExpressionStatementÍ/Í;T®CallExpressionÍ/Í:Y°MemberExpressionÍ/Í8LªIdentifierÍ/Í4¥StackLªIdentifierÍ5Í8£popÂÂÂÂM®BlockStatementÍrÍÓ‘S³ExpressionStatementÍ…ÍÄT®CallExpressionÍ…ÍÃY°MemberExpressionÍ…Í¤U®ThisExpressionÍ…Í‰LªIdentifierÍŠÍ¤ºifElseBranchUpdateFunctionÂÂ’R§LiteralÍ¥Í¦¡1O·ArrowFunctionExpressionÍ¨ÍÂÀÂÂÂM®BlockStatementÍ®ÍÂÂLªIdentifierÍàÍâ¢IfÂS³ExpressionStatementÍîÍ÷T®CallExpressionÍîÍöY°MemberExpressionÍîÍôLªIdentifierÍîÍğ¢IfLªIdentifierÍñÍô£popÂÂÂS³ExpressionStatementÍÍ»T®CallExpressionÍÍºY°MemberExpressionÍÍU®ThisExpressionÍÍLªIdentifierÍÍ¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ ÍµÀÂÂÂ’LªIdentifierÍ!Í'¦elmtIdLªIdentifierÍ)Í8¯isInitialRenderM®BlockStatementÍ=Íµ’S³ExpressionStatementÍLÍXT®CallExpressionÍLÍWY°MemberExpressionÍLÍULªIdentifierÍLÍN¢IfLªIdentifierÍOÍU¦createÂÂÂV«IfStatementÍfÍªY°MemberExpressionÍjÍƒY°MemberExpressionÍjÍyU®ThisExpressionÍjÍnLªIdentifierÍoÍyªtitleNViewÂÂLªIdentifierÍzÍƒ©titleTextÂÂM®BlockStatementÍ…Í6‘S³ExpressionStatementÍ˜Í'T®CallExpressionÍ˜Í&Y°MemberExpressionÍ˜Í·U®ThisExpressionÍ˜ÍœLªIdentifierÍÍ·ºifElseBranchUpdateFunctionÂÂ’R§LiteralÍ¸Í¹ ¡0O·ArrowFunctionExpressionÍ»Í%ÀÂÂÂM®BlockStatementÍÁÍ%’S³ExpressionStatementÍØÍñT®CallExpressionÍØÍğY°MemberExpressionÍØÍöU®ThisExpressionÍØÍÜLªIdentifierÍİÍö¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ÷ÍéÀÂÂÂ’LªIdentifierÍøÍş¦elmtIdLªIdentifierÍ Í¯isInitialRenderM®BlockStatementÍÍé–S³ExpressionStatementÍ/ÍVT®CallExpressionÍ/ÍUY°MemberExpressionÍ/Í:LªIdentifierÍ/Í3¤TextLªIdentifierÍ4Í:¦createÂÂ‘Y°MemberExpressionÍ;ÍTY°MemberExpressionÍ;ÍJU®ThisExpressionÍ;Í?LªIdentifierÍ@ÍJªtitleNViewÂÂLªIdentifierÍKÍT©titleTextÂÂÂS³ExpressionStatementÍpÍ‚T®CallExpressionÍpÍY°MemberExpressionÍpÍ}LªIdentifierÍpÍt¤TextLªIdentifierÍuÍ}¨fontSizeÂÂ‘R§LiteralÍ~Í€¢20ÂS³ExpressionStatementÍœÍÇT®CallExpressionÍœÍÆY°MemberExpressionÍœÍªLªIdentifierÍœÍ ¤TextLªIdentifierÍ¡Íª©fontColorÂÂ‘Y°MemberExpressionÍ«ÍÅY°MemberExpressionÍ«ÍºU®ThisExpressionÍ«Í¯LªIdentifierÍ°ÍºªtitleNViewÂÂLªIdentifierÍ»ÍÅªtitleColorÂÂÂS³ExpressionStatementÍáÍòT®CallExpressionÍáÍñY°MemberExpressionÍáÍîLªIdentifierÍáÍå¤TextLªIdentifierÍæÍî¨maxLinesÂÂ‘R§LiteralÍïÍğ¡1ÂS³ExpressionStatementÍÍyT®CallExpressionÍÍxY°MemberExpressionÍÍLªIdentifierÍÍ¤TextLªIdentifierÍÍ¬textOverflowÂÂ‘_°ObjectExpressionÍÍw‘`¨PropertyÍ=Í\ÂÂÂLªIdentifierÍ=ÍE¨overflowY°MemberExpressionÍGÍ\LªIdentifierÍGÍS¬TextOverflowLªIdentifierÍTÍ\¨EllipsisÂÂ¤initÂS³ExpressionStatementÍ“ÍÒT®CallExpressionÍ“ÍÑY°MemberExpressionÍ“ÍLªIdentifierÍ“Í—¤TextLªIdentifierÍ˜Í¦marginÂÂ‘_°ObjectExpressionÍŸÍĞ‘`¨PropertyÍ¡ÍÎÂÂÂLªIdentifierÍ¡Í¥¤leftVµConditionalExpressionÍ§ÍÎY°MemberExpressionÍ§ÍÅY°MemberExpressionÍ§Í¶U®ThisExpressionÍ§Í«LªIdentifierÍ¬Í¶ªtitleNViewÂÂLªIdentifierÍ·ÍÅ®autoBackButtonÂÂR§LiteralÍÈÍÉ ¡0R§LiteralÍÌÍÎ¢16¤initÂLªIdentifierÍëÍï¤TextÂS³ExpressionStatementÍÍT®CallExpressionÍÍY°MemberExpressionÍÍLªIdentifierÍÍ¤TextLªIdentifierÍÍ£popÂÂÂÂM®BlockStatementÍIÍª‘S³ExpressionStatementÍ\Í›T®CallExpressionÍ\ÍšY°MemberExpressionÍ\Í{U®ThisExpressionÍ\Í`LªIdentifierÍaÍ{ºifElseBranchUpdateFunctionÂÂ’R§LiteralÍ|Í}¡1O·ArrowFunctionExpressionÍÍ™ÀÂÂÂM®BlockStatementÍ…Í™ÂLªIdentifierÍ·Í¹¢IfÂS³ExpressionStatementÍÅÍÎT®CallExpressionÍÅÍÍY°MemberExpressionÍÅÍËLªIdentifierÍÅÍÇ¢IfLªIdentifierÍÈÍË£popÂÂÂS³ExpressionStatementÍØÍ¤T®CallExpressionÍØÍ£Y°MemberExpressionÍØÍöU®ThisExpressionÍØÍÜLªIdentifierÍİÍö¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍ÷ÍÀÂÂÂ’LªIdentifierÍøÍş¦elmtIdLªIdentifierÍ Í¯isInitialRenderM®BlockStatementÍÍ’S³ExpressionStatementÍ#Í/T®CallExpressionÍ#Í.Y°MemberExpressionÍ#Í,LªIdentifierÍ#Í%¢IfLªIdentifierÍ&Í,¦createÂÂÂV«IfStatementÍ=Í“Y°MemberExpressionÍAÍXY°MemberExpressionÍAÍPU®ThisExpressionÍAÍELªIdentifierÍFÍPªtitleNViewÂÂLªIdentifierÍQÍX§loadingÂÂM®BlockStatementÍZÍ‘S³ExpressionStatementÍmÍT®CallExpressionÍmÍY°MemberExpressionÍmÍŒU®ThisExpressionÍmÍqLªIdentifierÍrÍŒºifElseBranchUpdateFunctionÂÂ’R§LiteralÍÍ ¡0O·ArrowFunctionExpressionÍÍÀÂÂÂM®BlockStatementÍ–Í‘S³ExpressionStatementÍ­ÍûT®CallExpressionÍ­ÍúY°MemberExpressionÍ­ÍËU®ThisExpressionÍ­Í±LªIdentifierÍ²ÍË¹observeComponentCreation2ÂÂ’O·ArrowFunctionExpressionÍÌÍèÀÂÂÂ’LªIdentifierÍÍÍÓ¦elmtIdLªIdentifierÍÕÍä¯isInitialRenderM®BlockStatementÍéÍè”S³ExpressionStatementÍÍT®CallExpressionÍÍY°MemberExpressionÍÍLªIdentifierÍÍ¯LoadingProgressLªIdentifierÍÍ¦createÂÂÂS³ExpressionStatementÍ7ÍQT®CallExpressionÍ7ÍPY°MemberExpressionÍ7ÍLLªIdentifierÍ7ÍF¯LoadingProgressLªIdentifierÍGÍL¥widthÂÂ‘R§LiteralÍMÍO ¢32ÂS³ExpressionStatementÍkÍ…T®CallExpressionÍkÍ„Y°MemberExpressionÍkÍLªIdentifierÍkÍz¯LoadingProgressLªIdentifierÍ{Í¦marginÂÂ‘R§LiteralÍ‚Íƒ¡4ÂS³ExpressionStatementÍŸÍÑT®CallExpressionÍŸÍĞY°MemberExpressionÍŸÍ´LªIdentifierÍŸÍ®¯LoadingProgressLªIdentifierÍ¯Í´¥colorÂÂ‘Y°MemberExpressionÍµÍÏY°MemberExpressionÍµÍÄU®ThisExpressionÍµÍ¹LªIdentifierÍºÍÄªtitleNViewÂÂLªIdentifierÍÅÍÏªtitleColorÂÂÂLªIdentifierÍêÍù¯LoadingProgressÂÂM®BlockStatementÍ2Í“‘S³ExpressionStatementÍEÍ„T®CallExpressionÍEÍƒY°MemberExpressionÍEÍdU®ThisExpressionÍEÍILªIdentifierÍJÍdºifElseBranchUpdateFunctionÂÂ’R§LiteralÍeÍf¡1O·ArrowFunctionExpressionÍhÍ‚ÀÂÂÂM®BlockStatementÍnÍ‚ÂLªIdentifierÍ Í¢¢IfÂS³ExpressionStatementÍ®Í·T®CallExpressionÍ®Í¶Y°MemberExpressionÍ®Í´LªIdentifierÍ®Í°¢IfLªIdentifierÍ±Í´£popÂÂÂS³ExpressionStatementÍÁÍÌT®CallExpressionÍÁÍËY°MemberExpressionÍÁÍÉLªIdentifierÍÁÍÅ¤FlexLªIdentifierÍÆÍÉ£popÂÂÂS³ExpressionStatementÍÖÍãT®CallExpressionÍÖÍâY°MemberExpressionÍÖÍàLªIdentifierÍÖÍÜ¦ColumnLªIdentifierÍİÍà£popÂÂÂN°MethodDefinitionÍğÍ(ÂÂLªIdentifierÍğÍø¨rerender¦methodO²FunctionExpressionÍøÍ(ÀÂÂÂM®BlockStatementÍûÍ(‘S³ExpressionStatementÍÍ!T®CallExpressionÍÍ Y°MemberExpressionÍÍU®ThisExpressionÍÍ
+LªIdentifierÍÍ³updateDirtyElementsÂÂÂÀ‘Ôra•¤type¥start£endªspecifiers¦source±ImportDeclarationÌ€Ì²‘Ôrb•¤type¥start£end¨imported¥local¯ImportSpecifierÌ‰Ì—LªIdentifierÌ‰Ì—®SafeAreaOffsetLªIdentifierÌ‰Ì—®SafeAreaOffsetR§LiteralÌŸÌ±°./SafeAreaOffset²'./SafeAreaOffset'

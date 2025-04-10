@@ -13,6 +13,7 @@ im-uikit-uniapp 界面效果如下图所示：
 - iOS
 - 微信小程序
 - h5
+- 鸿蒙
 
 ## 运行 demo
 
