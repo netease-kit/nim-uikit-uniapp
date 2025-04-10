@@ -1,8 +1,12 @@
 <script lang="ts">
 import RootStore from "@xkit-yx/im-store-v2";
-
-import V2NIM from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
+/** esm 版本 */
+//@ts-ignore
+// import { V2NIMConst, NIM } from './esmNim.js'
+/** 常规版本*/
+import NIM from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
 import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
+
 import {
   customRedirectTo,
   customReLaunch,
@@ -11,15 +15,13 @@ import {
 import { getMsgContentTipByType } from "./utils/msg";
 import { STORAGE_KEY } from "./utils/constants";
 import { isWxApp } from "./utils";
+/** 国际化*/
 import { setLanguage } from "./utils/i18n";
-import {
-  V2NIMMessage,
-  V2NIMMessagePushConfig,
-} from "nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService";
+
 // #ifdef APP-PLUS
-// 推送插件
+/** 推送插件 */
 const nimPushPlugin = uni.requireNativePlugin("NIMUniPlugin-PluginModule");
-// 音视频通话插件
+/** 音视频通话插件 */
 const nimCallKit = (uni.$UIKitCallKit =
   uni.requireNativePlugin("netease-CallKit"));
 // #endif
@@ -27,13 +29,16 @@ const nimCallKit = (uni.$UIKitCallKit =
 export default {
   onLaunch() {
     // #ifdef APP-PLUS
-    // 关闭启动画面，锁定竖屏
+    /** 关闭启动画面，锁定竖屏 */
     plus.navigator.closeSplashscreen();
     plus.screen.lockOrientation("portrait-primary");
     // #endif
 
-    // 设置语言
-    // setLanguage('en')
+    /** 设置语言 （此处为了方便demo切换语言，将其存到本地，实际需根据业务情况设置）*/
+    setLanguage(
+      uni.getStorageSync("switchToEnglishFlag") == "en" ? "en" : "zh"
+    );
+    /** 已经登录了 不用走初始化逻辑*/
     if (
       uni?.$UIKitStore?.connectStore?.connectStatus ===
       V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
@@ -44,7 +49,7 @@ export default {
     if (imOptions) {
       this.initNim(imOptions);
     } else {
-      // 需要登录 im
+      /** 未登录 跳转登录页 */
       customRedirectTo({
         url: isWxApp ? "/pages/index/index" : "/pages/Login/index",
       });
@@ -62,26 +67,31 @@ export default {
   },
   methods: {
     initNim(opts: { account: string; token: string }) {
-      // 保存登录信息
-
+      /** 保存登录信息  demo 层逻辑 具体根据您的业务调整*/
       uni.setStorage({
         key: STORAGE_KEY,
         data: opts,
-        success: function () {
-          console.log("保存登录信息success");
-        },
       });
 
-      const nim = (uni.$UIKitNIM = V2NIM.getInstance(
+      /** 是否开启云端会话（此处为了方便demo切换云端/本地会话，将其存到本地，实际需根据业务情况设置）*/
+      const enableV2CloudConversation =
+        uni.getStorageSync("enableV2CloudConversation") === "on";
+
+      /** 初始化 nim sdk */
+      //@ts-ignore
+      const nim = (uni.$UIKitNIM = NIM.getInstance(
         {
           appkey: "",
           needReconnect: true,
-          // "reconnectionAttempts": 5,
           debugLevel: "debug",
           apiVersion: "v2",
+          enableV2CloudConversation: enableV2CloudConversation,
         },
         {
           V2NIMLoginServiceConfig: {
+            /**
+             * 微信小程序需要使用单独的lbsUrls和linkUrl
+             */
             lbsUrls: isWxApp
               ? ["https://lbs.netease.im/lbs/wxwebconf.jsp"]
               : ["https://lbs.netease.im/lbs/webconf.jsp"],
@@ -94,6 +104,7 @@ export default {
         }
       ));
 
+      /** 初始化 im store */
       const store = (uni.$UIKitStore = new RootStore(
         // @ts-ignore
         nim,
@@ -108,11 +119,7 @@ export default {
           teamAgreeMode:
             V2NIMConst.V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH,
           // 发送消息前回调, 可对消息体进行修改，添加自定义参数
-          sendMsgBefore: async (options: {
-            msg: V2NIMMessage;
-            conversationId: string;
-            serverExtension?: Record<string, unknown>;
-          }) => {
+          sendMsgBefore: async (options: any) => {
             const pushContent = getMsgContentTipByType({
               text: options.msg.text,
               messageType: options.msg.messageType,
@@ -177,7 +184,7 @@ export default {
               sessionType: conversationType,
             });
 
-            const pushConfig: V2NIMMessagePushConfig = {
+            const pushConfig = {
               pushEnabled: true,
               pushNickEnabled: true,
               forcePush: needForcePush,
@@ -192,27 +199,22 @@ export default {
         },
         "UniApp"
       ));
-
+      /** nim sdk 登录 */
       nim.V2NIMLoginService.login(opts.account, opts.token).then(() => {
         // #ifdef APP-PLUS
-
-        // 初始化音视频通话插件
-        console.log("-------------callkit init 开始", opts.account, opts.token);
+        /** 初始化音视频通话插件*/
         nimCallKit.initConfig(
           {
-            appKey: "3e215d27b6a6a9e27dad7ef36dd5b65c", // 请填写你的appkey
+            appKey: "", // 请填写你的appkey
             account: opts.account, // 请填写你的account
             token: opts.token, // 请填写你的token
             apnsCername: "",
             pkCername: "",
           },
           (ret: any) => {
-            console.log("-------------callkit 回调", ret);
             if (ret.code != 200) {
-              console.log("-------------callkit init失败\n错误码：");
+              // callkit init失败
             } else {
-              console.log("-------------callkit 开始登录------------");
-
               nimCallKit.login(
                 {
                   account: opts.account,
@@ -220,15 +222,9 @@ export default {
                 },
                 function (ret: any) {
                   if (ret.code != 200) {
-                    console.log(
-                      "-------------callkit 登录失败------------",
-                      ret
-                    );
+                    // 登录失败
                   } else {
-                    console.log(
-                      "-------------callkit 登录成功------------ ",
-                      ret
-                    );
+                    // 登录成功
                   }
                 }
               );
@@ -241,7 +237,7 @@ export default {
         });
       });
       // #ifdef APP-PLUS
-      // 注册推送
+      /** 注册推送 */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
         miPush: {
           appId: "",
@@ -296,7 +292,7 @@ export default {
       } catch (error) {
         console.log("音视频通话插件退出失败", error);
       }
-
+      // 退出登录
       uni.$UIKitNIM.V2NIMLoginService.logout().then(() => {
         uni.$UIKitStore.destroy();
         customReLaunch({

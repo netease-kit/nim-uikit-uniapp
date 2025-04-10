@@ -1,0 +1,2009 @@
+
+.network-alert[data-v-f5969aa8] {
+  font-size: 14px;
+  background: #fee3e6;
+  color: #fc596a;
+  text-align: center;
+  padding: 8px 0;
+}
+
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.icon-wrapper[data-v-ca7f3f1d] {
+  display: inline-block;
+  line-height: 0;
+}
+.icon[data-v-ca7f3f1d] {
+  display: inline-block;
+  vertical-align: middle;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+body[data-v-40a09da3],
+div[data-v-40a09da3],
+ul[data-v-40a09da3],
+ol[data-v-40a09da3],
+dl[data-v-40a09da3],
+dt[data-v-40a09da3],
+dd[data-v-40a09da3],
+li[data-v-40a09da3],
+dl[data-v-40a09da3],
+h1[data-v-40a09da3],
+h2[data-v-40a09da3],
+h3[data-v-40a09da3],
+h4[data-v-40a09da3],
+p[data-v-40a09da3] {
+  margin: 0;
+  padding: 0;
+  font-family: "PingFang SC";
+  font-style: normal;
+}
+ol[data-v-40a09da3],
+ul[data-v-40a09da3],
+li[data-v-40a09da3] {
+  list-style: none;
+}
+img[data-v-40a09da3] {
+  border: 0;
+  vertical-align: middle;
+}
+body[data-v-40a09da3] {
+  color: #000000;
+  background: #fff;
+}
+.clear[data-v-40a09da3] {
+  clear: both;
+  height: 1px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -1px;
+}
+a[data-v-40a09da3] {
+  color: #000000;
+  text-decoration: none;
+}
+a[data-v-40a09da3]:hover {
+  text-decoration: none;
+}
+@keyframes loadingCircle-40a09da3 {
+100% {
+    transform: rotate(360deg);
+}
+}
+.ok-btn[data-v-40a09da3] {
+  background: #ffffff;
+  border-radius: 8px;
+  color: #5ca1e6;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0px 20px;
+}
+.button-box-mp[data-v-40a09da3] {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+.button-box[data-v-40a09da3] {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.button-box[data-v-40a09da3],
+.button-box-mp .button-icon[data-v-40a09da3] {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+}
+.nav-bar-wrapper[data-v-40a09da3] {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--status-bar-height) 10px 5px 10px;
+  z-index: 9999;
+}
+.nav-bar-wrapper .title-container[data-v-40a09da3] {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 230px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nav-bar-wrapper .title[data-v-40a09da3] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.nav-bar-wrapper .subTitle[data-v-40a09da3] {
+  white-space: nowrap;
+  font-weight: 500;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.avatar[data-v-c8a835f9] {
+  overflow: hidden;
+  border-radius: 50%;
+  flex-shrink: 0;
+  position: relative;
+}
+.img-mask[data-v-c8a835f9] {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+}
+.avatar-img[data-v-c8a835f9] {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+.avatar-name-wrapper[data-v-c8a835f9] {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-name-text[data-v-c8a835f9] {
+  color: #fff;
+  size: 14px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.zb-tooltip[data-v-218252dc] {
+  position: relative;
+}
+.zb_tooltip_content[data-v-218252dc] {
+  height: 100%;
+  /* float: left; */
+  position: relative;
+  display: inline-block;
+  /* overflow: hidden; */
+}
+.zb_tooltip__popper[data-v-218252dc] {
+  /* transform-origin: center top; */
+  background: var(--theme-bg-color);
+  visibility: hidden;
+  position: absolute;
+  border-radius: 4px;
+  font-size: 12px;
+  padding: 10px;
+  min-width: 10px;
+  word-wrap: break-word;
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 99;
+}
+.zb_tooltip__mask[data-v-218252dc] {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: rgba(255, 255, 255, 0);
+  z-index: 8;
+}
+.zb_popper__icon[data-v-218252dc] {
+  width: 0;
+  height: 0;
+  z-index: 9;
+  position: absolute;
+}
+.zb_popper__arrow[data-v-218252dc] {
+  bottom: -5px;
+  /* transform-origin: center top; */
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid var(--theme-bg-color);
+}
+.zb_popper__right[data-v-218252dc] {
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid var(--theme-bg-color);
+  left: -5px;
+}
+.zb_popper__left[data-v-218252dc] {
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-left: 6px solid var(--theme-bg-color);
+  right: -5px;
+}
+.zb_popper__up[data-v-218252dc] {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid var(--theme-bg-color);
+  top: -5px;
+}
+.fixed[data-v-218252dc] {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: auto;
+  background: red;
+  z-index: -1;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+body[data-v-7f8137d5],
+div[data-v-7f8137d5],
+ul[data-v-7f8137d5],
+ol[data-v-7f8137d5],
+dl[data-v-7f8137d5],
+dt[data-v-7f8137d5],
+dd[data-v-7f8137d5],
+li[data-v-7f8137d5],
+dl[data-v-7f8137d5],
+h1[data-v-7f8137d5],
+h2[data-v-7f8137d5],
+h3[data-v-7f8137d5],
+h4[data-v-7f8137d5],
+p[data-v-7f8137d5] {
+  margin: 0;
+  padding: 0;
+  font-family: "PingFang SC";
+  font-style: normal;
+}
+ol[data-v-7f8137d5],
+ul[data-v-7f8137d5],
+li[data-v-7f8137d5] {
+  list-style: none;
+}
+img[data-v-7f8137d5] {
+  border: 0;
+  vertical-align: middle;
+}
+body[data-v-7f8137d5] {
+  color: #000000;
+  background: #fff;
+}
+.clear[data-v-7f8137d5] {
+  clear: both;
+  height: 1px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -1px;
+}
+a[data-v-7f8137d5] {
+  color: #000000;
+  text-decoration: none;
+}
+a[data-v-7f8137d5]:hover {
+  text-decoration: none;
+}
+@keyframes loadingCircle-7f8137d5 {
+100% {
+    transform: rotate(360deg);
+}
+}
+.ok-btn[data-v-7f8137d5] {
+  background: #ffffff;
+  border-radius: 8px;
+  color: #5ca1e6;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0px 20px;
+}
+.button-box-mp[data-v-7f8137d5] {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+.button-box[data-v-7f8137d5] {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.button-box[data-v-7f8137d5],
+.button-box-mp .button-icon[data-v-7f8137d5] {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+}
+.msg-bg[data-v-7f8137d5] {
+  max-width: 11.25rem;
+  overflow: hidden;
+  padding: 12px 16px;
+}
+.msg-bg-in[data-v-7f8137d5] {
+  border-radius: 0 8px 8px 8px;
+  background-color: #e8eaed;
+  margin-left: 8px;
+}
+.msg-bg-out[data-v-7f8137d5] {
+  border-radius: 8px 0 8px 8px;
+  background-color: #d6e5f6;
+  margin-right: 8px;
+}
+.msg-action-groups[data-v-7f8137d5] {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 224px;
+  width: -webkit-max-content;
+  width: max-content;
+}
+.msg-action-btn[data-v-7f8137d5] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px;
+  width: 56px;
+}
+.msg-action-btn-icon[data-v-7f8137d5] {
+  color: #656a72;
+  font-size: 18px;
+}
+.msg-action-btn-text[data-v-7f8137d5] {
+  color: #333;
+  font-size: 14px;
+  word-break: keep-all;
+}
+.msg-failed-wrapper[data-v-7f8137d5] {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: 100%;
+}
+.msg-failed-wrapper .in-blacklist[data-v-7f8137d5] {
+  color: #b3b7bc;
+  font-size: 14px;
+  position: relative;
+  right: 20%;
+  margin: 10px 0;
+}
+.msg-failed-wrapper .friend-delete[data-v-7f8137d5] {
+  color: #b3b7bc;
+  font-size: 14px;
+  margin: 10px 0;
+}
+.msg-failed-wrapper .friend-delete .friend-verification[data-v-7f8137d5] {
+  color: #337eff;
+  font-size: 14px;
+}
+.msg-status-wrapper[data-v-7f8137d5] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-right: 8px;
+  box-sizing: border-box;
+}
+.msg-status-wrapper .msg-bg-out[data-v-7f8137d5] {
+  margin-right: 0;
+  flex: 1;
+}
+.msg-status-icon[data-v-7f8137d5] {
+  margin-right: 8px;
+  font-size: 21px;
+}
+.msg-status-icon.icon-loading[data-v-7f8137d5] {
+  color: #337eff;
+  animation: loadingCircle-7f8137d5 1s infinite linear;
+}
+.icon-fail[data-v-7f8137d5] {
+  background: #fc596a;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  line-height: 20px;
+  margin-right: 5px;
+  font-size: 15px;
+}
+.msg-failed[data-v-7f8137d5] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.wrapper[data-v-7b46a878] {
+  flex: 1;
+  font-size: 13px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.msg-reply-text[data-v-7b46a878] {
+  font-size: 13px !important;
+  height: 18px;
+  line-height: 18px;
+  width: 100%;
+  display: inline;
+}
+.ellipsis[data-v-7b46a878] {
+  display: inline-block;
+  flex-basis: 25px;
+  font-size: 13px;
+}
+
+.uni-link[data-v-109b22ad] {
+  cursor: pointer;
+}
+.uni-link--withline[data-v-109b22ad] {
+  text-decoration: underline;
+}
+
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-text[data-v-78d0533c] {
+  color: #333;
+  text-align: left;
+  overflow-y: auto;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: break-spaces;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.audio-dur[data-v-bedcccfd] {
+  height: 24px;
+  line-height: 24px;
+}
+.audio-in[data-v-bedcccfd],
+.audio-out[data-v-bedcccfd] {
+  width: 50px;
+  display: flex;
+  cursor: pointer;
+  justify-content: flex-end;
+  align-items: center;
+}
+.audio-in[data-v-bedcccfd] {
+  flex-direction: row-reverse;
+}
+.audio-in .audio-icon-wrapper[data-v-bedcccfd] {
+  transform: rotate(180deg);
+}
+.audio-icon-wrapper[data-v-bedcccfd] {
+  height: 24px;
+  display: flex;
+  align-items: center;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.reply-msg-wrapper[data-v-acd112ca] {
+  display: flex;
+  align-items: center;
+  color: #929299;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.reply-msg-wrapper .reply-msg[data-v-acd112ca] {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.reply-msg-wrapper .reply-msg message-one-line[data-v-acd112ca] {
+  flex: 1;
+  font-size: 13px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.reply-msg-wrapper .reply-msg-name-wrapper[data-v-acd112ca] {
+  margin-right: 5px;
+  max-width: 125px;
+  flex: 0 0 auto;
+  display: flex;
+  white-space: nowrap;
+}
+.reply-msg-wrapper .reply-msg-name-line[data-v-acd112ca] {
+  flex-basis: 0 0 3px;
+  margin-right: 2px;
+}
+.reply-msg-wrapper .reply-msg-name-to[data-v-acd112ca] {
+  flex-basis: 0 0 3px;
+}
+.reply-msg-wrapper .reply-msg-name-content[data-v-acd112ca] {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.reply-msg-wrapper .reply-msg-content[data-v-acd112ca] {
+  flex: 1;
+}
+.reply-full-screen[data-v-acd112ca] {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 24px;
+  justify-content: center;
+  touch-action: none;
+  z-index: 999999999;
+  box-sizing: border-box;
+}
+.reply-message-content[data-v-acd112ca] {
+  height: 85vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 30px 30px 100px 30px;
+  touch-action: none;
+  display: flex;
+  align-items: center;
+}
+.other-msg-wrapper[data-v-acd112ca] {
+  flex-wrap: nowrap;
+}
+.reply-message-close[data-v-acd112ca] {
+  position: fixed;
+  right: 20px;
+  z-index: 999999;
+  top: 60px;
+}
+.reply-message-close-mp[data-v-acd112ca] {
+  position: fixed;
+  right: 20px;
+  top: 100px;
+  z-index: 999999;
+}
+.msg-common[data-v-acd112ca] {
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+  max-width: 11.25rem;
+  overflow: hidden;
+  padding: 16px 20px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-file[data-v-999edb3e] {
+  height: 56px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #dee0e2;
+}
+.msg-file-in[data-v-999edb3e] {
+  margin-left: 8px;
+}
+.msg-file-out[data-v-999edb3e] {
+  margin-right: 8px;
+}
+.msg-file-content[data-v-999edb3e] {
+  margin-left: 15px;
+  max-width: 9.375rem;
+  min-width: 0;
+}
+.msg-file-title[data-v-999edb3e] {
+  color: #333;
+  font-size: 14px;
+  font-weight: 400;
+  display: flex;
+}
+.msg-file-title-prefix[data-v-999edb3e] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.msg-file-title-suffix[data-v-999edb3e] {
+  white-space: nowrap;
+}
+.msg-file-name[data-v-999edb3e] {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.msg-file-size[data-v-999edb3e] {
+  color: #999;
+  font-size: 10px;
+  margin-top: 4px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-noti[data-v-27e904c7] {
+  margin: 8px auto 0;
+  text-align: center;
+  font-size: 14px;
+  color: #b3b7bc;
+  max-width: 70%;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.g2-message-wrapper[data-v-8a417550] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.g2-message-status[data-v-8a417550] {
+  margin: 0 7px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-read-wrapper[data-v-571f73c4] {
+  align-self: flex-end;
+}
+.icon-read-wrapper[data-v-571f73c4] {
+  margin: 0px 10px 5px 0;
+}
+.sector[data-v-571f73c4] {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  border: 2px solid #4c84ff;
+  width: 14px;
+  height: 14px;
+  background-color: #eeeeee;
+  border-radius: 50%;
+  margin: 0px 10px 0 0;
+}
+.sector .cover-1[data-v-571f73c4],
+.sector .cover-2[data-v-571f73c4] {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  background-color: #eeeeee;
+}
+.sector .cover-1[data-v-571f73c4] {
+  background-color: #4c84ff;
+  transform-origin: right;
+}
+.sector .cover-3[data-v-571f73c4] {
+  right: 0;
+  background-color: #4c84ff;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.appellation[data-v-3d795ad0] {
+  color: #333;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-item-wrapper[data-v-ef3dafa9] {
+  padding: 0 15px 15px;
+}
+.msg-common[data-v-ef3dafa9] {
+  padding-top: 8px;
+  display: flex;
+  align-items: flex-start;
+  font-size: 16px;
+}
+.msg-common message-is-read[data-v-ef3dafa9] {
+  align-self: flex-end;
+}
+.msg-pin[data-v-ef3dafa9] {
+  opacity: 1;
+  background: #fffbea;
+}
+.msg-pin-tip[data-v-ef3dafa9] {
+  font-size: 11px;
+  font-weight: normal;
+  color: #3eaf96;
+  margin: 8px 50px 0 50px;
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.msg-content[data-v-ef3dafa9] {
+  display: flex;
+  flex-direction: column;
+}
+.msg-name[data-v-ef3dafa9] {
+  font-size: 12px;
+  color: #999;
+  text-align: left;
+  margin-bottom: 4px;
+  max-width: 9.375rem;
+  padding-left: 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.msg-image[data-v-ef3dafa9] {
+  max-width: 100%;
+}
+.msg-time[data-v-ef3dafa9] {
+  margin-top: 8px;
+  text-align: center;
+  color: #b3b7bc;
+  font-size: 12px;
+}
+.msg-recall-btn[data-v-ef3dafa9] {
+  margin-left: 5px;
+  color: #1861df;
+}
+.msg-recall2[data-v-ef3dafa9] {
+  font-size: 16px;
+}
+.self-msg-recall[data-v-ef3dafa9] {
+  max-width: 11.25rem;
+  overflow: hidden;
+  padding: 12px 16px;
+  border-radius: 8px 0px 8px 8px;
+  margin-right: 8px;
+  background-color: #d6e5f6;
+  color: #666666;
+}
+.msg-recall[data-v-ef3dafa9] {
+  max-width: 11.25rem;
+  overflow: hidden;
+  padding: 12px 16px;
+  border-radius: 0px 8px 8px 8px;
+  margin-left: 8px;
+  background-color: #e8eaed;
+  color: #666666;
+}
+.recall-text[data-v-ef3dafa9] {
+  color: #666666;
+}
+.video-play-button[data-v-ef3dafa9] {
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 50%;
+  z-index: 9;
+}
+.video-play-icon[data-v-ef3dafa9] {
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-left: 18px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-40%, -50%);
+}
+.video-msg-wrapper[data-v-ef3dafa9] {
+  box-sizing: border-box;
+  max-width: 11.25rem;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-list-wrapper[data-v-afb2a626] {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 16px 0;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+.msg-tip[data-v-afb2a626] {
+  text-align: center;
+  color: #b3b7bc;
+  font-size: 12px;
+  margin-top: 10px;
+}
+.block[data-v-afb2a626] {
+  width: 100%;
+  height: 40px;
+}
+.message-scroll-list[data-v-afb2a626] {
+  height: 100%;
+  box-sizing: border-box;
+  padding-bottom: 1px;
+}
+.view-more-text[data-v-afb2a626] {
+  text-align: center;
+  color: #b3b7bc;
+  font-size: 15px;
+  margin-top: 20px;
+}
+body > uni-view > message > uni-view > message-list[data-v-afb2a626] {
+  height: 100%;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.msg-face-wrapper[data-v-b8bdb75f] {
+  box-sizing: border-box;
+}
+.msg-face-control[data-v-b8bdb75f] {
+  position: fixed;
+  bottom: 8px;
+  right: 10px;
+  z-index: 8;
+}
+.emoji-block[data-v-b8bdb75f] {
+  width: 100%;
+  height: 40px;
+  background-color: transparent;
+}
+.msg-face[data-v-b8bdb75f] {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 10px;
+}
+.msg-face-row[data-v-b8bdb75f] {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 12px;
+}
+.msg-face-row[data-v-b8bdb75f]:last-child {
+  flex-basis: 57.14%;
+}
+.msg-face-item[data-v-b8bdb75f] {
+  font-size: 27px;
+}
+.msg-face-delete[data-v-b8bdb75f] {
+  font-size: 27px;
+  visibility: hidden;
+}
+.msg-face-control[data-v-b8bdb75f] {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.msg-send-btn[data-v-b8bdb75f] {
+  padding: 6px 16px;
+  color: #fff;
+  background-color: #337eff;
+}
+.msg-delete-btn[data-v-b8bdb75f] {
+  background-color: #fff;
+  margin-right: 10px;
+  padding: 0 16px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.voice-panel-wrapper[data-v-67c7211d] {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.voice-panel[data-v-67c7211d] {
+  flex: 1;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+.audio-remind-text[data-v-67c7211d] {
+  margin-top: 30px;
+  height: 30px;
+  text-align: center;
+  font-size: 14px;
+  color: #666;
+  line-height: 30px;
+}
+.voice-panel-circel[data-v-67c7211d] {
+  z-index: 3;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: linear-gradient(163deg, #4883ea 11%, #2561c9 121%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.big-circle[data-v-67c7211d] {
+  z-index: 1;
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  left: 20%;
+  top: 10%;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: #cce6f8 38.14%;
+  animation: circleSmall-67c7211d 1.5s ease-out;
+  animation-iteration-count: infinite;
+}
+.small-circle[data-v-67c7211d] {
+  z-index: 2;
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  background: #a0d2f0;
+  top: 28%;
+  left: 33%;
+  transform: translate(-50%, -50%);
+  animation: circleSmall-67c7211d 1.5s ease-out;
+  animation-iteration-count: infinite;
+}
+@keyframes circleSmall-67c7211d {
+0% {
+    transform: scale(1);
+    opacity: 0;
+}
+25% {
+    transform: scale(1);
+    opacity: 0.4;
+}
+50% {
+    transform: scale(1.2);
+    opacity: 0.6;
+}
+75% {
+    transform: scale(1.3);
+    opacity: 0.4;
+}
+100% {
+    transform: scale(1.4);
+    opacity: 0;
+}
+}
+.img-mask[data-v-67c7211d] {
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  opacity: 0;
+}
+.audio-btn-text[data-v-67c7211d] {
+  position: absolute;
+  bottom: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #666;
+  font-size: 14px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+.uni-popup[data-v-795eedea] {
+  position: fixed;
+  z-index: 999999;
+}
+.uni-popup.top[data-v-795eedea], .uni-popup.left[data-v-795eedea], .uni-popup.right[data-v-795eedea] {
+  top: 0;
+}
+.uni-popup .uni-popup__wrapper[data-v-795eedea] {
+  display: block;
+  position: relative;
+  z-index: 999;
+  /* iphonex 等安全区设置，底部安全区适配 */
+}
+.uni-popup .uni-popup__wrapper.left[data-v-795eedea], .uni-popup .uni-popup__wrapper.right[data-v-795eedea] {
+  padding-top: 0;
+  flex: 1;
+}
+.fixforpc-z-index[data-v-795eedea] {
+  z-index: 999;
+}
+.fixforpc-top[data-v-795eedea] {
+  top: 0;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+body[data-v-084fc42f],
+div[data-v-084fc42f],
+ul[data-v-084fc42f],
+ol[data-v-084fc42f],
+dl[data-v-084fc42f],
+dt[data-v-084fc42f],
+dd[data-v-084fc42f],
+li[data-v-084fc42f],
+dl[data-v-084fc42f],
+h1[data-v-084fc42f],
+h2[data-v-084fc42f],
+h3[data-v-084fc42f],
+h4[data-v-084fc42f],
+p[data-v-084fc42f] {
+  margin: 0;
+  padding: 0;
+  font-family: "PingFang SC";
+  font-style: normal;
+}
+ol[data-v-084fc42f],
+ul[data-v-084fc42f],
+li[data-v-084fc42f] {
+  list-style: none;
+}
+img[data-v-084fc42f] {
+  border: 0;
+  vertical-align: middle;
+}
+body[data-v-084fc42f] {
+  color: #000000;
+  background: #fff;
+}
+.clear[data-v-084fc42f] {
+  clear: both;
+  height: 1px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -1px;
+}
+a[data-v-084fc42f] {
+  color: #000000;
+  text-decoration: none;
+}
+a[data-v-084fc42f]:hover {
+  text-decoration: none;
+}
+@keyframes loadingCircle-084fc42f {
+100% {
+    transform: rotate(360deg);
+}
+}
+.ok-btn[data-v-084fc42f] {
+  background: #ffffff;
+  border-radius: 8px;
+  color: #5ca1e6;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0px 20px;
+}
+.button-box-mp[data-v-084fc42f] {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+.button-box[data-v-084fc42f] {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.button-box[data-v-084fc42f],
+.button-box-mp .button-icon[data-v-084fc42f] {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+}
+.mention-member-list-wrapper[data-v-084fc42f] {
+  z-index: 9999999;
+  touch-action: none;
+}
+.title[data-v-084fc42f] {
+  text-align: center;
+  font-weight: 500;
+  margin: 0 auto;
+}
+.header[data-v-084fc42f] {
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+.close[data-v-084fc42f] {
+  transform: rotate(90deg);
+  margin-left: 15px;
+}
+.member-list-content[data-v-084fc42f] {
+  height: 70vh;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+.member-item[data-v-084fc42f] {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  padding: 8px 20px;
+}
+.member-item-block[data-v-084fc42f] {
+  height: 100px;
+}
+.member-name[data-v-084fc42f] {
+  margin-left: 10px;
+  font-size: 16px;
+  padding-right: 20px;
+  color: #333333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.contact-item-icon[data-v-084fc42f] {
+  height: 42px;
+  width: 42px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 39px;
+  font-size: 20px;
+  color: #fff;
+  background-color: #53c3f4;
+}
+.owner[data-v-084fc42f],
+.manager[data-v-084fc42f] {
+  color: #069beb;
+  background-color: #d2e5f6;
+  height: 20px;
+  line-height: 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: center;
+  padding: 2px 4px;
+  position: relative;
+  right: 10px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+body[data-v-8bbf21ad],
+div[data-v-8bbf21ad],
+ul[data-v-8bbf21ad],
+ol[data-v-8bbf21ad],
+dl[data-v-8bbf21ad],
+dt[data-v-8bbf21ad],
+dd[data-v-8bbf21ad],
+li[data-v-8bbf21ad],
+dl[data-v-8bbf21ad],
+h1[data-v-8bbf21ad],
+h2[data-v-8bbf21ad],
+h3[data-v-8bbf21ad],
+h4[data-v-8bbf21ad],
+p[data-v-8bbf21ad] {
+  margin: 0;
+  padding: 0;
+  font-family: "PingFang SC";
+  font-style: normal;
+}
+ol[data-v-8bbf21ad],
+ul[data-v-8bbf21ad],
+li[data-v-8bbf21ad] {
+  list-style: none;
+}
+img[data-v-8bbf21ad] {
+  border: 0;
+  vertical-align: middle;
+}
+body[data-v-8bbf21ad] {
+  color: #000000;
+  background: #fff;
+}
+.clear[data-v-8bbf21ad] {
+  clear: both;
+  height: 1px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: -1px;
+}
+a[data-v-8bbf21ad] {
+  color: #000000;
+  text-decoration: none;
+}
+a[data-v-8bbf21ad]:hover {
+  text-decoration: none;
+}
+@keyframes loadingCircle-8bbf21ad {
+100% {
+    transform: rotate(360deg);
+}
+}
+.ok-btn[data-v-8bbf21ad] {
+  background: #ffffff;
+  border-radius: 8px;
+  color: #5ca1e6;
+  padding: 10px;
+  font-size: 16px;
+  text-align: center;
+  position: fixed;
+  bottom: 20px;
+  height: 40px;
+  width: calc(100% - 40px);
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0px 20px;
+}
+.button-box-mp[data-v-8bbf21ad] {
+  display: flex;
+  align-items: center;
+  position: fixed;
+  z-index: 100;
+  bottom: 30px;
+  right: 30px;
+}
+.button-box[data-v-8bbf21ad] {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.button-box[data-v-8bbf21ad],
+.button-box-mp .button-icon[data-v-8bbf21ad] {
+  width: 40px;
+  height: 40px;
+  margin-left: 20px;
+}
+.input-root[data-v-8bbf21ad] {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+  max-height: 300px;
+}
+.input-root-h5[data-v-8bbf21ad] {
+  height: auto;
+  position: relative;
+  order: 1;
+}
+.msg-input-wrapper[data-v-8bbf21ad] {
+  width: 100%;
+  height: 100%;
+  background-color: #eff1f3;
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+  z-index: 999;
+}
+.msg-input[data-v-8bbf21ad] {
+  overflow-x: hidden;
+  padding: 7px;
+  background-color: #eff1f3;
+}
+.msg-input-input[data-v-8bbf21ad] {
+  background-color: #fff;
+  height: 40px;
+  font-size: 16px;
+  padding: 0 12px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+.msg-input-input[data-v-8bbf21ad]::-webkit-input-placeholder {
+  padding: 0 12px;
+}
+.msg-input-input[data-v-8bbf21ad]::placeholder {
+  padding: 0 12px;
+}
+.msg-button-group[data-v-8bbf21ad] {
+  padding: 12px 20px 2px 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.msg-input-button[data-v-8bbf21ad] {
+  flex: 1;
+}
+.msg-input-button.msg-input-loading[data-v-8bbf21ad] {
+  animation: loadingCircle-8bbf21ad 1s infinite linear;
+  z-index: 1;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+}
+.msg-input-button.msg-input-loading .loading[data-v-8bbf21ad] {
+  width: 100%;
+  height: 100%;
+}
+.msg-ext[data-v-8bbf21ad] {
+  overflow-y: auto;
+  width: 100%;
+  height: 300px;
+  background-color: #eff1f3;
+  z-index: 1;
+}
+.msg-emoji-panel[data-v-8bbf21ad] {
+  overflow-y: auto;
+  width: 100%;
+  height: 246px;
+  background-color: #eff1f3;
+  z-index: 1;
+}
+.msg-audio-panel[data-v-8bbf21ad] {
+  overflow-y: hidden;
+  width: 100%;
+  height: 300px;
+  background-color: #eff1f3;
+  z-index: 1;
+}
+.send-more-panel[data-v-8bbf21ad] {
+  padding: 15px;
+  overflow-y: hidden;
+  width: 100%;
+  height: 300px;
+  background-color: #eff1f3;
+  z-index: 1;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+}
+.send-more-panel-item-wrapper[data-v-8bbf21ad] {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.send-more-panel-item-wrapper .send-more-panel-item[data-v-8bbf21ad] {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  margin: 0 15px;
+  justify-content: center;
+}
+.send-more-panel-item-wrapper .icon-text[data-v-8bbf21ad] {
+  font-size: 12px;
+  color: #747475;
+  margin-top: 8px;
+  text-align: center;
+}
+.reply-message-wrapper[data-v-8bbf21ad] {
+  display: flex;
+  font-size: 13px;
+  background-color: #eff1f2;
+  height: 25px;
+  padding-top: 6px;
+  align-items: center;
+  color: #929299;
+}
+.reply-message-wrapper .reply-noFind[data-v-8bbf21ad] {
+  width: -webkit-fit-content;
+  width: fit-content;
+}
+.reply-message-wrapper .reply-to-colon[data-v-8bbf21ad] {
+  flex-basis: 3px;
+  margin-right: 2px;
+}
+.reply-message-wrapper .reply-message-close[data-v-8bbf21ad] {
+  flex-basis: 14px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+.reply-message-wrapper .reply-message[data-v-8bbf21ad] {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.reply-message-wrapper .reply-message message-one-line[data-v-8bbf21ad] {
+  flex: 1;
+  font-size: 13px;
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.reply-message-wrapper .reply-title[data-v-8bbf21ad] {
+  flex-basis: 30px;
+  white-space: nowrap;
+  margin-right: 5px;
+}
+.reply-message-wrapper .reply-to[data-v-8bbf21ad] {
+  max-width: 120px;
+  flex: 0 0 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.input-emoji[data-v-8bbf21ad] {
+  background-color: #fff;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0 12px;
+  border-radius: 6px;
+}
+.input-text[data-v-8bbf21ad] {
+  white-space: nowrap;
+}
+.input-placeholder[data-v-8bbf21ad] {
+  background-color: #fff;
+  height: 40px;
+  line-height: 40px;
+  font-size: 16px;
+  padding: 0 12px;
+  border-radius: 6px;
+  color: gray;
+}
+.file-picker-wrapper[data-v-8bbf21ad] {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  z-index: 1;
+}
+.file-picker-wrapper .files-button[data-v-8bbf21ad] {
+  width: 60px;
+  height: 60px;
+}
+/**
+ * 这里是uni-app内置的常用样式变量
+ *
+ * uni-app 官方扩展插件及插件市场（https://ext.dcloud.net.cn）上很多三方插件均使用了这些样式变量
+ * 如果你是插件开发者，建议你使用scss预处理，并在插件代码中直接使用这些变量（无需 import 这个文件），方便用户通过搭积木的方式开发整体风格一致的App
+ *
+ */
+/**
+ * 如果你是App开发者（插件使用者），你可以通过修改这些变量来定制自己的插件主题，实现自定义主题功能
+ *
+ * 如果你的项目同样使用了scss预处理，你也可以直接在你的 scss 代码中使用如下变量，同时无需 import 这个文件
+ */
+/* 颜色变量 */
+/* 行为相关颜色 */
+/* 文字基本颜色 */
+/* 背景颜色 */
+/* 边框颜色 */
+/* 尺寸变量 */
+/* 文字尺寸 */
+/* 图片尺寸 */
+/* Border Radius */
+/* 水平间距 */
+/* 垂直间距 */
+/* 透明度 */
+/* 文章场景相关 */
+body[data-v-c868fe04] {
+  height: 100%;
+  overflow: hidden;
+}
+.msg-page-wrapper[data-v-c868fe04] {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+.msg-page-wrapper-h5[data-v-c868fe04] {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.msg-alert[data-v-c868fe04] {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: auto;
+  z-index: 1;
+}
+.msg-wrapper[data-v-c868fe04] {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex: 1;
+}
+.msg-wrapper-h5[data-v-c868fe04] {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.msg-wrapper > message-list[data-v-c868fe04] {
+  height: 100%;
+}

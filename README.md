@@ -11,6 +11,7 @@ im-uikit-uniapp 是基于网易云信 IM SDK 的一款 uniapp UI 组件库，它
 - iOS
 - 微信小程序
 - h5
+- 鸿蒙
 
 ## 运行 demo
 

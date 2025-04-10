@@ -1,22 +1,27 @@
 {
-  "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "strict": true,
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "useDefineForClassFields": true,
     "sourceMap": true,
+    "strictFunctionTypes": false,
+    "preserveValueImports": false,
+    "isolatedModules": false,
     "baseUrl": ".",
+    "types": ["node"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["/*"]
     },
-    "lib": ["esnext", "dom"],
-    "types": ["@dcloudio/types"],
-    "noImplicitAny": false,
-    "experimentalDecorators": true
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "src/locale/zh-Hans.json"
-  ]
+  "include": ["*.d.ts", "**/*.ts", "**/*.vue", "**/*.ts", "main.js"],
+  "exclude": ["node_modules"]
 }
-
