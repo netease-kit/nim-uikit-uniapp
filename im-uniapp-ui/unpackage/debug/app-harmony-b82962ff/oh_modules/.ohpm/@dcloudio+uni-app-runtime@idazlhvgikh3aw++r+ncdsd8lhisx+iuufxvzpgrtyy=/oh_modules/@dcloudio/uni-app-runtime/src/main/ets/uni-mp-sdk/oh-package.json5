@@ -1,8 +1,0 @@
-{
- "name": "@dcloudio/uni-mp-sdk",
- "version": "1.0.0",
- "description": "",
- "main": "Index.ets",
- "author": "DCloud",
- "dependencies": {}
-}
