@@ -203,43 +203,7 @@ export default {
         },
         "UniApp"
       ));
-      /** nim sdk 登录 */
-      nim.V2NIMLoginService.login(opts.account, opts.token).then(() => {
-        // #ifdef APP-PLUS
-        /** 初始化音视频通话插件*/
-        nimCallKit.initConfig(
-          {
-            appKey: opts.appkey, // 请填写你的appkey
-            account: opts.account, // 请填写你的account
-            token: opts.token, // 请填写你的token
-            apnsCername: "",
-            pkCername: "",
-          },
-          (ret: any) => {
-            if (ret.code != 200) {
-              // callkit init失败
-            } else {
-              nimCallKit.login(
-                {
-                  account: opts.account,
-                  token: opts.token,
-                },
-                function (ret: any) {
-                  if (ret.code != 200) {
-                    // 登录失败
-                  } else {
-                    // 登录成功
-                  }
-                }
-              );
-            }
-          }
-        );
-        // #endif
-        customSwitchTab({
-          url: "/pages/Conversation/index",
-        });
-      });
+
       // #ifdef APP-PLUS
       /** 注册推送 */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
@@ -282,6 +246,44 @@ export default {
         },
       });
       // #endif
+
+      /** nim sdk 登录 */
+      nim.V2NIMLoginService.login(opts.account, opts.token).then(() => {
+        // #ifdef APP-PLUS
+        /** 初始化音视频通话插件*/
+        nimCallKit.initConfig(
+          {
+            appKey: opts.appkey, // 请填写你的appkey
+            account: opts.account, // 请填写你的account
+            token: opts.token, // 请填写你的token
+            apnsCername: "",
+            pkCername: "",
+          },
+          (ret: any) => {
+            if (ret.code != 200) {
+              // callkit init失败
+            } else {
+              nimCallKit.login(
+                {
+                  account: opts.account,
+                  token: opts.token,
+                },
+                function (ret: any) {
+                  if (ret.code != 200) {
+                    // 登录失败
+                  } else {
+                    // 登录成功
+                  }
+                }
+              );
+            }
+          }
+        );
+        // #endif
+        customSwitchTab({
+          url: "/pages/Conversation/index",
+        });
+      });
     },
     logout() {
       uni.removeStorageSync(STORAGE_KEY);
