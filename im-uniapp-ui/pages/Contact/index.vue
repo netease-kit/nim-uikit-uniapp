@@ -8,9 +8,6 @@
 import ContactList from './contact-list/index.vue'
 import { onShow } from '@dcloudio/uni-app'
 import { setContactTabUnread, setTabUnread } from '../../utils/msg'
-import { trackInit } from '../../utils/reporter'
-
-trackInit('ContactUIKit')
 
 onShow(() => {
   setTabUnread()

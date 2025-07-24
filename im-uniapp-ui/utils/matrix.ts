@@ -1,4 +1,4 @@
-export const culculateMatrix = <T>(arr: T[], colNum: number): T[][] => {
+export const calculateMatrix = <T>(arr: T[], colNum: number): T[][] => {
   if (colNum < 1) {
     throw Error('colNum cound not be smaller than 1')
   }

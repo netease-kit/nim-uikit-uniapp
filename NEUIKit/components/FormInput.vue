@@ -24,13 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  ref,
-  computed,
-  defineProps,
-  withDefaults,
-  defineEmits,
-} from '../utils/transformVue'
+import { ref, computed } from 'vue'
 const $emit = defineEmits([
   'update:modelValue',
   'input',

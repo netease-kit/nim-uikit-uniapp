@@ -15,11 +15,7 @@
 
 <script lang="ts" setup>
 /** 搜索结果Item组件 */
-import {
-  defineProps,
-  withDefaults,
-  computed,
-} from '../../../utils/transformVue'
+import { computed } from 'vue'
 import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 

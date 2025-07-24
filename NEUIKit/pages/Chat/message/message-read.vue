@@ -52,14 +52,7 @@
 <script lang="ts" setup>
 /** 消息已读未读组件 */
 
-import {
-  computed,
-  defineProps,
-  withDefaults,
-  ref,
-  onMounted,
-  onUnmounted,
-} from 'vue'
+import { computed, ref, onMounted, onUnmounted } from 'vue'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import Icon from '../../../components/Icon.vue'
 import { V2NIMConst } from '../../../utils/nim'
@@ -93,6 +86,8 @@ const p2pMsgRotateDeg = ref(0)
 /**是否是云端会话 */
 const enableV2CloudConversation =
   uni.$UIKitStore?.sdkOptions?.enableV2CloudConversation
+
+/** 设置单聊消息已读未读 */
 const setP2pMsgRotateDeg = () => {
   /**如果是单聊 */
   if (
@@ -112,6 +107,7 @@ const setP2pMsgRotateDeg = () => {
   }
 }
 
+/** 监听单聊消息已读未读 */
 const p2pMsgReadWatch = autorun(() => {
   setP2pMsgRotateDeg()
 })

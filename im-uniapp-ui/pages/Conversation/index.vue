@@ -6,10 +6,9 @@
 /** 会话列表页面 */
 
 import ConversationList from './conversation-list/index.vue'
-import { trackInit } from '../../utils/reporter'
-import { onShow } from '@dcloudio/uni-app'
+import { onShow, onHide } from '@dcloudio/uni-app'
 
-trackInit('ConversationUIKit')
+let timeout: any
 
 onShow(() => {
   // 重置选中会话
@@ -17,7 +16,7 @@ onShow(() => {
   // 是否是云端会话
   const enableV2CloudConversation =
     uni.$UIKitStore?.sdkOptions?.enableV2CloudConversation
-  setTimeout(() => {
+  timeout = setTimeout(() => {
     // 获取未读消息数
     const unread = enableV2CloudConversation
       ? uni.$UIKitNIM?.V2NIMConversationService?.getTotalUnreadCount()
@@ -33,6 +32,10 @@ onShow(() => {
       })
     }
   }, 800)
+})
+
+onHide(() => {
+  clearTimeout(timeout)
 })
 </script>
 

@@ -145,14 +145,18 @@ export function parseText(text: string, ext?: string): Match[] {
     })
   }
 
-  const result = emojiAndLinkAndAitArr.map((item) => {
+  const result = emojiAndLinkAndAitArr.map((item, index) => {
     if (typeof item == 'string') {
       return {
         type: 'text',
         value: item,
+        key: index + 'text',
       }
     } else {
-      return item
+      return {
+        ...item,
+        key: index + item.type,
+      }
     }
   })
   return result

@@ -29,7 +29,6 @@
 <script lang="ts" setup>
 import { isWxApp } from '../../../utils'
 import Icon from '../../../components/Icon.vue'
-import { defineProps, withDefaults } from '../../../utils/transformVue'
 
 withDefaults(
   defineProps<{
@@ -65,7 +64,7 @@ const back = () => {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    width: 230px;
+    width: 300px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -77,6 +76,7 @@ const back = () => {
     text-align: center;
     white-space: nowrap;
     font-weight: 500;
+    max-width: 230px;
   }
 
   .subTitle {

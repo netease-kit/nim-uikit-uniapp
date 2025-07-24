@@ -8,7 +8,14 @@
       <div v-else class="reply-msg" @tap="showFullReplyMsg">
         <div class="reply-msg-name-wrapper">
           <div class="reply-msg-name-line">|</div>
-          <div class="reply-msg-name-content">{{ repliedTo }}</div>
+          <div class="reply-msg-name-content">
+            <Appellation
+              :account="props.replyMsg?.senderId"
+              :teamId="props.replyMsg?.receiverId"
+              color="#929299"
+              :fontSize="13"
+            ></Appellation>
+          </div>
           <div class="reply-msg-name-to">:</div>
         </div>
         <message-one-line
@@ -70,7 +77,7 @@
       <!-- #endif -->
       <div
         v-if="
-          props.replyMsg.messageType ==
+          props.replyMsg?.messageType ==
           V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT
         "
         class="reply-message-content"
@@ -79,14 +86,16 @@
       </div>
       <div
         v-else-if="
-          props.replyMsg.messageType ==
+          props.replyMsg?.messageType ==
           V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_AUDIO
         "
         class="msg-common"
         :style="{
-          flexDirection: props.replyMsg.isSelf ? 'row-reverse' : 'row',
-          backgroundColor: props.replyMsg.isSelf ? '#d6e5f6' : '#e8eaed',
-          borderRadius: props.replyMsg.isSelf ? '8px 0px 8px 8px' : '0 8px 8px',
+          flexDirection: props.replyMsg?.isSelf ? 'row-reverse' : 'row',
+          backgroundColor: props.replyMsg?.isSelf ? '#d6e5f6' : '#e8eaed',
+          borderRadius: props.replyMsg?.isSelf
+            ? '8px 0px 8px 8px'
+            : '0 8px 8px',
         }"
         @click.stop="() => {}"
       >
@@ -101,14 +110,7 @@
 
 import { t } from '../../../utils/i18n'
 import MessageOneLine from '../../../components/MessageOneLine.vue'
-import {
-  ref,
-  onMounted,
-  computed,
-  defineProps,
-  withDefaults,
-  onUnmounted,
-} from '../../../utils/transformVue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 import MessageText from './message-text.vue'
 // @ts-ignore
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
@@ -118,10 +120,10 @@ import { isHarmonyOs, stopAllAudio } from '../../../utils'
 import { autorun } from 'mobx'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-//@ts-ignore
 import { V2NIMConst } from '../../../utils/nim'
 import MessageAudio from './message-audio.vue'
 import Icon from '../../../components/Icon.vue'
+import Appellation from '../../../components/Appellation.vue'
 
 const props = withDefaults(
   defineProps<{ replyMsg: V2NIMMessageForUI | undefined }>(),
@@ -131,25 +133,23 @@ const props = withDefaults(
 /**是否全屏展示 */
 const isFullScreen = ref(false)
 
+/** 回复对象 */
 const repliedTo = ref('')
 
 //@ts-ignore
 const { name = '', url = '' } = props.replyMsg?.attachment || {}
 
 /**下载地址 */
-const downloadUrl =
-  url + ((url as string).includes('?') ? '&' : '?') + `download=${name}`
+const downloadUrl = computed(() => {
+  //@ts-ignore
+  const { name = '', url = '' } = props.replyMsg?.attachment || {}
+
+  return url + ((url as string).includes('?') ? '&' : '?') + `download=${name}`
+})
 
 /**被回复消息是否存在 */
 const isReplyMsgExist = computed(() => {
   return props.replyMsg?.messageClientId !== 'noFind'
-})
-
-onMounted(() => {
-  repliedTo.value = uni.$UIKitStore.uiStore.getAppellation({
-    account: props.replyMsg?.senderId as string,
-    teamId: props.replyMsg?.receiverId,
-  })
 })
 
 /**回复消息昵称 */
@@ -216,6 +216,13 @@ const openInBrowser = (url: string) => {
     },
   })
 }
+
+onMounted(() => {
+  repliedTo.value = uni.$UIKitStore.uiStore.getAppellation({
+    account: props.replyMsg?.senderId as string,
+    teamId: props.replyMsg?.receiverId,
+  })
+})
 
 onUnmounted(() => {
   repliedToWatch()

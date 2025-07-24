@@ -48,12 +48,7 @@
 /** 消息转发弹窗组件 */
 
 import { t } from '../../../utils/i18n'
-import {
-  ref,
-  computed,
-  defineProps,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, computed } from 'vue'
 import Modal from '../../../components/Modal.vue'
 import Avatar from '../../../components/Avatar.vue'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
@@ -81,6 +76,7 @@ const emit = defineEmits(['confirm', 'cancel'])
 /** 留言 */
 const forwardComment = ref('')
 
+/** 转发弹窗 Input  */
 const handleForwardInputChange = (event: any) => {
   forwardComment.value = event.detail.value
 }

@@ -39,11 +39,11 @@ import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
 
 import { onLoad } from '@dcloudio/uni-app'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
-import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import { V2NIMConst } from '../../../utils/nim'
 
 const myNick = ref('')
 const conversation = ref()
@@ -87,7 +87,7 @@ const addTeamMember = () => {
     conversationId.value
   )
   customNavigateTo({
-    url: `/pages/Group/group-create/index?p2pConversationId=${to}`,
+    url: `/pages/Team/team-create/index?p2pConversationId=${to}`,
   })
 }
 

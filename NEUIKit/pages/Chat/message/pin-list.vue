@@ -30,14 +30,25 @@
 
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import NavBar from '../../../components/NavBar.vue'
 import PinCard from './message-pin-card.vue'
 import { t } from '../../../utils/i18n'
 import Empty from '../../../components/Empty.vue'
-import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+
+import {
+  V2NIMMessage,
+  V2NIMMessagePin,
+} from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+
+export type PinInfo = V2NIMMessagePin & {
+  operatorId?: string
+  pinState: number
+  message?: V2NIMMessage
+}
+
 let conversationId = ''
-let pinInfos = ref([])
+let pinInfos = ref<PinInfo[]>([])
 let pinInfosWatch = () => {}
 
 onLoad((option) => {

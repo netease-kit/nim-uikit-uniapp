@@ -68,7 +68,7 @@ const handleUnPinMsg = (msg) => {
       .catch(() => {
         uni.showToast({
           title: t('unpinFailedText'),
-          icon: 'success',
+          icon: 'none',
           duration: 1000,
         })
       })

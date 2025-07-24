@@ -1,8 +1,8 @@
 <template>
   <div class="conversation-wrapper">
     <div
-      class="dropdown-mark"
       v-if="addDropdownVisible"
+      class="dropdown-mark"
       @touchstart="hideAddDropdown"
     ></div>
     <div class="navigation-bar">
@@ -13,7 +13,7 @@
         />
         <div>{{ t('appText') }}</div>
       </div>
-      <div :class="buttonClass">
+      <div :class="isWxApp ? 'button-box-mp' : 'button-box'">
         <!-- #ifdef MP -->
         <image
           src="https://yx-web-nosdn.netease.im/common/9ae07d276ba2833b678a4077960e2d1e/Group 1899.png"
@@ -38,6 +38,16 @@
                 :style="{ marginRight: '5px' }"
               />
               {{ t('createTeamText') }}
+            </div>
+            <div
+              class="add-menu-item"
+              @tap="onDropdownClick('createDiscussion')"
+            >
+              <Icon
+                type="icon-chuangjianqunzu"
+                :style="{ marginRight: '5px' }"
+              />
+              {{ t('createDiscussionText') }}
             </div>
           </div>
         </div>
@@ -89,7 +99,7 @@
           <div class="search-input">{{ t('searchText') }}</div>
         </div>
       </div>
-      <!-- 此处的key如果用session.id，会在ios上渲染存在问题，会出现会话列表显示undefined -->
+      <!-- 此处的key如果用conversationId，会在ios上渲染存在问题，会出现会话列表显示undefined -->
       <div
         v-for="conversation in conversationList"
         :key="conversation.renderKey"
@@ -112,10 +122,9 @@
 
 <script lang="ts" setup>
 /** 会话列表主界面 */
-
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref, watch } from 'vue'
 import { autorun } from 'mobx'
-import { onHide } from '@dcloudio/uni-app'
+import { onShow, onHide } from '@dcloudio/uni-app'
 import Icon from '../../../components/Icon.vue'
 import NetworkAlert from '../../../components/NetworkAlert.vue'
 import Empty from '../../../components/Empty.vue'
@@ -124,22 +133,27 @@ import { setContactTabUnread, setTabUnread } from '../../../utils/msg'
 import { t } from '../../../utils/i18n'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { V2NIMConst } from '../../../utils/nim'
+import { isWxApp } from '../../../utils'
+import { trackInit } from '../../../utils/reporter'
+
 import {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
 } from '@xkit-yx/im-store-v2/dist/types/types'
 
+/**会话列表 */
 const conversationList = ref<
-  (V2NIMConversationForUI | V2NIMLocalConversationForUI)[]
+  (
+    | (V2NIMConversationForUI & { renderKey: string })
+    | (V2NIMLocalConversationForUI & { renderKey: string })
+  )[]
 >([])
+
+/** 右上角更多 */
 const addDropdownVisible = ref(false)
 
+/** 当前左滑会话ID */
 const currentMoveSessionId = ref('')
-
-let buttonClass = 'button-box'
-// #ifdef MP
-buttonClass = 'button-box-mp'
-// #endif
 
 /**是否是云端会话 */
 const enableV2CloudConversation =
@@ -158,6 +172,7 @@ const handleSessionItemLeftSlide = (
 }
 
 let flag = false
+
 // 点击会话
 const handleSessionItemClick = async (
   conversation: V2NIMConversationForUI | V2NIMLocalConversationForUI
@@ -268,20 +283,27 @@ const handleSessionItemStickTopChange = async (
   }
 }
 
+/** 显示添加好友、群聊 Dropdown */
 const showAddDropdown = () => {
   addDropdownVisible.value = true
 }
 
+/** 隐藏添加好友、群聊 Dropdown */
 const hideAddDropdown = () => {
   addDropdownVisible.value = false
 }
 
-const onDropdownClick = (urlType: 'addFriend' | 'createGroup') => {
+/** 点击Dropdown */
+const onDropdownClick = (
+  urlType: 'addFriend' | 'createGroup' | 'createDiscussion'
+) => {
   const urlMap = {
     // 添加好友
-    addFriend: '/pages/Friend/add-friend/index',
+    addFriend: '/pages/User/friend/add-friend',
     // 创建群聊
-    createGroup: '/pages/Group/group-create/index',
+    createGroup: '/pages/Team/team-create/index',
+    // 创建讨论组和创建群聊复用一个页面，仅在创建群接口时，群扩展字段添加im_ui_kit_group参数区分，讨论组本质也是群，只是少了群的一些能力，旨在于快速创建讨论
+    createDiscussion: `/pages/Team/team-create/index?createDiscussion=${true}`,
   }
   addDropdownVisible.value = false
   customNavigateTo({
@@ -296,11 +318,42 @@ const goToSearchPage = () => {
   })
 }
 
-onHide(() => {
-  addDropdownVisible.value = false
-})
+/** 订阅当前会话方在线离线状态 */
+const subscribeUserStatus = (
+  conversations: (V2NIMConversationForUI | V2NIMLocalConversationForUI)[]
+) => {
+  const loginStateVisible = uni.$UIKitStore.localOptions.loginStateVisible
+  if (loginStateVisible) {
+    // 订阅会话列表中 单聊的在线离线状态
+    const accounts = conversations
+      .filter(
+        (item) =>
+          item.type ===
+          V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
+      )
+      .map((item) => {
+        return uni.$UIKitNIM?.V2NIMConversationIdUtil.parseConversationTargetId(
+          item.conversationId
+        )
+      })
+    // 将 accounts 拆分成多个长度不超过 100 的子数组
+    const chunkSize = 100
 
-/** 监听会话列表 */
+    const length = accounts.length
+
+    for (let i = 0; i < length; i += chunkSize) {
+      const chunk = accounts.slice(i, i + chunkSize)
+
+      if (chunk.length > 0) {
+        uni.$UIKitStore.subscriptionStore.subscribeUserStatusActive(chunk)
+      }
+    }
+  }
+}
+
+trackInit('ConversationUIKit')
+
+/** 监听会话列表数据变更，实时更新 conversationList */
 const conversationListWatch = autorun(() => {
   const _conversationList = enableV2CloudConversation
     ? uni.$UIKitStore?.uiStore?.conversations
@@ -311,6 +364,8 @@ const conversationListWatch = autorun(() => {
       (conversation: V2NIMConversationForUI | V2NIMLocalConversationForUI) => {
         return {
           ...conversation,
+          // 为什么要加一个renderKey 直接在渲染的时候写 :key = conversation.conversationId 不就行了吗？
+          // 如果不加，在渲染的时候，就会出现会话列表显示undefined，uniapp 很奇怪的问题
           renderKey: conversation.conversationId,
         }
       }
@@ -325,6 +380,18 @@ const conversationListWatch = autorun(() => {
   setTabUnread()
 })
 
+/** 连接状态监听 断网重连后重新订阅 */
+const connectWatch = autorun(() => {
+  if (
+    uni.$UIKitStore?.connectStore.loginStatus ===
+      V2NIMConst.V2NIMLoginStatus.V2NIM_LOGIN_STATUS_LOGINED &&
+    uni.$UIKitStore?.connectStore.connectStatus ===
+      V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
+  ) {
+    subscribeUserStatus(conversationList?.value)
+  }
+})
+
 /** 监听系统消息未读 */
 const getTotalUnreadMsgsCountWatch = autorun(() => {
   // 为了监听会触发
@@ -332,9 +399,31 @@ const getTotalUnreadMsgsCountWatch = autorun(() => {
   setContactTabUnread()
 })
 
+// 监听数组长度变化
+watch(
+  () => conversationList?.value?.length, // 监听 length 属性
+  () => {
+    subscribeUserStatus(conversationList?.value)
+  }
+)
+
+// 监听会话列表数据变更，实时订阅在线离线状态
+onShow(() => {
+  if (conversationList.value?.length) {
+    subscribeUserStatus(conversationList?.value)
+  }
+})
+
+onHide(() => {
+  addDropdownVisible.value = false
+  currentMoveSessionId.value = ''
+})
+
+/**卸载监听 */
 onUnmounted(() => {
   conversationListWatch()
   getTotalUnreadMsgsCountWatch()
+  connectWatch()
 })
 </script>
 
@@ -396,6 +485,7 @@ onUnmounted(() => {
 .search-input {
   margin-left: 5px;
   color: #999999;
+  font-size: 14px;
 }
 .search-icon-wrapper {
   height: 22px;

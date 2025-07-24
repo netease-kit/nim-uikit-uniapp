@@ -81,7 +81,7 @@
 <script lang="ts" setup>
 /**消息转发页面 */
 
-import { ref, computed, onUnmounted } from '../../utils/transformVue'
+import { ref, computed, onUnmounted } from 'vue'
 import NavBar from '../../components/NavBar.vue'
 import { t } from '../../utils/i18n'
 import { onLoad } from '@dcloudio/uni-app'
@@ -91,26 +91,42 @@ import { autorun } from 'mobx'
 import Empty from '../../components/Empty.vue'
 import Icon from '../../components/Icon.vue'
 import ForwardModal from './message/message-forward-modal.vue'
-import { V2NIMConst } from '../../utils/nim'
+import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
+
+/** 好友列表 */
 const friendGroupList = ref<
   { key: string; data: { account: string; appellation: string }[] }[]
 >([])
+
+/** 转发类型 */
 const forwardConversationType = ref<V2NIMConst.V2NIMConversationType>(
   V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
 )
+
+/** 群列表 */
 const teamList = ref<V2NIMTeam[]>([])
 
+/** 会话ID */
 const conversationId = uni.$UIKitStore?.uiStore.selectedConversation
+
+/** 转发消息idClient*/
 let msgIdClient = ''
+
+/** 转发消息来源 */
 let origin = ''
-// 转发相关
+
+/** 转发相关 */
 const forwardModalVisible = ref(false)
+/** 转发到 */
 const forwardTo = ref('')
+/** 转发消息内容 */
 const forwardMsg = ref<V2NIMMessageForUI>()
+/** 转发到的群信息 */
 const forwardToTeamInfo = ref<V2NIMTeam>()
+
 const moveThrough = computed(() => {
   return forwardModalVisible.value
 })
@@ -142,7 +158,7 @@ const handleForwardConfirm = (forwardComment: string) => {
     .then(() => {
       uni.showToast({
         title: t('forwardSuccessText'),
-        icon: 'success',
+        icon: 'none',
         duration: 1000,
       })
       setTimeout(() => {
@@ -199,6 +215,7 @@ const friendsWatch = autorun(() => {
   )
 })
 
+/**回到聊天 */
 const backToChat = () => {
   uni.navigateBack({
     delta: 1,

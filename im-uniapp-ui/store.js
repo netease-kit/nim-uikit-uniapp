@@ -324,6 +324,13 @@ var ConnectStore = /** @class */ (function () {
     //   // 重连时需要重置其他人的登录状态
     //   this.rootStore.eventStore.stateMap.clear()
     // }
+    // 同步完成之前需先清理下上次的在线离线状态，避免断开网络 好友退出登录 联网查看好友状态不对。只有在线离线需要处理，因为其他的都会在断网重连后触发其他事件，就在线离线不会触发
+    // 注意这里必须同步前重置，否则会导致数据同步时的状态丢失
+    if (
+      e === 1 /* V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED */
+    ) {
+      this.rootStore.subscriptionStore.resetState()
+    }
   }
   ConnectStore.prototype._onDisconnected = function (e) {
     var _a
@@ -337,13 +344,11 @@ var ConnectStore = /** @class */ (function () {
       ? void 0
       : _a.log('_onConnectFailed', e)
   }
-  ConnectStore.prototype._onDataSync = function (e) {
+  ConnectStore.prototype._onDataSync = function (type, V2NIMDataSyncState) {
     var _a, _b, _c, _d
     ;(_a = this.logger) === null || _a === void 0
       ? void 0
-      : _a.log('_onDataSync', e)
-    // 同步后需先清理下上次的状态
-    // this.rootStore.resetState()
+      : _a.log('_onDataSync', type, V2NIMDataSyncState)
     // 获取个人信息
     this.rootStore.userStore.getMyUserInfoActive()
     // 获取黑名单列表
@@ -387,7 +392,9 @@ var ConnectStore = /** @class */ (function () {
       limit: 100,
     })
     // 获取 AI 机器人
-    this.rootStore.aiUserStore.getAIUserListActive()
+    if (this.localOptions.aiVisible) {
+      this.rootStore.aiUserStore.getAIUserListActive()
+    }
   }
   return ConnectStore
 })()
@@ -476,13 +483,50 @@ var FriendStore = /** @class */ (function () {
     })
   }
   /**
+   * 根据Id 查询好友信息
+   */
+  FriendStore.prototype.getFriendByIdsActive = function (ids) {
+    var _a, _b, _c
+    return __awaiter(this, void 0, void 0, function () {
+      var friends, error_2
+      return __generator(this, function (_d) {
+        switch (_d.label) {
+          case 0:
+            _d.trys.push([0, 2, , 3])
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('getFriendByIdsActive', ids)
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMFriendService.getFriendByIds(ids),
+            ]
+          case 1:
+            friends = _d.sent()
+            this.addFriend(friends)
+            ;(_b = this.logger) === null || _b === void 0
+              ? void 0
+              : _b.log('getFriendByIdsActive success', friends)
+            return [2 /*return*/, friends]
+          case 2:
+            error_2 = _d.sent()
+            ;(_c = this.logger) === null || _c === void 0
+              ? void 0
+              : _c.error('getFriendByIdsActive failed: ', error_2)
+            throw error_2
+          case 3:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
+  /**
    * 获取申请添加好友列表通知
    * @param options V2NIMFriendAddApplicationQueryOption
    */
   FriendStore.prototype.getAddApplicationListActive = function (options) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var res, error_2
+      var res, error_3
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -502,11 +546,11 @@ var FriendStore = /** @class */ (function () {
               : _b.log('getAddApplicationListActive success', res)
             return [2 /*return*/, res]
           case 2:
-            error_2 = _d.sent()
+            error_3 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('getAddApplicationListActive failed: ', error_2)
-            throw error_2
+              : _c.error('getAddApplicationListActive failed: ', error_3)
+            throw error_3
           case 3:
             return [2 /*return*/]
         }
@@ -521,7 +565,7 @@ var FriendStore = /** @class */ (function () {
   FriendStore.prototype.addFriendActive = function (accountId, params) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_3
+      var error_4
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -540,11 +584,11 @@ var FriendStore = /** @class */ (function () {
               : _b.log('addFriendActive success', accountId, params)
             return [3 /*break*/, 3]
           case 2:
-            error_3 = _d.sent()
+            error_4 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('addFriendActive failed: ', accountId, params, error_3)
-            throw error_3
+              : _c.error('addFriendActive failed: ', accountId, params, error_4)
+            throw error_4
           case 3:
             return [2 /*return*/]
         }
@@ -558,7 +602,7 @@ var FriendStore = /** @class */ (function () {
   FriendStore.prototype.acceptAddApplicationActive = function (application) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_4
+      var error_5
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -577,15 +621,15 @@ var FriendStore = /** @class */ (function () {
               : _b.log('acceptAddApplicationActive success', application)
             return [3 /*break*/, 3]
           case 2:
-            error_4 = _d.sent()
+            error_5 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'acceptAddApplicationActive failed: ',
                   application,
-                  error_4
+                  error_5
                 )
-            throw error_4
+            throw error_5
           case 3:
             return [2 /*return*/]
         }
@@ -603,7 +647,7 @@ var FriendStore = /** @class */ (function () {
   ) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_5
+      var error_6
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -647,16 +691,16 @@ var FriendStore = /** @class */ (function () {
                 )
             return [3 /*break*/, 3]
           case 2:
-            error_5 = _d.sent()
+            error_6 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'rejectFriendApplyActive failed: ',
                   application,
                   postscript,
-                  error_5
+                  error_6
                 )
-            throw error_5
+            throw error_6
           case 3:
             return [2 /*return*/]
         }
@@ -670,7 +714,7 @@ var FriendStore = /** @class */ (function () {
   FriendStore.prototype.deleteFriendActive = function (accountId) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_6
+      var error_7
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -692,11 +736,11 @@ var FriendStore = /** @class */ (function () {
               : _b.log('deleteFriendActive success', accountId)
             return [3 /*break*/, 3]
           case 2:
-            error_6 = _d.sent()
+            error_7 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('deleteFriendActive failed: ', accountId, error_6)
-            throw error_6
+              : _c.error('deleteFriendActive failed: ', accountId, error_7)
+            throw error_7
           case 3:
             return [2 /*return*/]
         }
@@ -711,7 +755,7 @@ var FriendStore = /** @class */ (function () {
   FriendStore.prototype.setFriendInfoActive = function (accountId, params) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_7
+      var error_8
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -730,16 +774,16 @@ var FriendStore = /** @class */ (function () {
               : _b.log('setFriendInfoActive success', accountId, params)
             return [3 /*break*/, 3]
           case 2:
-            error_7 = _d.sent()
+            error_8 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'setFriendInfoActive failed: ',
                   accountId,
                   params,
-                  error_7
+                  error_8
                 )
-            throw error_7
+            throw error_8
           case 3:
             return [2 /*return*/]
         }
@@ -885,7 +929,7 @@ var constant = /*#__PURE__*/ Object.freeze({
 })
 
 var name$1 = '@xkit-yx/im-store-v2'
-var version$1 = '0.7.1'
+var version$1 = '0.8.2'
 var description$1 = '云信即时通讯 store V2 版本'
 var license$1 = 'MIT'
 var main$1 = 'dist/index.cjs.js'
@@ -911,7 +955,7 @@ var devDependencies$1 = {
   'gulp-typescript': '^6.0.0-alpha.1',
   less: '^4.1.1',
   'less-plugin-npm-import': '^2.1.0',
-  'nim-web-sdk-ng': '10.8.10',
+  'nim-web-sdk-ng': '10.9.10',
   postcss: '^8.3.5',
   'postcss-nested': '^5.0.5',
   rollup: '^2.39.0',
@@ -1359,6 +1403,7 @@ var MsgStore = /** @class */ (function () {
       this._onReceiveP2PMessageReadReceipts.bind(this)
     this._onReceiveTeamMessageReadReceipts =
       this._onReceiveTeamMessageReadReceipts.bind(this)
+    this._onReceiveMessagesModified = this._onReceiveMessagesModified.bind(this)
     this.getTeamMsgReadsActive = batchRequest(this.getTeamMsgReadsActive, 50)
     /** 收到消息 */
     nim.V2NIMMessageService.on('onReceiveMessages', this._onReceiveMessages)
@@ -1396,6 +1441,17 @@ var MsgStore = /** @class */ (function () {
     nim.V2NIMMessageService.on(
       'onReceiveTeamMessageReadReceipts',
       this._onReceiveTeamMessageReadReceipts
+    )
+    /**
+     * 收到消息更新事件
+     *
+     * 1. 收到更新消息在线同步通知
+     * 2. 收到更新消息多端同步通知
+     * 3. 收到更新消息漫游通知
+     */
+    nim.V2NIMMessageService.on(
+      'onReceiveMessagesModified',
+      this._onReceiveMessagesModified
     )
   }
   MsgStore.prototype.resetState = function () {
@@ -1450,7 +1506,9 @@ var MsgStore = /** @class */ (function () {
    * @param msg 消息对象
    */
   MsgStore.prototype.replyMsgActive = function (msg) {
-    this.replyMsgs.set(msg.conversationId, msg)
+    if (msg === null || msg === void 0 ? void 0 : msg.conversationId) {
+      this.replyMsgs.set(msg.conversationId, msg)
+    }
   }
   /**
    * 回复消息
@@ -1566,9 +1624,70 @@ var MsgStore = /** @class */ (function () {
     })
   }
   /**
+   * 回复消息
+   * @param msgs 消息对象
+   * @param repliedMessages 被回复的消息对象
+   * @param conversationId 会话id
+   */
+  MsgStore.prototype.replyMessageByThreadActive = function (
+    message,
+    repliedMessage,
+    conversationId,
+    params
+  ) {
+    var _a, _b, _c
+    return __awaiter(this, void 0, void 0, function () {
+      var result, error_3
+      return __generator(this, function (_d) {
+        switch (_d.label) {
+          case 0:
+            _d.trys.push([0, 2, , 3])
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('replyMessageByThreadActive', message, repliedMessage)
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMMessageService.replyMessage(
+                message,
+                repliedMessage,
+                params
+              ),
+            ]
+          case 1:
+            result = _d.sent()
+            this.removeReplyMsgActive(conversationId)
+            this._handleSendMsgSuccess(result.message)
+            ;(_b = this.logger) === null || _b === void 0
+              ? void 0
+              : _b.log(
+                  'replyMessageByThreadActive success',
+                  { message: message, repliedMessage: repliedMessage },
+                  result
+                )
+            return [3 /*break*/, 3]
+          case 2:
+            error_3 = _d.sent()
+            ;(_c = this.logger) === null || _c === void 0
+              ? void 0
+              : _c.error(
+                  'replyMessageByThreadActive fail',
+                  message,
+                  repliedMessage
+                )
+            message.threadReply = repliedMessage
+            this._handleSendMsgSuccess(message)
+            throw error_3
+          case 3:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
+  /**
    * 发送消息
    * @param __namedParameters.msg - 消息对象
    * @param __namedParameters.conversationId - 会话id
+   * @param __namedParameters.conversationType - 会话类型
    * @param __namedParameters.progress - progress 进度回调
    * @param __namedParameters.sendBefore - sendBefore 进度回调
    * @param __namedParameters.serverExtension - 扩展字段
@@ -1576,10 +1695,11 @@ var MsgStore = /** @class */ (function () {
    * @param __namedParameters.onAISend - AI 单聊或 at AI 发送成功后的回调
    */
   MsgStore.prototype.sendMessageActive = function (params) {
-    var _a, _b, _c, _d, _e, _f, _g
+    var _a, _b, _c, _d, _e, _f, _g, _h, _j
     return __awaiter(this, void 0, void 0, function () {
       var msg,
         conversationId,
+        conversationType,
         progress,
         sendBefore,
         serverExtension,
@@ -1591,27 +1711,40 @@ var MsgStore = /** @class */ (function () {
         aiConfig,
         finalAIConfig,
         finalParams,
+        replyMsg,
         message,
-        error_3
+        error_4
       var _this = this
-      return __generator(this, function (_h) {
-        switch (_h.label) {
+      return __generator(this, function (_k) {
+        switch (_k.label) {
           case 0:
             ;(_a = this.logger) === null || _a === void 0
               ? void 0
               : _a.log('sendMessageActive', params)
             ;(msg = params.msg),
               (conversationId = params.conversationId),
+              (conversationType = params.conversationType),
               (progress = params.progress),
               (sendBefore = params.sendBefore),
               (serverExtension = params.serverExtension),
               (previewImg = params.previewImg),
               (onAISend = params.onAISend)
             newMsg = __assign({}, msg)
-            finalServerExtension = this._formatExtField(
-              conversationId,
-              serverExtension || JSON.parse(newMsg.serverExtension || '{}')
-            )
+            finalServerExtension = {}
+            // @ts-ignore 发送回复消息旧模式，使用ext实现，有一系列缺点
+            if (
+              (_b = this.localOptions) === null || _b === void 0
+                ? void 0
+                : _b.sendReplyMsgByExt
+            ) {
+              finalServerExtension = this._formatExtField(
+                conversationId,
+                serverExtension || JSON.parse(newMsg.serverExtension || '{}')
+              )
+            } else {
+              finalServerExtension =
+                serverExtension || JSON.parse(newMsg.serverExtension || '{}')
+            }
             newMsg.serverExtension = Object.keys(finalServerExtension).length
               ? JSON.stringify(finalServerExtension)
               : void 0
@@ -1621,6 +1754,9 @@ var MsgStore = /** @class */ (function () {
                 conversationId
               )
             newMsg.conversationId = conversationId
+            if (conversationType !== void 0) {
+              newMsg.conversationType = conversationType
+            }
             newMsg.sendingState = 3 /* V2NIMConst.V2NIMMessageSendingState.V2NIM_MESSAGE_SENDING_STATE_SENDING */
             if (previewImg) {
               newMsg.previewImg = previewImg
@@ -1628,32 +1764,27 @@ var MsgStore = /** @class */ (function () {
             if (progress) {
               newMsg.uploadProgress = 0
             }
-            _h.label = 1
+            _k.label = 1
           case 1:
-            _h.trys.push([1, 4, , 5])
+            _k.trys.push([1, 6, , 7])
             return [
               4 /*yield*/,
-              (_c = (_b = this.localOptions).sendMsgBefore) === null ||
-              _c === void 0
+              (_d = (_c = this.localOptions).sendMsgBefore) === null ||
+              _d === void 0
                 ? void 0
-                : _c.call(_b, params),
+                : _d.call(_c, params),
             ]
           case 2:
-            sendMsgParams = _h.sent()
+            sendMsgParams = _k.sent()
             if (sendMsgParams === false) {
-              ;(_d = this.logger) === null || _d === void 0
+              ;(_e = this.logger) === null || _e === void 0
                 ? void 0
-                : _d.log('sendMessageActive cancel', params, sendMsgParams)
+                : _e.log('sendMessageActive cancel', params, sendMsgParams)
               return [2 /*return*/]
             }
             aiConfig = this._getAIConfig(newMsg)
+            // 先插入这条消息，快速让消息上屏
             this.addMsg(newMsg.conversationId, [newMsg])
-            if (
-              newMsg.messageType ===
-              0 /* V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT */
-            ) {
-              this.removeReplyMsgActive(conversationId)
-            }
             sendBefore === null || sendBefore === void 0
               ? void 0
               : sendBefore(newMsg)
@@ -1696,14 +1827,43 @@ var MsgStore = /** @class */ (function () {
               ),
               aiConfig: finalAIConfig,
             })
-            ;(_e = this.logger) === null || _e === void 0
+            ;(_f = this.logger) === null || _f === void 0
               ? void 0
-              : _e.log(
+              : _f.log(
                   'sendMessageActive finalParams: ',
                   newMsg,
                   conversationId,
                   finalParams
                 )
+            replyMsg = this.getReplyMsgActive(conversationId)
+            if (
+              !(
+                replyMsg &&
+                !((_g = this.localOptions) === null || _g === void 0
+                  ? void 0
+                  : _g.sendReplyMsgByExt)
+              )
+            )
+              return [3 /*break*/, 4]
+            newMsg.serverExtension = Object.keys(finalServerExtension).length
+              ? JSON.stringify(finalServerExtension)
+              : void 0
+            return [
+              4 /*yield*/,
+              this.replyMessageByThreadActive(
+                newMsg,
+                replyMsg,
+                conversationId,
+                finalParams
+              ),
+            ]
+          case 3:
+            _k.sent()
+            sendBefore === null || sendBefore === void 0
+              ? void 0
+              : sendBefore(newMsg)
+            return [2 /*return*/]
+          case 4:
             return [
               4 /*yield*/,
               this.nim.V2NIMMessageService.sendMessage(
@@ -1730,8 +1890,8 @@ var MsgStore = /** @class */ (function () {
                 }
               ),
             ]
-          case 3:
-            message = _h.sent().message
+          case 5:
+            message = _k.sent().message
             if (finalAIConfig) {
               onAISend === null || onAISend === void 0
                 ? void 0
@@ -1750,27 +1910,39 @@ var MsgStore = /** @class */ (function () {
               message.uploadProgress = 100
             }
             this._handleSendMsgSuccess(message)
-            ;(_f = this.logger) === null || _f === void 0
+            ;(_h = this.logger) === null || _h === void 0
               ? void 0
-              : _f.log('sendMessageActive success', message)
+              : _h.log('sendMessageActive success', message)
+            if (
+              newMsg.messageType ===
+              0 /* V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT */
+            ) {
+              this.removeReplyMsgActive(conversationId)
+            }
             return [2 /*return*/, message]
-          case 4:
-            error_3 = _h.sent()
-            ;(_g = this.logger) === null || _g === void 0
+          case 6:
+            error_4 = _k.sent()
+            ;(_j = this.logger) === null || _j === void 0
               ? void 0
-              : _g.error(
+              : _j.error(
                   'sendMessageActive failed: ',
-                  error_3.toString(),
+                  error_4.toString(),
                   newMsg
                 )
             // 手动取消上传
-            if (error_3.code === 191002) {
+            if (error_4.code === 191002) {
               this.removeMsg(conversationId, [newMsg.messageClientId])
             } else {
-              this._handleSendMsgFail(newMsg, error_3.code)
+              this._handleSendMsgFail(newMsg, error_4.code)
             }
-            throw error_3
-          case 5:
+            if (
+              newMsg.messageType ===
+              0 /* V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT */
+            ) {
+              this.removeReplyMsgActive(conversationId)
+            }
+            throw error_4
+          case 7:
             return [2 /*return*/]
         }
       })
@@ -1783,7 +1955,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.cancelMessageAttachmentUploadActive = function (msg) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_4
+      var error_5
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -1805,15 +1977,15 @@ var MsgStore = /** @class */ (function () {
               : _b.log('cancelMessageAttachmentUploadActive success', msg)
             return [3 /*break*/, 3]
           case 2:
-            error_4 = _d.sent()
+            error_5 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'cancelMessageAttachmentUploadActive failed: ',
                   msg,
-                  error_4
+                  error_5
                 )
-            throw error_4
+            throw error_5
           case 3:
             return [2 /*return*/]
         }
@@ -1827,7 +1999,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.sendMsgReceiptActive = function (msg) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_5
+      var error_6
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -1848,15 +2020,15 @@ var MsgStore = /** @class */ (function () {
               : _b.log('sendMsgReceiptActive success', msg)
             return [3 /*break*/, 3]
           case 2:
-            error_5 = _d.sent()
+            error_6 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'sendMsgReceiptActive failed: ',
                   msg,
-                  error_5.toString()
+                  error_6.toString()
                 )
-            throw error_5
+            throw error_6
           case 3:
             return [2 /*return*/]
         }
@@ -1870,7 +2042,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.addCollectionActive = function (params) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_6
+      var error_7
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -1889,15 +2061,15 @@ var MsgStore = /** @class */ (function () {
               : _b.log('addCollectionActive success', params)
             return [3 /*break*/, 3]
           case 2:
-            error_6 = _d.sent()
+            error_7 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'addCollectionActive failed: ',
                   params,
-                  error_6.toString()
+                  error_7.toString()
                 )
-            throw error_6
+            throw error_7
           case 3:
             return [2 /*return*/]
         }
@@ -1911,7 +2083,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.removeCollectionsActive = function (collections) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var error_7
+      var error_8
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -1930,15 +2102,15 @@ var MsgStore = /** @class */ (function () {
               : _b.log('removeCollectionsActive success', collections)
             return [3 /*break*/, 3]
           case 2:
-            error_7 = _d.sent()
+            error_8 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'removeCollectionsActive failed: ',
                   collections,
-                  error_7.toString()
+                  error_8.toString()
                 )
-            throw error_7
+            throw error_8
           case 3:
             return [2 /*return*/]
         }
@@ -1952,7 +2124,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.getCollectionListByOptionActive = function (option) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var res, error_8
+      var res, error_9
       var _this = this
       return __generator(this, function (_d) {
         switch (_d.label) {
@@ -1985,15 +2157,15 @@ var MsgStore = /** @class */ (function () {
               : _b.log('getCollectionListByOptionActive success', option)
             return [3 /*break*/, 4]
           case 3:
-            error_8 = _d.sent()
+            error_9 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'getCollectionListByOptionActive failed: ',
                   option,
-                  error_8.toString()
+                  error_9.toString()
                 )
-            throw error_8
+            throw error_9
           case 4:
             return [2 /*return*/, res]
         }
@@ -2007,7 +2179,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.sendTeamMsgReceiptActive = function (msgs) {
     var _a, _b, _c, _d
     return __awaiter(this, void 0, void 0, function () {
-      var finalMsgs, error_9
+      var finalMsgs, error_10
       var _this = this
       return __generator(this, function (_e) {
         switch (_e.label) {
@@ -2036,28 +2208,32 @@ var MsgStore = /** @class */ (function () {
               : _c.log('sendTeamMsgReceiptActive success', msgs)
             return [3 /*break*/, 4]
           case 3:
-            error_9 = _e.sent()
+            error_10 = _e.sent()
             ;(_d = this.logger) === null || _d === void 0
               ? void 0
               : _d.error(
                   'sendTeamMsgReceiptActive failed: ',
                   msgs,
-                  error_9.toString()
+                  error_10.toString()
                 )
-            throw error_9
+            throw error_10
           case 4:
             return [2 /*return*/]
         }
       })
     })
   }
+  /**
+   * 获取群消息已读未读详情
+   * @param message 消息
+   */
   MsgStore.prototype.getTeamMessageReceiptDetailsActive = function (
     message,
     memberAccountIds
   ) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var res, error_10
+      var res, error_11
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -2088,16 +2264,16 @@ var MsgStore = /** @class */ (function () {
                 )
             return [2 /*return*/, res]
           case 2:
-            error_10 = _d.sent()
+            error_11 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
-                  'sendTeamMsgReceiptActive failed: ',
+                  'getTeamMessageReceiptDetailsActive failed: ',
                   message,
                   memberAccountIds,
-                  error_10.toString()
+                  error_11.toString()
                 )
-            throw error_10
+            throw error_11
           case 3:
             return [2 /*return*/]
         }
@@ -2124,7 +2300,7 @@ var MsgStore = /** @class */ (function () {
         anchorMessage,
         msgs,
         myMsgs,
-        error_11
+        error_12
       return __generator(this, function (_e) {
         switch (_e.label) {
           case 0:
@@ -2195,15 +2371,15 @@ var MsgStore = /** @class */ (function () {
                 )
             return [2 /*return*/, msgs]
           case 4:
-            error_11 = _e.sent()
+            error_12 = _e.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
               : _c.error(
                   'getHistoryMsgActive failed: ',
                   options,
-                  error_11.toString()
+                  error_12.toString()
                 )
-            throw error_11
+            throw error_12
           case 5:
             return [2 /*return*/]
         }
@@ -2223,7 +2399,7 @@ var MsgStore = /** @class */ (function () {
   ) {
     var _a, _b, _c, _d
     return __awaiter(this, void 0, void 0, function () {
-      var serverExtension, deleteKeys, finalMsg, forwardMsg, textMsg, error_12
+      var serverExtension, deleteKeys, finalMsg, forwardMsg, textMsg, error_13
       return __generator(this, function (_e) {
         switch (_e.label) {
           case 0:
@@ -2292,11 +2468,11 @@ var MsgStore = /** @class */ (function () {
               : _c.log('forwardMsgActive success', msg, conversationId, comment)
             return [3 /*break*/, 6]
           case 5:
-            error_12 = _e.sent()
+            error_13 = _e.sent()
             ;(_d = this.logger) === null || _d === void 0
               ? void 0
-              : _d.error('forwardMsgActive failed: ', error_12)
-            throw error_12
+              : _d.error('forwardMsgActive failed: ', error_13)
+            throw error_13
           case 6:
             return [2 /*return*/]
         }
@@ -2311,7 +2487,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.getTeamMsgReadsActive = function (msgs, conversationId) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var res, error_13, newMsgs
+      var res, error_14, newMsgs
       var _this = this
       return __generator(this, function (_c) {
         switch (_c.label) {
@@ -2336,12 +2512,12 @@ var MsgStore = /** @class */ (function () {
             res = _c.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_13 = _c.sent()
+            error_14 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.warn(
                   'getTeamMsgReadsActive failed but continue: ',
-                  error_13.toString()
+                  error_14.toString()
                 )
             return [3 /*break*/, 4]
           case 4:
@@ -2377,7 +2553,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype.pinMessageActive = function (message, serverExtension) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var error_14
+      var error_15
       return __generator(this, function (_c) {
         switch (_c.label) {
           case 0:
@@ -2395,15 +2571,15 @@ var MsgStore = /** @class */ (function () {
             _c.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_14 = _c.sent()
+            error_15 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.warn(
                   'pinMessageActive failed but continue: ',
-                  error_14.toString()
+                  error_15.toString()
                 )
             // 这里需要把错误抛出去，让 ui 层感知到
-            throw error_14
+            throw error_15
           case 4:
             return [2 /*return*/]
         }
@@ -2421,7 +2597,7 @@ var MsgStore = /** @class */ (function () {
   ) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var error_15
+      var error_16
       return __generator(this, function (_c) {
         switch (_c.label) {
           case 0:
@@ -2442,15 +2618,15 @@ var MsgStore = /** @class */ (function () {
             _c.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_15 = _c.sent()
+            error_16 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.warn(
                   'uppinMessageActive failed but continue: ',
-                  error_15.toString()
+                  error_16.toString()
                 )
             // 这里需要把错误抛出去，让 ui 层感知到
-            throw error_15
+            throw error_16
           case 4:
             return [2 /*return*/]
         }
@@ -2468,7 +2644,7 @@ var MsgStore = /** @class */ (function () {
   ) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var error_16
+      var error_17
       return __generator(this, function (_c) {
         switch (_c.label) {
           case 0:
@@ -2489,15 +2665,15 @@ var MsgStore = /** @class */ (function () {
             _c.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_16 = _c.sent()
+            error_17 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.warn(
                   'updatePinMessageActive failed but continue: ',
-                  error_16.toString()
+                  error_17.toString()
                 )
             // 这里需要把错误抛出去，让 ui 层感知到
-            throw error_16
+            throw error_17
           case 4:
             return [2 /*return*/]
         }
@@ -2553,10 +2729,95 @@ var MsgStore = /** @class */ (function () {
       })
     })
   }
+  /**
+   * 停止流式输出
+   * @param message 消息体
+   * @param params 停止模式等入参
+   */
+  MsgStore.prototype.stopAIStreamMessageActive = function (message, params) {
+    var _a, _b
+    return __awaiter(this, void 0, void 0, function () {
+      var error_18
+      return __generator(this, function (_c) {
+        switch (_c.label) {
+          case 0:
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('stopAIStreamMessageActive', message)
+            _c.label = 1
+          case 1:
+            _c.trys.push([1, 3, , 4])
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMMessageService.stopAIStreamMessage(message, params),
+            ]
+          case 2:
+            _c.sent()
+            return [3 /*break*/, 4]
+          case 3:
+            error_18 = _c.sent()
+            ;(_b = this.logger) === null || _b === void 0
+              ? void 0
+              : _b.error(
+                  'stopAIStreamMessageActive failed ',
+                  error_18.toString()
+                )
+            throw error_18
+          case 4:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
+  /**
+   * 重新生成 ai 消息
+   *
+   * 注: 若是流式消息, 必须等到流式分片输出完毕, 才允许调用此 API
+   *
+   * 此外他支持两种配置
+   *
+   * 1. 更新，新消息覆盖老消息---只允许更新3天内的消息
+   * 2. 新消息，产生一条新消息
+   *
+   * @param message 需要重新输出的原始数字人消息
+   * @param params 确定重新输出的操作类型
+   */
+  MsgStore.prototype.regenAIMessageActive = function (message, params) {
+    var _a, _b
+    return __awaiter(this, void 0, void 0, function () {
+      var error_19
+      return __generator(this, function (_c) {
+        switch (_c.label) {
+          case 0:
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('regenAIMessageActive', message)
+            _c.label = 1
+          case 1:
+            _c.trys.push([1, 3, , 4])
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMMessageService.regenAIMessage(message, params),
+            ]
+          case 2:
+            _c.sent()
+            return [3 /*break*/, 4]
+          case 3:
+            error_19 = _c.sent()
+            ;(_b = this.logger) === null || _b === void 0
+              ? void 0
+              : _b.error('regenAIMessageActive failed ', error_19.toString())
+            throw error_19
+          case 4:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
   MsgStore.prototype.voiceToTextActive = function (message) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var text, error_17
+      var text, error_20
       return __generator(this, function (_c) {
         switch (_c.label) {
           case 0:
@@ -2595,12 +2856,12 @@ var MsgStore = /** @class */ (function () {
             })
             return [3 /*break*/, 4]
           case 3:
-            error_17 = _c.sent()
+            error_20 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
-              : _b.warn('voiceToTextActive failed: ', error_17.toString())
+              : _b.warn('voiceToTextActive failed: ', error_20.toString())
             // 这里需要把错误抛出去，让 ui 层感知到
-            throw error_17
+            throw error_20
           case 4:
             return [2 /*return*/]
         }
@@ -2773,7 +3034,6 @@ var MsgStore = /** @class */ (function () {
     return __assign(__assign({}, msg), {
       __kit__isSelf: msg.isSelf,
       __kit__senderId: msg.senderId,
-      senderId: senderId,
       isSelf: isSelf,
     })
   }
@@ -2803,7 +3063,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype._getMessageListByRefer = function (messageRefers) {
     var _a
     return __awaiter(this, void 0, void 0, function () {
-      var res, error_18
+      var res, error_21
       return __generator(this, function (_b) {
         switch (_b.label) {
           case 0:
@@ -2821,12 +3081,12 @@ var MsgStore = /** @class */ (function () {
             res = _b.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_18 = _b.sent()
+            error_21 = _b.sent()
             ;(_a = this.logger) === null || _a === void 0
               ? void 0
               : _a.warn(
                   '_getMessageListByRefer failed but continue: ',
-                  error_18.toString()
+                  error_21.toString()
                 )
             return [3 /*break*/, 4]
           case 4:
@@ -2839,7 +3099,7 @@ var MsgStore = /** @class */ (function () {
   MsgStore.prototype._getPinnedMessageListByServer = function (conversationId) {
     var _a, _b
     return __awaiter(this, void 0, void 0, function () {
-      var res, pinInfos, error_19
+      var res, pinInfos, error_22
       return __generator(this, function (_c) {
         switch (_c.label) {
           case 0:
@@ -2859,12 +3119,12 @@ var MsgStore = /** @class */ (function () {
             res = _c.sent()
             return [3 /*break*/, 4]
           case 3:
-            error_19 = _c.sent()
+            error_22 = _c.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.warn(
                   '_getPinnedMessageListByServer failed but continue: ',
-                  error_19.toString()
+                  error_22.toString()
                 )
             return [3 /*break*/, 4]
           case 4:
@@ -3001,6 +3261,16 @@ var MsgStore = /** @class */ (function () {
         ? void 0
         : _d.handleConversationWithAit(data)
     }
+  }
+  MsgStore.prototype._onReceiveMessagesModified = function (data) {
+    var _this = this
+    var _a
+    ;(_a = this.logger) === null || _a === void 0
+      ? void 0
+      : _a.log('_onReceiveMessagesModified: ', data)
+    data.forEach(function (item) {
+      _this.addMsg(item.conversationId, [item])
+    })
   }
   MsgStore.prototype._onClearHistoryNotifications = function (data) {
     var _this = this
@@ -3326,6 +3596,7 @@ var MsgStore = /** @class */ (function () {
     ) {
       recallMsg.oldText = msg.text
       recallMsg.canEdit = true
+      recallMsg.isRecallMsg = true
       recallMsg.canEditTimer = setTimeout(function () {
         var newMsg = _this.getMsg(recallMsg.conversationId, [
           recallMsg.messageClientId,
@@ -3354,12 +3625,13 @@ var MsgStore = /** @class */ (function () {
   }
   MsgStore.prototype._getAIConfig = function (msg) {
     var _this = this
+    var _a
     var serverExtension = msg.serverExtension,
       conversationId = msg.conversationId,
       receiverId = msg.receiverId,
       messageType = msg.messageType,
-      _a = msg.text,
-      text = _a === void 0 ? '' : _a
+      _b = msg.text,
+      text = _b === void 0 ? '' : _b
     var serverExt
     try {
       serverExt = JSON.parse(serverExtension || '{}')
@@ -3446,6 +3718,13 @@ var MsgStore = /** @class */ (function () {
         aiConfig.messages = void 0
       }
     }
+    //@ts-ignore
+    aiConfig === null || aiConfig === void 0
+      ? void 0
+      : (aiConfig.aiStream =
+          (_a = this.localOptions) === null || _a === void 0
+            ? void 0
+            : _a.aiStream)
     return aiConfig
   }
   MsgStore.prototype._findMinStart = function (data) {
@@ -4616,10 +4895,20 @@ var ConversationStore = /** @class */ (function () {
     return flag
   }
   ConversationStore.prototype._onSyncStarted = function () {
-    var _a
+    var _a, _b, _c
     ;(_a = this.logger) === null || _a === void 0
       ? void 0
       : _a.log('_onSyncStarted')
+    // 获取会话列表
+    ;(_b = this.rootStore.conversationStore) === null || _b === void 0
+      ? void 0
+      : _b.getConversationListActive(
+          0,
+          this.rootStore.localOptions.conversationLimit || 100
+        )
+    ;(_c = this.logger) === null || _c === void 0
+      ? void 0
+      : _c.log('_onSyncFinished')
   }
   ConversationStore.prototype._onSyncFinished = function () {
     var _a, _b
@@ -4672,6 +4961,25 @@ var ConversationStore = /** @class */ (function () {
       })
     } else {
       this.addConversation([data])
+      // 会话创建的时候，获取一下当前会话的最后已读时间，便于展示消息已读未读
+      if (
+        data.type ===
+        1 /* V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P */
+      ) {
+        var conversationId_1 = data.conversationId
+        this.nim.V2NIMMessageService.getP2PMessageReceipt(
+          conversationId_1
+        ).then(function (res) {
+          var conversation = _this.conversations.get(conversationId_1)
+          if (conversation) {
+            _this.updateConversation([
+              __assign(__assign({}, conversation), {
+                msgReceiptTime: res.timestamp,
+              }),
+            ])
+          }
+        })
+      }
     }
   }
   ConversationStore.prototype._onConversationDeleted = function (
@@ -4948,7 +5256,12 @@ var TeamStore = /** @class */ (function () {
       avatar = _a.avatar,
       name = _a.name,
       intro = _a.intro,
-      serverExtension = _a.serverExtension
+      serverExtension = _a.serverExtension,
+      joinMode = _a.joinMode,
+      agreeMode = _a.agreeMode,
+      inviteMode = _a.inviteMode,
+      updateInfoMode = _a.updateInfoMode,
+      updateExtensionMode = _a.updateExtensionMode
     return __awaiter(this, void 0, void 0, function () {
       var team, error_1
       return __generator(this, function (_f) {
@@ -4959,8 +5272,11 @@ var TeamStore = /** @class */ (function () {
               ? void 0
               : _b.log('createTeamActive', {
                   accounts: accounts,
+                  type: type,
                   avatar: avatar,
                   name: name,
+                  intro: intro,
+                  serverExtension: serverExtension,
                 })
             return [
               4 /*yield*/,
@@ -4968,11 +5284,13 @@ var TeamStore = /** @class */ (function () {
                 {
                   avatar: avatar,
                   teamType: type,
-                  joinMode: this.localOptions.teamJoinMode,
-                  agreeMode: this.localOptions.teamAgreeMode,
-                  inviteMode: this.localOptions.teamInviteMode,
-                  updateInfoMode: this.localOptions.teamUpdateTeamMode,
-                  updateExtensionMode: this.localOptions.teamUpdateExtMode,
+                  joinMode: joinMode || this.localOptions.teamJoinMode,
+                  agreeMode: agreeMode || this.localOptions.teamAgreeMode,
+                  inviteMode: inviteMode || this.localOptions.teamInviteMode,
+                  updateInfoMode:
+                    updateInfoMode || this.localOptions.teamUpdateTeamMode,
+                  updateExtensionMode:
+                    updateExtensionMode || this.localOptions.teamUpdateExtMode,
                   name: name,
                   intro: intro,
                   serverExtension: serverExtension,
@@ -4993,7 +5311,14 @@ var TeamStore = /** @class */ (function () {
               ? void 0
               : _d.error(
                   'createTeamActive failed: ',
-                  { accounts: accounts, avatar: avatar, name: name },
+                  {
+                    accounts: accounts,
+                    type: type,
+                    avatar: avatar,
+                    name: name,
+                    intro: intro,
+                    serverExtension: serverExtension,
+                  },
                   error_1,
                   error_1.code,
                   error_1.detail
@@ -5016,7 +5341,7 @@ var TeamStore = /** @class */ (function () {
       type = 1 /* V2NIMConst.V2NIMTeamType.V2NIM_TEAM_TYPE_ADVANCED */
     }
     return __awaiter(this, void 0, void 0, function () {
-      var error_2
+      var team, error_2
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -5029,11 +5354,11 @@ var TeamStore = /** @class */ (function () {
               this.nim.V2NIMTeamService.applyJoinTeam(teamId, type),
             ]
           case 1:
-            _d.sent()
+            team = _d.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
               : _b.log('applyTeamActive success', teamId)
-            return [3 /*break*/, 3]
+            return [2 /*return*/, team]
           case 2:
             error_2 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
@@ -5508,7 +5833,7 @@ var TeamStore = /** @class */ (function () {
    * 管理员通过入群申请
    * @param options V2NIMTeamJoinActionInfo
    */
-  TeamStore.prototype.passTeamApplyActive = function (options) {
+  TeamStore.prototype.acceptJoinApplicationActive = function (options) {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
       var error_12
@@ -5518,7 +5843,7 @@ var TeamStore = /** @class */ (function () {
             _d.trys.push([0, 2, , 3])
             ;(_a = this.logger) === null || _a === void 0
               ? void 0
-              : _a.log('passTeamApplyActive: ', options)
+              : _a.log('acceptJoinApplicationActive: ', options)
             return [
               4 /*yield*/,
               this.nim.V2NIMTeamService.acceptJoinApplication(options),
@@ -5527,13 +5852,17 @@ var TeamStore = /** @class */ (function () {
             _d.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
-              : _b.log('passTeamApplyActive success', options)
+              : _b.log('acceptJoinApplicationActive success', options)
             return [3 /*break*/, 3]
           case 2:
             error_12 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('passTeamApplyActive failed: ', options, error_12)
+              : _c.error(
+                  'acceptJoinApplicationActive failed: ',
+                  options,
+                  error_12
+                )
             throw error_12
           case 3:
             return [2 /*return*/]
@@ -6395,7 +6724,10 @@ var SysMsgStore = /** @class */ (function () {
   }
   /** 创建群组申请消息的 key */
   SysMsgStore.prototype.createTeamJoinActionMsgKey = function (msg) {
-    return ''.concat(msg.teamId, '_').concat(msg.operatorAccountId)
+    return ''
+      .concat(msg.teamId, '_')
+      .concat(msg.operatorAccountId, '_')
+      .concat(msg.actionType)
   }
   /** 创建好友申请消息的 key */
   SysMsgStore.prototype.createFriendApplyMsgKey = function (msg) {
@@ -6591,7 +6923,7 @@ var UserStore = /** @class */ (function () {
     })
   }
   /**
-   * 获取用户最新信息（始终从服务器取最新的，用于点开用户头像时）
+   * 获取用户最新信息
    * @param accountIds - 账号id数组
    */
   UserStore.prototype.getUserForceActive = function (accountId) {
@@ -6604,20 +6936,62 @@ var UserStore = /** @class */ (function () {
             _d.trys.push([0, 2, , 3])
             ;(_a = this.logger) === null || _a === void 0
               ? void 0
-              : _a.log('getUserListForceActive', accountId)
+              : _a.log('getUserForceActive', accountId)
             return [4 /*yield*/, this._getUserInfo(accountId)]
           case 1:
             user = _d.sent()
             ;(_b = this.logger) === null || _b === void 0
               ? void 0
-              : _b.log('getUserListForceActive success', user, accountId)
+              : _b.log('getUserForceActive success', user, accountId)
             return [2 /*return*/, user]
           case 2:
             error_3 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('getUserListForceActive failed: ', accountId, error_3)
+              : _c.error('getUserForceActive failed: ', accountId, error_3)
             throw error_3
+          case 3:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
+  /**
+   * 获取用户最新信息（始终从服务器取最新的，用于点开用户头像时）
+   * @param accountIds - 账号id数组
+   */
+  UserStore.prototype.getUserListFromCloudActive = function (accountIds) {
+    var _a, _b, _c
+    return __awaiter(this, void 0, void 0, function () {
+      var users, error_4
+      return __generator(this, function (_d) {
+        switch (_d.label) {
+          case 0:
+            _d.trys.push([0, 2, , 3])
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('getUserListFromCloudActive', accountIds)
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMUserService.getUserListFromCloud(accountIds),
+            ]
+          case 1:
+            users = _d.sent()
+            this.addUsers(users)
+            ;(_b = this.logger) === null || _b === void 0
+              ? void 0
+              : _b.log('getUserListFromCloudActive success', users, accountIds)
+            return [2 /*return*/, users]
+          case 2:
+            error_4 = _d.sent()
+            ;(_c = this.logger) === null || _c === void 0
+              ? void 0
+              : _c.error(
+                  'getUserListFromCloudActive failed: ',
+                  accountIds,
+                  error_4
+                )
+            throw error_4
           case 3:
             return [2 /*return*/]
         }
@@ -6628,7 +7002,7 @@ var UserStore = /** @class */ (function () {
   UserStore.prototype.getMyUserInfoActive = function () {
     var _a, _b, _c
     return __awaiter(this, void 0, void 0, function () {
-      var myUserInfo, error_4
+      var myUserInfo, error_5
       return __generator(this, function (_d) {
         switch (_d.label) {
           case 0:
@@ -6651,11 +7025,11 @@ var UserStore = /** @class */ (function () {
               : _b.log('getMyUserInfoActive success', myUserInfo)
             return [2 /*return*/, myUserInfo[0]]
           case 2:
-            error_4 = _d.sent()
+            error_5 = _d.sent()
             ;(_c = this.logger) === null || _c === void 0
               ? void 0
-              : _c.error('getMyUserInfoActive failed: ', error_4)
-            throw error_4
+              : _c.error('getMyUserInfoActive failed: ', error_5)
+            throw error_5
           case 3:
             return [2 /*return*/]
         }
@@ -6708,7 +7082,7 @@ var AIUserStore = /** @class */ (function () {
     this.onSendAIProxyErrorHandler = function () {
       //
     }
-    this.requestId = ''
+    this.requestIds = []
     this.proxyAccountId = ''
     makeAutoObservable(this)
     this.logger = rootStore.logger
@@ -6891,10 +7265,16 @@ var AIUserStore = /** @class */ (function () {
     )
   }
   /**
+   * 判断是否AI数字人
+   */
+  AIUserStore.prototype.isAIUser = function (accountId) {
+    return this.aiUsers.has(accountId)
+  }
+  /**
    * 重置 AI 代理状态
    */
   AIUserStore.prototype.resetAIProxy = function () {
-    this.requestId = ''
+    this.requestIds = []
     this.aiReqMsgs = []
     this.aiResMsgs = []
     this.proxyAccountId = ''
@@ -6956,10 +7336,11 @@ var AIUserStore = /** @class */ (function () {
             // 表示新的请求，重置 requestId、aiResMsgs、proxyAccountId
             if (params.requestId) {
               this.resetAIProxy()
-              this.requestId = params.requestId
+              this.requestIds.push(params.requestId)
               this.proxyAccountId = params.accountId
             } else {
-              finalParams.requestId = this.requestId
+              finalParams.requestId = Math.random().toString(36).slice(2)
+              this.requestIds.push(finalParams.requestId)
             }
             if (params.onSendAIProxyErrorHandler) {
               this.onSendAIProxyErrorHandler = params.onSendAIProxyErrorHandler
@@ -6993,7 +7374,7 @@ var AIUserStore = /** @class */ (function () {
     ;(_a = this.logger) === null || _a === void 0
       ? void 0
       : _a.log('_onProxyAIModelCall', res)
-    if (this.requestId === res.requestId) {
+    if (this.requestIds.includes(res.requestId)) {
       if (res.code === 200) {
         this.aiResMsgs.push(res.content.msg)
       } else {
@@ -7011,11 +7392,17 @@ var UiStore = /** @class */ (function () {
     this.rootStore = rootStore
     // 这边使用 undefined 会导致无法被注册成 observable，但是 demo 上没问题，不知道是为什么，很懵逼，但是先把这边附上默认值就可以解决
     this.selectedContactType = ''
+    /**
+     * 当前选中的会话
+     */
     this.selectedConversation = ''
     this.logger = null
     makeAutoObservable(this)
     this.logger = rootStore.logger
   }
+  /**
+   * 重置状态
+   */
   UiStore.prototype.resetState = function () {
     this.selectedContactType = ''
     this.selectedConversation = ''
@@ -7338,10 +7725,10 @@ var StorageStore = /** @class */ (function () {
 })()
 
 var name = 'nim-web-sdk-ng'
-var version = '10.8.10'
+var version = '10.9.10'
 var sdk = {
-  version: 100810,
-  versionFormat: '10.8.10',
+  version: 100910,
+  versionFormat: '10.9.10',
 }
 var description = 'Yunxin IM SDK next generation'
 var main = './dist/v2/NIM_BROWSER_SDK.js'
@@ -7378,6 +7765,7 @@ var eslintIgnore = ['dist/']
 var files = [
   'README.md',
   'CHANGELOG.md',
+  'dist/v1/NIM*',
   'dist/v1/CHATROOM*',
   'dist/v1/QCHAT*',
   'dist/v2/NIM*',
@@ -7407,7 +7795,7 @@ var devDependencies = {
   '@typescript-eslint/eslint-plugin': '^5.12.0',
   '@typescript-eslint/parser': '^5.12.0',
   '@yxfe/multilingual-tool': '^1.0.30',
-  '@yxfe/nim-log-reporter': '^1.0.3',
+  '@yxfe/nim-log-reporter': '^1.0.6',
   '@yxfe/nos-uploader': '^1.0.28',
   '@yxfe/request': '^0.2.12',
   backo2: '^1.0.2',
@@ -8308,10 +8696,17 @@ var LocalConversationStore = /** @class */ (function () {
     return flag
   }
   LocalConversationStore.prototype._onSyncStarted = function () {
-    var _a
+    var _a, _b
     ;(_a = this.logger) === null || _a === void 0
       ? void 0
       : _a.log('LocalConversationStore _onSyncStarted')
+    // 获取会话列表
+    ;(_b = this.rootStore.localConversationStore) === null || _b === void 0
+      ? void 0
+      : _b.getConversationListActive(
+          0,
+          this.rootStore.localOptions.conversationLimit || 100
+        )
   }
   LocalConversationStore.prototype._onSyncFinished = function () {
     var _a, _b
@@ -8364,6 +8759,25 @@ var LocalConversationStore = /** @class */ (function () {
       })
     } else {
       this.addConversation([data])
+      // 会话创建的时候，获取一下当前会话的最后已读时间，便于展示消息已读未读
+      if (
+        data.type ===
+        1 /* V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P */
+      ) {
+        var conversationId_1 = data.conversationId
+        this.nim.V2NIMMessageService.getP2PMessageReceipt(
+          conversationId_1
+        ).then(function (res) {
+          var conversation = _this.conversations.get(conversationId_1)
+          if (conversation) {
+            _this.updateConversation([
+              __assign(__assign({}, conversation), {
+                msgReceiptTime: res.timestamp,
+              }),
+            ])
+          }
+        })
+      }
     }
   }
   LocalConversationStore.prototype._onConversationDeleted = function (
@@ -8477,21 +8891,157 @@ var LocalConversationStore = /** @class */ (function () {
   return LocalConversationStore
 })()
 
+/**Mobx 可观察对象，负责管理在线离线等事件订阅的子store */
+var SubscriptionStore = /** @class */ (function () {
+  function SubscriptionStore(rootStore, nim) {
+    this.rootStore = rootStore
+    this.nim = nim
+    this.stateMap = new Map()
+    this.logger = null
+    makeAutoObservable(this)
+    this._onUserStatusChanged = this._onUserStatusChanged.bind(this)
+    this.nim.V2NIMSubscriptionService.on(
+      'onUserStatusChanged',
+      this._onUserStatusChanged
+    )
+    this.logger = rootStore.logger
+  }
+  SubscriptionStore.prototype.resetState = function () {
+    var _a
+    ;(_a = this.logger) === null || _a === void 0
+      ? void 0
+      : _a.log('SubscriptionStore resetState')
+    this.stateMap.clear()
+  }
+  /**
+   * 销毁SubscriptionStore，会取消相关事件监听
+   */
+  SubscriptionStore.prototype.destroy = function () {
+    this.resetState()
+    this.nim.V2NIMSubscriptionService.off(
+      'onUserStatusChanged',
+      this._onUserStatusChanged
+    )
+  }
+  /** 获取当前用户在线离线状态
+   * @param accountId 用户ID
+   **/
+  SubscriptionStore.prototype.getUserStatus = function (accountId) {
+    return this.stateMap.get(accountId)
+  }
+  /** 获取当前所有用户在线离线状态
+   **/
+  SubscriptionStore.prototype.getUserStatusList = function () {
+    return __spreadArray([], __read(this.stateMap.values()), false)
+  }
+  /**
+   * 订阅用户状态，包括在线状态或用户自定义的状态。
+   * 成功订阅用户状态后，当订阅的用户状态有变更时，会触发 onUserStatusChanged 回调。
+   * @param accountIds 要订阅的用户 ID 列表。
+   */
+  SubscriptionStore.prototype.subscribeUserStatusActive = function (
+    accountIds
+  ) {
+    var _a, _b, _c, _d
+    return __awaiter(this, void 0, void 0, function () {
+      var failedAccounts, err_1
+      return __generator(this, function (_e) {
+        switch (_e.label) {
+          case 0:
+            _e.trys.push([0, 2, , 3])
+            ;(_a = this.logger) === null || _a === void 0
+              ? void 0
+              : _a.log('subscribeUserStatusActive', accountIds)
+            return [
+              4 /*yield*/,
+              this.nim.V2NIMSubscriptionService.subscribeUserStatus({
+                accountIds: accountIds,
+                duration: 3600 * 24 * 7,
+                immediateSync: true,
+              }),
+            ]
+          case 1:
+            failedAccounts = _e.sent()
+            if (failedAccounts.length > 0) {
+              ;(_b = this.logger) === null || _b === void 0
+                ? void 0
+                : _b.warn(
+                    'subscribeUserStatusActive failed accounts',
+                    failedAccounts
+                  )
+              return [2 /*return*/, failedAccounts]
+            }
+            ;(_c = this.logger) === null || _c === void 0
+              ? void 0
+              : _c.log('subscribeUserStatusActive success')
+            return [3 /*break*/, 3]
+          case 2:
+            err_1 = _e.sent()
+            ;(_d = this.logger) === null || _d === void 0
+              ? void 0
+              : _d.error('subscribeUserStatusActive err', err_1)
+            return [3 /*break*/, 3]
+          case 3:
+            return [2 /*return*/]
+        }
+      })
+    })
+  }
+  /**
+   * 注册用户状态订阅相关监听。
+   */
+  SubscriptionStore.prototype._onUserStatusChanged = function (userStatusList) {
+    var e_1, _a
+    var _b
+    ;(_b = this.logger) === null || _b === void 0
+      ? void 0
+      : _b.log('_onUserStatusChanged', userStatusList)
+    try {
+      for (
+        var userStatusList_1 = __values(userStatusList),
+          userStatusList_1_1 = userStatusList_1.next();
+        !userStatusList_1_1.done;
+        userStatusList_1_1 = userStatusList_1.next()
+      ) {
+        var userStatus = userStatusList_1_1.value
+        this.stateMap.set(userStatus.accountId, userStatus)
+      }
+    } catch (e_1_1) {
+      e_1 = { error: e_1_1 }
+    } finally {
+      try {
+        if (
+          userStatusList_1_1 &&
+          !userStatusList_1_1.done &&
+          (_a = userStatusList_1.return)
+        )
+          _a.call(userStatusList_1)
+      } finally {
+        if (e_1) throw e_1.error
+      }
+    }
+  }
+  return SubscriptionStore
+})()
+
 var RootStore = /** @class */ (function () {
   function RootStore(nim, localOptions, platform) {
     if (platform === void 0) {
       platform = 'Web'
     }
     var _this = this
-    var _a, _b, _c, _d
+    var _a, _b, _c, _d, _e
     this.localOptions = {
       addFriendNeedVerify: true,
-      teamAgreeMode: 1 /* V2NIMConst.V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH */,
       teamJoinMode: 0 /* V2NIMConst.V2NIMTeamJoinMode.V2NIM_TEAM_JOIN_MODE_FREE */,
+      teamAgreeMode: 1 /* V2NIMConst.V2NIMTeamAgreeMode.V2NIM_TEAM_AGREE_MODE_NO_AUTH */,
       teamInviteMode: 0 /* V2NIMConst.V2NIMTeamInviteMode.V2NIM_TEAM_INVITE_MODE_MANAGER */,
       teamUpdateTeamMode: 0 /* V2NIMConst.V2NIMTeamUpdateInfoMode.V2NIM_TEAM_UPDATE_INFO_MODE_MANAGER */,
       teamUpdateExtMode: 1 /* V2NIMConst.V2NIMTeamUpdateExtensionMode
                     .V2NIM_TEAM_UPDATE_EXTENSION_MODE_ALL */,
+      enableTeam: true,
+      enableChangeTeamJoinMode: true,
+      enableChangeTeamAgreeMode: true,
       leaveOnTransfer: false,
       needMention: true,
       p2pMsgReceiptVisible: false,
@@ -8511,6 +9061,7 @@ var RootStore = /** @class */ (function () {
       aiUserAgentProvider: {},
       conversationLimit: 100,
       debug: 'debug',
+      aiStream: true,
       iconfontUrl: [],
     }
     this.sdkOptions = {}
@@ -8539,16 +9090,19 @@ var RootStore = /** @class */ (function () {
       : _c.log('store init', {
           localOptions: this.localOptions,
         })
-    this.sdkOptions = __assign({}, this.nim.getOptions())
+    this.sdkOptions = __assign(
+      {},
+      (_d = this.nim) === null || _d === void 0 ? void 0 : _d.getOptions()
+    )
     this.connectStore = new ConnectStore(this, nim, this.localOptions)
     this.friendStore = new FriendStore(this, nim)
     this.msgStore = new MsgStore(this, nim, this.localOptions)
     this.relationStore = new RelationStore(this, nim)
     // 区分是本地会话还是云端会话
     if (
-      (_d = this.sdkOptions) === null || _d === void 0
+      (_e = this.sdkOptions) === null || _e === void 0
         ? void 0
-        : _d.enableV2CloudConversation
+        : _e.enableV2CloudConversation
     ) {
       this.conversationStore = new ConversationStore(this, nim)
     } else {
@@ -8561,6 +9115,7 @@ var RootStore = /** @class */ (function () {
     this.aiUserStore = new AIUserStore(this, nim, this.localOptions)
     this.uiStore = new UiStore(this)
     this.storageStore = new StorageStore(this, nim)
+    this.subscriptionStore = new SubscriptionStore(this, nim)
     // 埋点上报
     var reportComponents = [
       'ContactKit',
@@ -8606,6 +9161,7 @@ var RootStore = /** @class */ (function () {
     this.userStore.resetState()
     this.aiUserStore.resetState()
     this.uiStore.resetState()
+    this.subscriptionStore.resetState()
   }
   /**
    * 销毁根store实例
@@ -8636,6 +9192,7 @@ var RootStore = /** @class */ (function () {
     this.userStore.destroy()
     this.aiUserStore.destroy()
     this.uiStore.destroy()
+    this.subscriptionStore.destroy()
   }
   /**
    * 获取根store实例
@@ -8665,6 +9222,7 @@ export {
   RelationStore,
   RootStore,
   StorageStore,
+  SubscriptionStore,
   SysMsgStore,
   TeamMemberStore,
   TeamStore,

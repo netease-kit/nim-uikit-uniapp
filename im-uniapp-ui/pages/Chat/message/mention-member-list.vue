@@ -63,12 +63,7 @@
 
 <script lang="ts" setup>
 /**@ 列表组件，用于在群里@ 成员列表 */
-import {
-  ref,
-  computed,
-  onUnmounted,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, computed, onUnmounted, withDefaults } from 'vue'
 import { t } from '../../../utils/i18n'
 import { autorun } from 'mobx'
 import Avatar from '../../../components/Avatar.vue'
@@ -80,7 +75,7 @@ import Appellation from '../../../components/Appellation.vue'
 import {
   V2NIMTeam,
   V2NIMTeamMember,
-} from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
+} from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
 
 import { V2NIMConst } from '../../../utils/nim'
 import { MentionedMember } from './message-input.vue'

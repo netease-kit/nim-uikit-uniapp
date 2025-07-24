@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults } from '../utils/transformVue'
 withDefaults(
   defineProps<{
     text?: string

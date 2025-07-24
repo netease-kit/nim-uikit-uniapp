@@ -14,6 +14,7 @@
     :id="MSG_ID_FLAG + props.msg.messageClientId"
     :key="props.msg.createTime"
   >
+    <!-- 消息时间 -->
     <div
       class="msg-time"
       v-if="
@@ -24,6 +25,7 @@
     >
       {{ props.msg.timeValue }}
     </div>
+    <!-- 撤回消息 可重新编辑 -->
     <div
       class="msg-common"
       :style="{
@@ -60,6 +62,7 @@
         </text>
       </MessageBubble>
     </div>
+    <!-- 撤回消息 不可重新编辑 主动撤回 -->
     <div
       class="msg-common"
       :style="{ flexDirection: !props.msg.isSelf ? 'row' : 'row-reverse' }"
@@ -84,6 +87,7 @@
         <div class="recall-text">{{ t('you') + t('recall') }}</div>
       </MessageBubble>
     </div>
+    <!-- 撤回消息 对方撤回-->
     <div
       class="msg-common"
       :style="{ flexDirection: !props.msg.isSelf ? 'row' : 'row-reverse' }"
@@ -114,6 +118,7 @@
         </div>
       </div>
     </div>
+    <!-- 文本消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -147,6 +152,7 @@
       </div>
       <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
+    <!-- 图片消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -178,7 +184,8 @@
           <div
             @tap="
               () => {
-                handleImageTouch(props.msg.attachment.url)
+                //@ts-ignore
+                handleImageTouch(props.msg.attachment?.url)
               }
             "
           >
@@ -193,6 +200,7 @@
       </div>
       <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
+    <!-- 视频消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -239,6 +247,7 @@
       </div>
       <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
+    <!-- 音视频消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -270,6 +279,7 @@
         </MessageBubble>
       </div>
     </div>
+    <!-- 文件消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -302,6 +312,7 @@
       </div>
       <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
+    <!-- 语音消息-->
     <div
       class="msg-common"
       v-else-if="
@@ -340,6 +351,7 @@
       </div>
       <MessageIsRead v-if="props.msg?.isSelf" :msg="props.msg"></MessageIsRead>
     </div>
+    <!-- 通知消息-->
     <MessageNotification
       v-else-if="
         props.msg.messageType ===
@@ -375,7 +387,7 @@
         </MessageBubble>
       </div>
     </div>
-    <!-- 不展示 pinState 为 0 、时间消息以及撤回消息的标记样式 -->
+    <!-- 消息标记 不展示 pinState 为 0 、时间消息以及撤回消息的标记样式 -->
     <div
       class="msg-pin-tip"
       v-if="
@@ -412,20 +424,9 @@
 
 <script lang="ts" setup>
 /** 消息组件 */
-
-import {
-  ref,
-  computed,
-  onUnmounted,
-  defineProps,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, computed, onUnmounted } from 'vue'
 import Avatar from '../../../components/Avatar.vue'
 import MessageBubble from './message-bubble.vue'
-import { events, MSG_ID_FLAG } from '../../../utils/constants'
-import { autorun } from 'mobx'
-import { stopAllAudio } from '../../../utils'
-import { t } from '../../../utils/i18n'
 import ReplyMessage from './message-reply.vue'
 import MessageFile from './message-file.vue'
 import MessageText from './message-text.vue'
@@ -433,11 +434,15 @@ import MessageAudio from './message-audio.vue'
 import MessageNotification from './message-notification.vue'
 import MessageG2 from './message-g2.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
-import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { V2NIMConst } from '../../../utils/nim'
 import MessageIsRead from './message-read.vue'
 import Icon from '../../../components/Icon.vue'
 import Appellation from '../../../components/Appellation.vue'
+import { events, MSG_ID_FLAG } from '../../../utils/constants'
+import { autorun } from 'mobx'
+import { stopAllAudio } from '../../../utils'
+import { t } from '../../../utils/i18n'
+import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
+import { V2NIMConst } from '../../../utils/nim'
 
 const props = withDefaults(
   defineProps<{
@@ -458,6 +463,7 @@ const replyMsg = computed(() => {
 
 /** 昵称 */
 const appellation = ref('')
+/** 当前用户账号 */
 const accountId = uni.$UIKitStore?.userStore?.myUserInfo.accountId
 
 /** 会话类型 */
@@ -474,7 +480,7 @@ const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
 const videoFirstFrameDataUrl = computed(() => {
   //@ts-ignore
   const url = props.msg.attachment?.url
-  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
+  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe&offset=1` : ''
 })
 
 /** 图片地址 */

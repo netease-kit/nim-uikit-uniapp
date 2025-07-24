@@ -4,7 +4,14 @@
       src="https://yx-web-nosdn.netease.im/common/da126b0fcc419b142224ced81456e179/yx-welcome.png"
       class="welcome-img"
     />
-    <button class="login-btn" @click="onClick">注册/登录</button>
+    <button
+      open-type="getPhoneNumber"
+      @getphonenumber="getphonenumber"
+      class="login-btn"
+      @click="onClick"
+    >
+      注册/登录
+    </button>
     <div class="bottom-box">
       <image
         src="https://yx-web-nosdn.netease.im/common/9303d9be2ea5f90c48397326ae5dfd45/welcome-bottom.png"
@@ -15,11 +22,18 @@
 </template>
 
 <script lang="ts" setup>
+import { isWxApp } from '../../../utils/index'
 const onClick = () => {
-  uni.$emit('login')
+  if (!isWxApp) {
+    uni.$emit('login')
+  }
 }
 
-// const url = 'https://yiyong-qa.netease.im/yiyong-static/statics/uniapp-vue2-h5'
+const getphonenumber = (e: any) => {
+  if (e.target.errMsg === 'getPhoneNumber:ok') {
+    uni.$emit('login')
+  }
+}
 </script>
 
 <style lang="scss" scoped>

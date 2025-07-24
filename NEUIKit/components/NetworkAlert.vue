@@ -6,7 +6,7 @@
 
 <script lang="ts" setup>
 import { autorun } from 'mobx'
-import { ref, onMounted, onUnmounted } from '../utils/transformVue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { t } from '../utils/i18n'
 import { V2NIMConst } from '../utils/nim'
 

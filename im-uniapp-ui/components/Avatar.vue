@@ -26,13 +26,7 @@
 <script lang="ts" setup>
 import { customNavigateTo, customRedirectTo } from '../utils/customNavigate'
 import { autorun } from 'mobx'
-import {
-  ref,
-  computed,
-  onUnmounted,
-  defineProps,
-  withDefaults,
-} from '../utils/transformVue'
+import { ref, computed, onUnmounted, withDefaults } from 'vue'
 import { V2NIMUser } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMUserService'
 const props = withDefaults(
   defineProps<{
@@ -104,21 +98,21 @@ const handleAvatarClick = () => {
     if (props.isRedirect) {
       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.accountId) {
         customRedirectTo({
-          url: `/pages/user-card/my-detail/index`,
+          url: `/pages/User/my-detail/index`,
         })
       } else {
         customRedirectTo({
-          url: `/pages/user-card/friend/index?account=${props.account}`,
+          url: `/pages/User/friend/index?account=${props.account}`,
         })
       }
     } else {
       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.accountId) {
         customNavigateTo({
-          url: `/pages/user-card/my-detail/index`,
+          url: `/pages/User/my-detail/index`,
         })
       } else {
         customNavigateTo({
-          url: `/pages/user-card/friend/index?account=${props.account}`,
+          url: `/pages/User/friend/index?account=${props.account}`,
         })
       }
     }

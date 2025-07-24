@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, defineProps, withDefaults } from 'vue'
+import { computed, withDefaults } from 'vue'
 import { stopAllAudio } from '../../../utils'
 import Avatar from '../../../components/Avatar.vue'
 import Icon from '../../../components/Icon.vue'
@@ -124,14 +124,18 @@ const props = withDefaults(
   {}
 )
 
+/** 会话类型 */
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.msg.conversationId
   )
+
+/** 会话对象 */
 const to = uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
   props.msg.conversationId
 )
 
+/** 调整至聊天页面 */
 const gotoChat = async () => {
   await uni.$UIKitStore.uiStore.selectConversation(props.msg.conversationId)
   customRedirectTo({
@@ -139,10 +143,10 @@ const gotoChat = async () => {
   })
 }
 
+/** 复制 */
 const handleCopy = () => {
   uni.setClipboardData({
-    //@ts-ignore
-    data: props.msg.text,
+    data: props.msg.text || '',
     showToast: false,
     success: () => {
       uni.showToast({
@@ -225,14 +229,17 @@ const handlePinMsg = () => {
   })
 }
 
+/** 图片Url */
 const imageUrl = computed(() => {
+  //@ts-ignore
   return props.msg?.attachment?.url || props.msg.attachment?.file
 })
 
 // 获取视频首帧
 const videoFirstFrameDataUrl = computed(() => {
+  //@ts-ignore
   const url = props.msg.attachment?.url
-  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe=1` : ''
+  return url ? `${url}${url.includes('?') ? '&' : '?'}vframe&offset=1` : ''
 })
 // 点击图片预览
 const handleImageTouch = (url: string) => {
@@ -246,6 +253,7 @@ const handleImageTouch = (url: string) => {
 // 点击视频播放
 const handleVideoTouch = (msg: V2NIMMessageForUI) => {
   stopAllAudio()
+  //@ts-ignore
   const url = msg.attachment?.url
   if (url) {
     customNavigateTo({
@@ -254,7 +262,8 @@ const handleVideoTouch = (msg: V2NIMMessageForUI) => {
   }
 }
 
-const isToday = (time) => {
+/** 时间格式化 */
+const isToday = (time: number) => {
   const createTime = new Date(time)
   const now = new Date()
   return (
@@ -263,11 +272,15 @@ const isToday = (time) => {
     createTime.getDate() === now.getDate()
   )
 }
-const isThisYear = (time) => {
+
+/** 时间格式化 */
+const isThisYear = (time: number) => {
   const createTime = new Date(time)
   const now = new Date()
   return createTime.getFullYear() === now.getFullYear()
 }
+
+/** 时间格式化 */
 const timeFormat = () => {
   const createTime = props.msg.createTime
   if (isToday(createTime)) {

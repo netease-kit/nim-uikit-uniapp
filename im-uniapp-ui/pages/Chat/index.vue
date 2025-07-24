@@ -4,7 +4,7 @@
     :page-style="'overflow:' + (moveThrough ? 'hidden' : 'visible')"
   ></page-meta>
   <div :class="isH5 ? 'msg-page-wrapper-h5' : 'msg-page-wrapper'">
-    <NavBar :title="title" :showLeft="true">
+    <NavBar :title="title" :subTitle="subTitle" :showLeft="true">
       <template v-slot:left>
         <div @click="backToConversation">
           <Icon type="icon-zuojiantou" :size="22"></Icon>
@@ -39,7 +39,7 @@ import { onShow, onHide } from '@dcloudio/uni-app'
 import { events } from '../../utils/constants'
 import { trackInit } from '../../utils/reporter'
 import { autorun } from 'mobx'
-import { ref, onMounted, onUnmounted } from '../../utils/transformVue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import { getUniPlatform } from '../../utils'
 import { onLoad, onUnload } from '@dcloudio/uni-app'
 import { customSwitchTab } from '../../utils/customNavigate'
@@ -53,6 +53,8 @@ import { t } from '../../utils/i18n'
 import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 import { V2NIMConst } from '../../utils/nim'
 import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMConversationService'
+import { V2NIMMessageRefer } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
+
 export interface YxReplyMsg {
   messageClientId: string
   scene: V2NIMConst.V2NIMConversationType
@@ -67,6 +69,8 @@ trackInit('ChatUIKit')
 
 const title = ref('')
 
+const subTitle = ref('')
+
 /**会话ID */
 const conversationId = uni.$UIKitStore.uiStore.selectedConversation
 /**会话类型 */
@@ -74,6 +78,7 @@ const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     conversationId
   ) as unknown as V2NIMConversationType
+
 /**对话方 */
 const to =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationTargetId(
@@ -92,11 +97,14 @@ const backToConversation = () => {
   })
 }
 
-/**是否需要显示群组消息已读未读，默认 false */
+/**读取是否需要显示群组消息已读未读的全局配置，默认 false */
 const teamManagerVisible = uni.$UIKitStore.localOptions.teamMsgReceiptVisible
 
-/**是否需要显示 p2p 消息、p2p会话列表消息已读未读，默认 false */
+/**读取是否需要显示 p2p 消息、p2p会话列表消息已读未读的全局配置，默认 false */
 const p2pMsgReceiptVisible = uni.$UIKitStore.localOptions.p2pMsgReceiptVisible
+
+/** 读取是否需要显示在线离线的全局配置，默认true*/
+const loginStateVisible = uni.$UIKitStore.localOptions.loginStateVisible
 
 let isMounted = false
 
@@ -132,7 +140,7 @@ const onTeamLeft = (data: any) => {
   uni
     .showToast({
       title: t('onRemoveTeamText'),
-      icon: 'success',
+      icon: 'none',
       duration: 1000,
     })
     .then(() => {
@@ -258,6 +266,20 @@ const getHistory = async (endTime: number, lastMsgId?: string) => {
       return historyMsgs
     }
   } catch (error) {
+    //@ts-ignore
+    // 云端会话下，离线状态时，解散群聊，仍然可以拉到会话，但此时群已经解散
+    if (error.code === 109404) {
+      uni.showModal({
+        content: t('onDismissTeamText'),
+        showCancel: false,
+        success(data) {
+          if (data.confirm) {
+            backToConversation()
+          }
+        },
+      })
+    }
+
     loadingMore.value = false
     throw error
   }
@@ -265,42 +287,45 @@ const getHistory = async (endTime: number, lastMsgId?: string) => {
 
 /** 加载更多消息 */
 const loadMoreMsgs = (lastMsg: V2NIMMessage) => {
-  getHistory(lastMsg.createTime, lastMsg.messageServerId).then(
-    (res: V2NIMMessage[]) => {
-      if (res?.[0]) {
-        // uni.pageScrollTo 微信小程序指定滚动位置不起作用 https://ask.dcloud.net.cn/question/173874?item_id=258278&rf=false
-        // setTimeout(() => {
-        //   uni.pageScrollTo({
-        //     selector: `#${MSG_ID_FLAG + res[0].messageClientId}`,
-        //     scrollTop: 0,
-        //     duration: 0,
-        //     fail: (error) => {
-        //       console.log('error', error)
-        //     },
-        //   })
-        // }, 300)
-      }
-    }
-  )
+  if (lastMsg) {
+    getHistory(lastMsg.createTime, lastMsg.messageServerId)
+  } else {
+    getHistory(Date.now())
+  }
 }
 
-/** 监听当前聊天页面的会话类型 */
-const conversationTypeWatch = autorun(() => {
+/** 设置页面标题 */
+const setNavTitle = () => {
   // 如果是单聊
   if (
     conversationType ===
     V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
   ) {
+    if (loginStateVisible) {
+      subTitle.value =
+        uni.$UIKitStore?.subscriptionStore.stateMap.get(to)?.statusType ===
+        V2NIMConst.V2NIMUserStatusType.V2NIM_USER_STATUS_TYPE_LOGIN
+          ? `(${t('userOnlineText')})`
+          : `(${t('userOfflineText')})`
+    }
+
     title.value = uni.$UIKitStore.uiStore.getAppellation({ account: to })
+
     // 如果是群聊
   } else if (
     conversationType ===
     V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
   ) {
     const team = uni.$UIKitStore.teamStore.teams.get(to)
-    const subTitle = `(${team?.memberCount || 0})`
-    title.value = (team?.name || '') + subTitle
+    subTitle.value = `(${team?.memberCount || 0})`
+
+    title.value = team?.name || ''
   }
+}
+
+/** 监听当前聊天页面的会话类型 */
+const conversationTypeWatch = autorun(() => {
+  setNavTitle()
 })
 
 /** 监听连接状态 */
@@ -323,18 +348,14 @@ const connectedWatch = autorun(() => {
   }
 })
 
-/** 动态更新消息 */
-const msgsWatch = autorun(() => {
-  // 这里需要 Clone，否则 pinState 更新了，对应的消息展示不会重新渲染
-  const messages = [...uni.$UIKitStore.msgStore.getMsg(conversationId)]
-  if (messages.length !== 0) {
-    msgs.value = messages
-  }
-
+/** 处理回复消息 */
+const handleReplyMsg = (messages: V2NIMMessage[]) => {
   // 遍历所有消息，找出被回复消息，储存在map中
   if (messages.length !== 0) {
-    const _replyMsgsMap: any = {}
-    const reqMsgs: YxReplyMsg[] = []
+    const replyMsgsMapForExt: any = {}
+    const replyMsgsMapForThreadReply: any = {}
+    const extReqMsgs: YxReplyMsg[] = []
+    const threadReplyReqMsgs: V2NIMMessageRefer[] = []
     const messageClientIds: Record<string, string> = {}
     msgs.value.forEach((msg) => {
       if (msg.serverExtension) {
@@ -348,10 +369,12 @@ const msgsWatch = autorun(() => {
             )
             // 如果直接找到，存储在map中
             if (replyMsg) {
-              _replyMsgsMap[msg.messageClientId] = replyMsg
+              replyMsgsMapForExt[msg.messageClientId] = replyMsg
               // 如果没找到，说明被回复的消息可能有三种情况：1.被删除 2.被撤回 3.不在当前消息列表中（一次性没拉到，在之前的消息中）
             } else {
-              _replyMsgsMap[msg.messageClientId] = { messageClientId: 'noFind' }
+              replyMsgsMapForExt[msg.messageClientId] = {
+                messageClientId: 'noFind',
+              }
               const {
                 scene,
                 from,
@@ -371,7 +394,7 @@ const msgsWatch = autorun(() => {
                 time &&
                 receiverId
               ) {
-                reqMsgs.push({
+                extReqMsgs.push({
                   scene,
                   from,
                   to,
@@ -386,13 +409,31 @@ const msgsWatch = autorun(() => {
           }
         } catch {}
       }
+
+      if (msg.threadReply) {
+        //找到被回复的消息
+        const beReplyMsg = msgs.value.find(
+          (item) => item.messageClientId === msg.threadReply?.messageClientId
+        )
+
+        if (beReplyMsg) {
+          replyMsgsMapForThreadReply[msg.messageClientId] = beReplyMsg
+        } else {
+          replyMsgsMapForThreadReply[msg.messageClientId] = {
+            messageClientId: 'noFind',
+          }
+          messageClientIds[msg.threadReply.messageServerId] =
+            msg.messageClientId
+          threadReplyReqMsgs.push(msg.threadReply)
+        }
+      }
     })
 
-    if (reqMsgs.length > 0) {
+    if (extReqMsgs.length > 0) {
       // 从服务器拉取被回复消息, 但是有频率控制
       uni.$UIKitNIM.V2NIMMessageService.getMessageListByRefers(
         //@ts-ignore
-        reqMsgs.map((item) => ({
+        extReqMsgs.map((item) => ({
           senderId: item.from,
           receiverId: item.receiverId,
           messageClientId: item.messageClientId,
@@ -406,19 +447,63 @@ const msgsWatch = autorun(() => {
           if (res?.length > 0) {
             res.forEach((item) => {
               if (item.messageServerId) {
-                _replyMsgsMap[messageClientIds[item.messageServerId]] = item
+                replyMsgsMapForExt[messageClientIds[item.messageServerId]] =
+                  item
               }
             })
           }
-          replyMsgsMap.value = { ..._replyMsgsMap }
+          replyMsgsMap.value = { ...replyMsgsMapForExt }
         })
         .catch(() => {
-          replyMsgsMap.value = { ..._replyMsgsMap }
+          replyMsgsMap.value = { ...replyMsgsMapForExt }
         })
-    } else {
-      replyMsgsMap.value = { ..._replyMsgsMap }
+    }
+
+    replyMsgsMap.value = {
+      ...replyMsgsMap.value,
+      ...replyMsgsMapForThreadReply,
+    }
+
+    if (threadReplyReqMsgs.length > 0) {
+      uni.$UIKitNIM.V2NIMMessageService.getMessageListByRefers(
+        //@ts-ignore
+        threadReplyReqMsgs
+      )
+        .then((res) => {
+          if (res?.length > 0) {
+            res.forEach((item) => {
+              if (item.messageServerId) {
+                replyMsgsMapForThreadReply[
+                  messageClientIds[item.messageServerId]
+                ] = item
+              }
+            })
+          }
+          replyMsgsMap.value = {
+            ...replyMsgsMap.value,
+            ...replyMsgsMapForThreadReply,
+          }
+        })
+        .catch((error) => {
+          replyMsgsMap.value = {
+            ...replyMsgsMap.value,
+            ...replyMsgsMapForThreadReply,
+          }
+        })
     }
   }
+}
+
+/** 动态更新消息 */
+const msgsWatch = autorun(() => {
+  // 这里需要 Clone，否则 pinState 更新了，对应的消息展示不会重新渲染
+  const messages = [...uni.$UIKitStore.msgStore.getMsg(conversationId)]
+  if (messages.length !== 0) {
+    msgs.value = messages
+  }
+
+  // 处理回复消息
+  handleReplyMsg(messages)
 
   // 当聊天消息小于6条时，由于页面被键盘撑起，导致已经发出的消息不可见，所以需要隐藏键盘
   if (messages.length < 6) {
@@ -426,30 +511,19 @@ const msgsWatch = autorun(() => {
   }
 })
 
-/** 设置页面标题 */
-const setNavTitle = () => {
+/** 监听会话方在线离线状态 */
+const statusWatch = autorun(() => {
+  const stateMap = uni.$UIKitStore?.subscriptionStore.stateMap
   if (
+    uni.$UIKitStore.localOptions.loginStateVisible &&
     conversationType ===
-    V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
+      V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
   ) {
-    title.value = uni.$UIKitStore.uiStore.getAppellation({ account: to })
-  } else if (
-    conversationType ===
-    V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
-  ) {
-    const team = uni.$UIKitStore.teamStore.teams.get(to)
-    const subTitle = `(${team?.memberCount || 0})`
-    title.value = (team?.name || '') + subTitle
-  }
-}
-
-onShow(function () {
-  setNavTitle()
-  scrollToBottom()
-  // 从其他页面返回到聊天页时，可能使用的是 uni.navigateBack，此时不会触发onload等事件，但此时需要将收到的新消息发送已读未读
-  if (msgs.value.length) {
-    const _msgs = [...msgs.value].reverse()
-    handleHistoryMsgReceipt(_msgs)
+    subTitle.value =
+      stateMap.get(to)?.statusType ===
+      V2NIMConst.V2NIMUserStatusType.V2NIM_USER_STATUS_TYPE_LOGIN
+        ? `(${t('userOnlineText')})`
+        : `(${t('userOfflineText')})`
   }
 })
 
@@ -460,6 +534,26 @@ const scrollToBottom = () => {
     clearTimeout(timer)
   }, 300)
 }
+
+/** 订阅在线离线状态 */
+const subscribeUserStatus = () => {
+  if (
+    loginStateVisible &&
+    conversationType ===
+      V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
+  ) {
+    uni.$UIKitStore.subscriptionStore.subscribeUserStatusActive([to])
+  }
+}
+
+onShow(function () {
+  setNavTitle()
+  // 从其他页面返回到聊天页时，可能使用的是 uni.navigateBack，此时不会触发onload等事件，但此时需要将收到的新消息发送已读未读
+  if (msgs.value.length) {
+    const _msgs = [...msgs.value].reverse()
+    handleHistoryMsgReceipt(_msgs)
+  }
+})
 
 onLoad(() => {
   uni.$on(events.HANDLE_MOVE_THROUGH, (flag) => {
@@ -472,6 +566,8 @@ onMounted(() => {
 
   scrollToBottom()
 
+  subscribeUserStatus()
+
   /** 收到消息 */
   uni.$UIKitNIM.V2NIMMessageService.on(
     'onReceiveMessages',
@@ -482,10 +578,11 @@ onMounted(() => {
   uni.$UIKitNIM.V2NIMTeamService.on('onTeamDismissed', onTeamDismissed)
   /** 自己主动离开群组或被管理员踢出回调 */
   uni.$UIKitNIM.V2NIMTeamService.on('onTeamLeft', onTeamLeft)
-
+  /** 加载更多消息 */
   uni.$on(events.GET_HISTORY_MSG, loadMoreMsgs)
 })
 
+//卸载相关事件监听
 onUnmounted(() => {
   uni.$UIKitNIM.V2NIMTeamService.off('onTeamDismissed', onTeamDismissed)
   uni.$UIKitNIM.V2NIMTeamService.off('onTeamLeft', onTeamLeft)
@@ -499,6 +596,7 @@ onUnmounted(() => {
   /** 移除store的数据监听 */
   connectedWatch()
   msgsWatch()
+  statusWatch()
   conversationTypeWatch()
 })
 

@@ -110,7 +110,7 @@
 /** 验证消息页面 */
 
 import { autorun } from 'mobx'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import NavBar from '../../../components/NavBar.vue'
@@ -121,7 +121,10 @@ import { V2NIMConst } from '../../../utils/nim'
 import Appellation from '../../../components/Appellation.vue'
 import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 
+/** 验证消息 */
 const validMsg = ref<V2NIMFriendAddApplicationForUI[]>([])
+
+/** 申请好友 loading */
 const applyFriendLoading = ref(false)
 
 /** 是否是我发起的申请 */
@@ -140,7 +143,7 @@ const handleRejectApplyFriendClick = async (
     await uni.$UIKitStore.friendStore.rejectAddApplicationActive(msg)
     uni.showToast({
       title: t('rejectedText'),
-      icon: 'success',
+      icon: 'none',
     })
   } catch (error) {
     uni.showToast({
@@ -162,7 +165,7 @@ const handleAcceptApplyFriendClick = async (
       await uni.$UIKitStore.friendStore.acceptAddApplicationActive(msg)
       uni.showToast({
         title: t('acceptedText'),
-        icon: 'success',
+        icon: 'none',
       })
     } catch (error) {
       uni.showToast({
