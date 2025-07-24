@@ -25,13 +25,16 @@
 <script lang="ts" setup>
 /** 会话列表已读未读组件 */
 
-import { defineProps, withDefaults, computed } from 'vue'
+import { computed } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { V2NIMConst } from '../../../utils/nim'
+
 import {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
 } from '@xkit-yx/im-store-v2/dist/types/types'
+
+import { V2NIMConversationType } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMConversationService'
 
 const props = withDefaults(
   defineProps<{
@@ -47,7 +50,8 @@ const p2pMsgReceiptVisible = uni.$UIKitStore.localOptions.p2pMsgReceiptVisible
 const conversationType =
   uni.$UIKitNIM.V2NIMConversationIdUtil.parseConversationType(
     props.conversation.conversationId
-  )
+  ) as unknown as V2NIMConversationType
+
 const p2pMsgRotateDeg = computed(() => {
   return (props?.conversation?.msgReceiptTime || 0) >=
     (props?.conversation?.lastMessage?.messageRefer?.createTime || 0)

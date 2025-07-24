@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <template v-for="item in textArr">
+    <template v-for="item in textArr" :key="item.key">
       <template v-if="item.type === 'text'" class="msg-reply-text">
         {{ item.value }}
       </template>
@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import Icon from './Icon.vue'
 import { EMOJI_ICON_MAP_CONFIG, emojiRegExp } from '../utils/emoji'
-import { computed, defineProps, withDefaults } from '../utils/transformVue'
+import { computed, withDefaults } from 'vue'
 
 const props = withDefaults(defineProps<{ text: string }>(), {})
 
@@ -65,7 +65,14 @@ const parseText = (text: string) => {
       })
   }
 
-  return matches.sort((a, b) => a.index - b.index)
+  return matches
+    .sort((a, b) => a.index - b.index)
+    .map((item, index) => {
+      return {
+        ...item,
+        key: index + item.type,
+      }
+    })
 }
 
 const textArr = computed(() => {

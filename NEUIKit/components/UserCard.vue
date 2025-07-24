@@ -27,12 +27,7 @@
 <script lang="ts" setup>
 import Avatar from './Avatar.vue'
 import Icon from './Icon.vue'
-import {
-  onUnmounted,
-  defineProps,
-  withDefaults,
-  ref,
-} from '../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { autorun } from 'mobx'
 import { t } from '../utils/i18n'

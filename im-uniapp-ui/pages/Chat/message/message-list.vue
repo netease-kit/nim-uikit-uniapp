@@ -28,22 +28,14 @@
 <script lang="ts" setup>
 /** 消息列表组件 */
 
-import {
-  ref,
-  computed,
-  onBeforeMount,
-  onUnmounted,
-  defineProps,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, computed, onBeforeMount, onUnmounted, withDefaults } from 'vue'
 import MessageItem from './message-item.vue'
 import { events } from '../../../utils/constants'
 import { caculateTimeago } from '../../../utils/date'
 import { t } from '../../../utils/i18n'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-//@ts-ignore
 import { V2NIMConst } from '../../../utils/nim'
-import { V2NIMTeam } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMTeamService'
+import { V2NIMTeam } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
 import { autorun } from 'mobx'
 
 const props = withDefaults(
@@ -59,6 +51,8 @@ const props = withDefaults(
   }>(),
   {}
 )
+
+/** 群信息监听 */
 let teamWatch = () => {}
 
 onBeforeMount(() => {
@@ -106,9 +100,12 @@ onBeforeMount(() => {
   })
 })
 
+/** 滚动条位置距离 */
 const scrollTop = ref(99999)
+
+/** 消息列表 */
 const finalMsgs = computed(() => {
-  const res: V2NIMMessageForUI[] = []
+  const res: (V2NIMMessageForUI & { renderKey: string })[] = []
   props.msgs.forEach((item, index) => {
     // 如果两条消息间隔超过5分钟，插入一条自定义时间消息
     if (
@@ -137,9 +134,12 @@ const finalMsgs = computed(() => {
   return res
 })
 
+/** 全局播放音频url */
 const broadcastNewAudioSrc = ref<string>('')
 
-/** 消息滑动到底部，建议搭配 nextTick 使用 */
+/** 消息滑动到底部
+ * 不建议查询当前的消息列表dom高度进行滚动，在个别机型会不生效，并有卡顿问题，使用极大值，进行滚动，无该问题
+ */
 const scrollToBottom = () => {
   scrollTop.value += 9999999
   const timer = setTimeout(() => {
@@ -158,9 +158,7 @@ const onLoadMore = () => {
         ['beReCallMsg', 'reCallMsg'].includes(item.recallType || '')
       )
   )[0]
-  if (msg) {
-    uni.$emit(events.GET_HISTORY_MSG, msg)
-  }
+  uni.$emit(events.GET_HISTORY_MSG, msg)
 }
 
 /** 点击消息列表 */

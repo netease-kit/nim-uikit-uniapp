@@ -34,6 +34,9 @@
           <div class="result-title" v-else-if="item.title == 'groups'">
             {{ t('teamText') }}
           </div>
+          <div class="result-title" v-else-if="item.title == 'discussions'">
+            {{ t('discussionText') }}
+          </div>
           <div v-else>
             <SearchResultItem :item="item" />
           </div>
@@ -50,22 +53,21 @@
 /** 会话列表搜索页 */
 
 import { autorun } from 'mobx'
-import {
-  ref,
-  onUnmounted,
-  computed,
-  onMounted,
-} from '../../../utils/transformVue'
+import { ref, onUnmounted, computed, onMounted } from 'vue'
 import { t } from '../../../utils/i18n'
 import NavBar from '../../../components/NavBar.vue'
 import Icon from '../../../components/Icon.vue'
 import SearchResultItem from './search-result-item.vue'
 import Empty from '../../../components/Empty.vue'
+import { isDiscussionFunc } from '../../../utils'
+import { V2NIMTeam } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
 
 const inputFocus = ref(false)
 
+/** 搜索框输入内容 */
 const searchText = ref('')
 
+/** 搜索列表 */
 const searchList = ref<{ id: string; list: any }[]>([])
 
 /** 搜索列表 */
@@ -88,7 +90,28 @@ const searchListWatch = autorun(() => {
           ...user,
         }
       }) || []
-  const teamList = uni.$UIKitStore.uiStore.teamList || []
+  const teamList =
+    uni.$UIKitStore.uiStore.teamList.filter((team) => {
+      if (team?.serverExtension) {
+        try {
+          return !isDiscussionFunc(team.serverExtension)
+        } catch (e) {
+          return true
+        }
+      }
+    }) || []
+
+  const discussionList =
+    uni.$UIKitStore.uiStore.teamList.filter((team) => {
+      if (team?.serverExtension) {
+        try {
+          return isDiscussionFunc(team.serverExtension)
+        } catch (e) {
+          return true
+        }
+      }
+    }) || []
+
   searchList.value = [
     {
       id: 'friends',
@@ -97,6 +120,10 @@ const searchListWatch = autorun(() => {
     {
       id: 'groups',
       list: teamList,
+    },
+    {
+      id: 'discussions',
+      list: discussionList,
     },
   ].filter((item) => !!item.list.length)
 })
@@ -123,7 +150,16 @@ const searchResult = computed(() => {
         if (item.id === 'groups') {
           return {
             ...item,
-            list: item.list?.filter((item: any) => {
+            list: item.list?.filter((item: V2NIMTeam) => {
+              return (item.name || item.teamId).includes(searchText.value)
+            }),
+          }
+        }
+
+        if (item.id === 'discussions') {
+          return {
+            ...item,
+            list: item.list?.filter((item: V2NIMTeam) => {
               return (item.name || item.teamId).includes(searchText.value)
             }),
           }
@@ -150,7 +186,18 @@ const searchResult = computed(() => {
           title: 'groups',
           renderKey: 'groups',
         })
-        item.list.forEach((item: any) => {
+        item.list.forEach((item: V2NIMTeam) => {
+          res.push({
+            ...item,
+            renderKey: item.teamId,
+          })
+        })
+      } else if (item.id === 'discussions') {
+        res.push({
+          title: 'discussions',
+          renderKey: 'discussions',
+        })
+        item.list.forEach((item: V2NIMTeam) => {
           res.push({
             ...item,
             renderKey: item.teamId,

@@ -13,13 +13,7 @@
 
 <script lang="ts" setup>
 /** 音频消息组件 */
-import {
-  ref,
-  onUnmounted,
-  computed,
-  watch,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, onUnmounted, computed, watch, withDefaults } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { events } from '../../../utils/constants'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
@@ -74,6 +68,7 @@ const handlePlayAudio = () => {
   toggleAudioPlayState()
 }
 
+/** 监听当前的音频播放 是不是当前点击url，如果不是，就停止 */
 watch(
   () => props.broadcastNewAudioSrc,
   (newSrc: string) => {
@@ -85,13 +80,16 @@ watch(
   }
 )
 
+/** 播放 */
 const toggleAudioPlayState = () => {
   if (!isAudioPlaying.value) {
     playAudio()
   } else {
     stopAudio()
   }
-} /**停止播放音频 */
+}
+
+/**停止播放音频 */
 const stopAudio = () => {
   const audioContext = getAudio()
   if (!audioContext) {
@@ -123,7 +121,7 @@ function initAudioSrc() {
 /**播放音频 */
 function playAudio() {
   const audioContext = getAudio()
-  console.log('audio played============', audioContext)
+  console.log('audio played', audioContext)
 
   if (!audioContext) {
     return

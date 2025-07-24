@@ -8,7 +8,7 @@
             color="#929299"
             :iconStyle="{ fontWeight: '200' }"
             :size="13"
-            type="icon-guanbi"
+            type="icon-guanbi1"
           />
         </div>
         <div class="reply-line">｜</div>
@@ -45,7 +45,9 @@
           ></message-one-line>
           <div v-else>
             {{
-              '[' + REPLY_MSG_TYPE_MAP[replyMsg && replyMsg.messageType] + ']'
+              replyMsg
+                ? '[' + REPLY_MSG_TYPE_MAP[replyMsg.messageType] + ']'
+                : ''
             }}
           </div>
         </div>
@@ -140,7 +142,7 @@
         <div class="send-more-panel-item-wrapper">
           <div
             class="send-more-panel-item"
-            @tap="(event) => handleSendVideoMsg('camera', event)"
+            @tap="(event:any) => handleSendVideoMsg('camera', event)"
           >
             <Icon type="icon-paishe" :size="30"></Icon>
           </div>
@@ -149,7 +151,7 @@
         <div class="send-more-panel-item-wrapper">
           <div
             class="send-more-panel-item"
-            @tap="(event) => handleSendVideoMsg('album', event)"
+            @tap="(event: any) => handleSendVideoMsg('album', event)"
           >
             <Icon type="icon-shipin2" :size="30"></Icon>
           </div>
@@ -215,15 +217,7 @@
 import Face from './face.vue'
 import VoicePanel from './voice-panel.vue'
 import Icon from '../../../components/Icon.vue'
-import {
-  ref,
-  getCurrentInstance,
-  computed,
-  onUnmounted,
-  onMounted,
-  defineProps,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { ref, getCurrentInstance, computed, onUnmounted, onMounted } from 'vue'
 import { ALLOW_AT, events, REPLY_MSG_TYPE_MAP } from '../../../utils/constants'
 import { emojiMap } from '../../../utils/emoji'
 import { t } from '../../../utils/i18n'
@@ -332,11 +326,14 @@ const replyMsg = ref<V2NIMMessageForUI>()
 /** @ 消息相关 */
 const ctx = getCurrentInstance()
 const popupRef = ref(null)
+/** @ 成员列表 */
 const selectedAtMembers = ref<MentionedMember[]>([])
 
 /** 群相关 */
 const team = ref<V2NIMTeam>()
+/** 群成员 */
 const teamMembers = ref<V2NIMTeamMember[]>([])
+/** 群禁言模式 */
 const teamMute = ref<V2NIMTeamChatBannedMode>(
   V2NIMConst.V2NIMTeamChatBannedMode.V2NIM_TEAM_CHAT_BANNED_MODE_UNBAN
 )
@@ -379,6 +376,7 @@ const updateTeamMute = () => {
   return
 }
 
+/** 弹窗*/
 const onPopupChange = (e: any) => {
   uni.$emit(events.HANDLE_MOVE_THROUGH, e.value)
 }
@@ -400,6 +398,7 @@ const handleMentionItemClick = (member: MentionedMember) => {
   inputText.value = newInputText
 }
 
+/** 关闭popup */
 const closePopup = () => {
   //@ts-ignore
   ctx.refs.popupRef.close()
@@ -420,22 +419,7 @@ const onClickEmojiInput = () => {
   }
 }
 
-// const handleInputFocus = () => {
-//   emojiVisible.value = false
-//   isFocus.value = true
-//   if (isAndroidApp) {
-//     setTimeout(() => {
-//       isFocus.value = true
-//     }, 300)
-//   }
-//   if (isIosWeb) {
-//     const inputRoot = document.getElementById('msg-input')
-//     setTimeout(() => {
-//       inputRoot?.scrollIntoView()
-//     }, 300)
-//   }
-// }
-
+/** 输入框失焦 */
 const handleInputBlur = () => {
   isFocus.value = false
 }
@@ -498,6 +482,7 @@ const handleSendTextMsg = () => {
 
   inputText.value = ''
   isReplyMsg.value = false
+  replyMsg.value = undefined
   selectedAtMembers.value = []
 }
 
@@ -507,7 +492,6 @@ const handleSendFileMsg = () => {
     count: 1,
     type: 'all',
     success: (res) => {
-      // @ts-ignore
       const filePath = res?.tempFilePaths?.[0]
       // @ts-ignore
       const fileName = res?.tempFiles?.[0]?.name
@@ -605,7 +589,7 @@ const handleAudioVisible = () => {
   }, 300)
 }
 
-/** 卸载监听 */
+/** 发送图片消息 */
 const handleSendImageMsg = () => {
   if (isTeamMute.value) return
   stopAllAudio()
@@ -739,7 +723,7 @@ const handleSetting = () => {
     V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
   ) {
     customNavigateTo({
-      url: `/pages/Group/group-set/index?id=${props.to}`,
+      url: `/pages/Team/team-set/index?id=${props.to}`,
     })
   }
 }
@@ -784,6 +768,14 @@ onMounted(() => {
   /** 撤回后，重新编辑消息 */
   uni.$on(events.ON_REEDIT_MSG, (msg: V2NIMMessageForUI) => {
     const _replyMsg = props.replyMsgsMap?.[msg.messageClientId]
+
+    // 为了解决 1.撤回回复消息A 2.再撤回普通文本消息B 3.重新编辑消息A 4.再重新编辑消息B后 输入框显示A的引用内容，发送后显示A的引用内容的问题
+
+    if (msg.conversationId) {
+      uni.$UIKitStore.msgStore.removeReplyMsgActive(msg.conversationId)
+      isReplyMsg.value = false
+    }
+
     /** 如果重新编辑的是回复消息，则需要将回复消息展示在输入框上方 */
     if (_replyMsg?.messageClientId) {
       _replyMsg && uni.$UIKitStore.msgStore.replyMsgActive(_replyMsg)
@@ -894,6 +886,7 @@ onMounted(() => {
   }
 })
 
+/** 处理选中的@ 成员 */
 const onAtMembersExtHandler = () => {
   let ext: YxServerExt
   if (selectedAtMembers.value.length) {

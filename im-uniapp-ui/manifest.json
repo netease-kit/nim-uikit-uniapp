@@ -3,7 +3,7 @@
   "fallbackLocale": "zh-Hans",
   "appid": "__UNI__A5CDF0D",
   "description": "",
-  "versionName": "10.3.0",
+  "versionName": "10.4.0",
   "versionCode": 1030,
   "transformPx": false,
   "app-plus": {
@@ -48,13 +48,15 @@
         ],
         "minSdkVersion": 21
       },
+      "orientation": ["portrait-primary"],
       "ios": {
         "dSYMs": false
       },
       "sdkConfigs": {
         "push": {},
         "ad": {}
-      }
+      },
+      "icons": {}
     },
     "nativePlugins": {
       "NIMUniPlugin": {
@@ -142,6 +144,8 @@
   },
   "app-harmony": {
     "distribute": {
+      "bundleName": "",
+      "icons": {},
       "splashScreens": {
         "startWindowIcon": ""
       }

@@ -57,7 +57,7 @@ export const setTabUnread = (): void => {
   const routes = getCurrentPages()
   const curRoute = routes[routes.length - 1].route
   const tabPaths = [
-    'pages/user-card/my/index',
+    'pages/User/my/index',
     'pages/Contact/index',
     'pages/Conversation/index',
   ]
@@ -104,7 +104,7 @@ export const setContactTabUnread = (): void => {
   const routes = getCurrentPages()
   const curRoute = routes[routes.length - 1].route
   const tabPaths = [
-    'pages/user-card/my/index',
+    'pages/User/my/index',
     'pages/Contact/index',
     'pages/Conversation/index',
   ]

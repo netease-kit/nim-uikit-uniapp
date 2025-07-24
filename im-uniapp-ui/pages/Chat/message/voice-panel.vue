@@ -26,17 +26,19 @@
 <script lang="ts" setup>
 /**语音消息面板组件 */
 
-import { ref } from '../../../utils/transformVue'
+import { ref } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
 import { isWxApp, stopAllAudio } from '../../../utils'
 
 const $emit = defineEmits(['handleSendAudioMsg'])
 
+/**录音实例 */
 const recorderManager = uni.getRecorderManager()
 
 let startRecordStamp = 0
 
+/**录音状态 */
 const recordState = ref('stop')
 
 /**开始录音 */
@@ -64,6 +66,7 @@ const onStopRecord = () => {
   recorderManager.stop()
 }
 
+/** 开始录音 */
 recorderManager.onStart((res) => {
   console.log('recorder start' + JSON.stringify(res))
   console.log('recorder start')
@@ -71,6 +74,7 @@ recorderManager.onStart((res) => {
   startRecordStamp = new Date().getTime()
 })
 
+/** 结束录音 */
 recorderManager.onStop((res) => {
   console.log('recorder stop' + JSON.stringify(res))
   recordState.value = 'stop'
@@ -85,6 +89,7 @@ recorderManager.onStop((res) => {
   $emit('handleSendAudioMsg', res.tempFilePath, duration)
 })
 
+/** 录音出错 */
 recorderManager.onError((res) => {
   console.log('recorder error', res)
   recordState.value = 'stop'

@@ -64,13 +64,7 @@ import Appellation from './Appellation.vue'
 import Empty from './Empty.vue'
 import { t } from '../utils/i18n'
 import { events } from '../utils/constants'
-import {
-  ref,
-  onMounted,
-  defineEmits,
-  defineProps,
-  withDefaults,
-} from '../utils/transformVue'
+import { ref, onMounted } from 'vue'
 
 export type PersonSelectItem = {
   accountId: string
@@ -95,17 +89,15 @@ const props = withDefaults(
   }
 )
 
-const selectAccount = ref<string[]>([])
-
-onMounted(() => {
-  selectAccount.value = props.personList
-    .filter((item) => item.checked)
-    .map((item) => item.accountId)
-})
-
 const $emit = defineEmits<{
   (event: 'checkboxChange', selectList: string | string[]): void
+  (event: 'onBtnClick'): void
 }>()
+
+const onBtnClick = () => {
+  uni.$emit(events.FRIEND_SELECT)
+  $emit('onBtnClick')
+}
 
 const checkboxChange = (event: any) => {
   const value = event.detail.value
@@ -113,9 +105,13 @@ const checkboxChange = (event: any) => {
   $emit('checkboxChange', value)
 }
 
-const onBtnClick = () => {
-  uni.$emit(events.FRIEND_SELECT)
-}
+const selectAccount = ref<string[]>([])
+
+onMounted(() => {
+  selectAccount.value = props.personList
+    .filter((item) => item.checked)
+    .map((item) => item.accountId)
+})
 </script>
 
 <style lang="scss" scoped>

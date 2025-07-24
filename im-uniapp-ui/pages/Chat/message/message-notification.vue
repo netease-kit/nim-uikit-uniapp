@@ -16,21 +16,18 @@ import {
   YxServerExt,
 } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMMessageNotificationAttachment } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
-import {
-  defineProps,
-  onUnmounted,
-  ref,
-  withDefaults,
-} from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import { autorun } from 'mobx'
 const props = withDefaults(defineProps<{ msg: V2NIMMessageForUI }>(), {})
 
+/** 群ID */
 const teamId =
   props.msg.conversationType ===
   V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
     ? props.msg.receiverId
     : ''
 
+/** 通知消息内容 */
 const notificationContent = ref('')
 
 /** 通知消息监听 */

@@ -1,5 +1,5 @@
 <template>
-  <div
+  <view
     class="avatar"
     :style="{ width: avatarSize + 'px', height: avatarSize + 'px' }"
     @click="handleAvatarClick"
@@ -7,7 +7,7 @@
     @touchend="touchend"
   >
     <!-- 使用遮罩层避免android长按头像会出现保存图片的弹窗 -->
-    <div class="img-mask"></div>
+    <view class="img-mask"></view>
     <image
       :lazy-load="true"
       class="avatar-img"
@@ -15,29 +15,23 @@
       :src="avatarUrl"
       mode="aspectFill"
     />
-    <div class="avatar-name-wrapper" :style="{ backgroundColor: color }">
-      <div class="avatar-name-text" :style="{ fontSize: fontSize + 'px' }">
+    <view class="avatar-name-wrapper" :style="{ backgroundColor: color }">
+      <view class="avatar-name-text" :style="{ fontSize: fontSize + 'px' }">
         <Appellation
           :account="account"
           :team-id="teamId"
           :ignore-alias="false"
           color="#fff"
         ></Appellation>
-      </div>
-    </div>
-  </div>
+      </view>
+    </view>
+  </view>
 </template>
 
 <script lang="ts" setup>
 import { customNavigateTo, customRedirectTo } from '../utils/customNavigate'
 import { autorun } from 'mobx'
-import {
-  ref,
-  computed,
-  onUnmounted,
-  defineProps,
-  withDefaults,
-} from '../utils/transformVue'
+import { ref, computed, onUnmounted, defineProps, withDefaults } from 'vue'
 import { V2NIMUser } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMUserService'
 import Appellation from './Appellation.vue'
 const props = withDefaults(
@@ -110,21 +104,21 @@ const handleAvatarClick = () => {
     if (props.isRedirect) {
       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.accountId) {
         customRedirectTo({
-          url: `/pages/user-card/my-detail/index`,
+          url: `/pages/User/my-detail/index`,
         })
       } else {
         customRedirectTo({
-          url: `/pages/user-card/friend/index?account=${props.account}`,
+          url: `/pages/User/friend/index?account=${props.account}`,
         })
       }
     } else {
       if (props.account === uni.$UIKitStore?.userStore?.myUserInfo.accountId) {
         customNavigateTo({
-          url: `/pages/user-card/my-detail/index`,
+          url: `/pages/User/my-detail/index`,
         })
       } else {
         customNavigateTo({
-          url: `/pages/user-card/friend/index?account=${props.account}`,
+          url: `/pages/User/friend/index?account=${props.account}`,
         })
       }
     }

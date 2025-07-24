@@ -14,7 +14,6 @@ import { t } from '../../../utils/i18n'
 import { convertSecondsToTime, startCall, isApp } from '../../../utils'
 import { g2StatusMap } from '../../../utils/constants'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
-import { defineProps, withDefaults } from '../../../utils/transformVue'
 
 const props = withDefaults(defineProps<{ msg: V2NIMMessageForUI }>(), {})
 

@@ -20,19 +20,34 @@
 <script lang="ts" setup>
 /** 群列表组件 */
 import { autorun } from 'mobx'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import NavBar from '../../../components/NavBar.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { t } from '../../../utils/i18n'
 import { V2NIMTeam } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMTeamService'
+import { V2NIMConst } from '../../../utils/nim'
+
+/** 群列表 */
 const teamList = ref<V2NIMTeam[]>([])
 
+/** 点击群聊 */
 const handleClick = async (team: V2NIMTeam) => {
-  await uni.$UIKitStore.uiStore.selectConversation(
-    uni.$UIKitNIM.V2NIMConversationIdUtil.teamConversationId(team.teamId)
-  )
+  if (uni.$UIKitStore.sdkOptions?.enableV2CloudConversation) {
+    await uni.$UIKitStore.conversationStore?.insertConversationActive(
+      V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM,
+      team.teamId,
+      true
+    )
+  } else {
+    await uni.$UIKitStore.localConversationStore?.insertConversationActive(
+      V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM,
+      team.teamId,
+      true
+    )
+  }
+
   customNavigateTo({
     url: '/pages/Chat/index',
   })

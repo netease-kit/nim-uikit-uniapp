@@ -17,8 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, withDefaults, defineEmits } from '../utils/transformVue'
-
 withDefaults(
   defineProps<{
     title: string

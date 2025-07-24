@@ -2,9 +2,22 @@
   <div>
     <div :class="inputClass">
       <slot name="addonBefore" />
-      <input class="input" :type="type" :value="value" @input="handleInput" :focus="inputFocus"
-        @focus="inputFocus = true" @blur="handleBlur" :placeholder="placeholder" />
-      <icon v-show="value && allowClear" type="clear" size="16" @click="clearInput()" />
+      <input
+        class="input"
+        :type="type"
+        :value="value"
+        @input="handleInput"
+        :focus="inputFocus"
+        @focus="inputFocus = true"
+        @blur="handleBlur"
+        :placeholder="placeholder"
+      />
+      <icon
+        v-show="value && allowClear"
+        type="clear"
+        size="16"
+        @click="clearInput()"
+      />
       <slot name="addonAfter" />
     </div>
     <div v-if="inputError && rule" class="error-tips">{{ rule.message }}</div>
@@ -12,73 +25,76 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from "../../../utils/transformVue";
-const emit = defineEmits(["updateModelValue"]);
+import { ref, computed } from 'vue'
+const emit = defineEmits(['updateModelValue'])
 const props = defineProps({
   className: {
     type: String,
-    default: ''
+    default: '',
   },
   type: {
     type: String,
-    default: 'text'
+    default: 'text',
   },
   value: {
     type: String,
-    default: ''
+    default: '',
   },
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   allowClear: {
     type: Boolean,
-    default: false
+    default: false,
   },
   rule: {
     type: Object,
-    default: null
-  }
-});
+    default: null,
+  },
+})
 
-
-const inputFocus = ref(false);
-const inputError = ref(false);
+const inputFocus = ref(false)
+const inputError = ref(false)
 // use key to force refresh input
 // const inputKey = ref(0);
 
 const inputClass = computed(() => {
-  return [props.className, 'form-input-item', { 'focus': inputFocus.value, 'error': inputError.value }];
-});
+  return [
+    props.className,
+    'form-input-item',
+    { focus: inputFocus.value, error: inputError.value },
+  ]
+})
 
-const handleInput = (event) => {
-  let value = event.detail.value;
+const handleInput = (event: any) => {
+  let value = event.detail.value
   if (props.type === 'tel') {
-    value = value.replace(/\D/g, '');
+    value = value.replace(/\D/g, '')
   }
   emit('updateModelValue', value)
   // inputKey.value++;
 }
 
 const handleBlur = () => {
-  inputFocus.value = false;
+  inputFocus.value = false
   if (props.rule && props.rule.trigger === 'blur') {
-    inputError.value = !props.rule.reg.test(props.value || '');
+    inputError.value = !props.rule.reg.test(props.value || '')
   }
 }
 
 const clearInput = () => {
-  emit("updateModelValue", null);
-  inputFocus.value = true;
+  emit('updateModelValue', null)
+  inputFocus.value = true
 }
 </script>
 
 <style lang="scss" scoped>
-$primary-color: #337EFF;
-$error-color: #F56C6C;
+$primary-color: #337eff;
+$error-color: #f56c6c;
 
 .form-input-item {
-  border-bottom: 1rpx solid #DCDFE5;
+  border-bottom: 1rpx solid #dcdfe5;
   padding: 10px 10px 5px 0px;
   display: flex;
   height: 44px;

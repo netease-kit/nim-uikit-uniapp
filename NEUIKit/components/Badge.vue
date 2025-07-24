@@ -7,12 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-import {
-  StyleValue,
-  computed,
-  defineProps,
-  withDefaults,
-} from '../utils/transformVue'
+import { StyleValue, computed, withDefaults } from 'vue'
 
 const props = withDefaults(
   defineProps<{

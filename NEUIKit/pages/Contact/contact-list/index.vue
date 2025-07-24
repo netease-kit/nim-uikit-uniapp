@@ -36,6 +36,16 @@
               </div>
               {{ t('createTeamText') }}
             </div>
+            <div
+              class="add-menu-item"
+              @tap="onDropdownClick('createDiscussion')"
+            >
+              <Icon
+                type="icon-chuangjianqunzu"
+                :style="{ marginRight: '5px' }"
+              />
+              {{ t('createDiscussionText') }}
+            </div>
           </div>
         </div>
       </div>
@@ -87,32 +97,34 @@
 
 import Icon from '../../../components/Icon.vue'
 import Badge from '../../../components/Badge.vue'
-import FriendList from './friend-list.vue'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import FriendList from './friend-list/index.vue'
+import { onUnmounted, ref } from 'vue'
 import { onHide, onShow } from '@dcloudio/uni-app'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { autorun } from 'mobx'
 import { t } from '../../../utils/i18n'
-import { onMounted } from 'vue'
+import { trackInit } from '../../../utils/reporter'
+
+/** Dropdown 展示 flag */
 const addDropdownVisible = ref(false)
+
+/** 未读消息数量 */
 const unreadSysMsgCount = ref(0)
 
 /** 未读监听 */
 let unreadWatch = () => {}
 
-onShow(() => {
-  unreadWatch = autorun(() => {
-    unreadSysMsgCount.value =
-      uni.$UIKitStore?.sysMsgStore.getTotalUnreadMsgsCount()
-  })
-})
-
-const onDropdownClick = (urlType: 'addFriend' | 'createGroup') => {
+/** 点击Dropdown */
+const onDropdownClick = (
+  urlType: 'addFriend' | 'createGroup' | 'createDiscussion'
+) => {
   const urlMap = {
     // 添加好友
-    addFriend: '/pages/Friend/add-friend/index',
+    addFriend: '/pages/User/friend/add-friend',
     // 创建群聊
-    createGroup: '/pages/Group/group-create/index',
+    createGroup: '/pages/Team/team-create/index',
+    // 创建讨论组和创建群聊复用一个页面，仅在创建群接口时，群扩展字段添加im_ui_kit_group参数区分，讨论组本质也是群，只是少了群的一些能力，旨在于快速创建讨论
+    createDiscussion: `/pages/Team/team-create/index?createDiscussion=${true}`,
   }
   addDropdownVisible.value = false
   customNavigateTo({
@@ -142,10 +154,12 @@ const handleGroupContactClick = () => {
   })
 }
 
+/** 显示添加好友或创建群聊的下拉框 */
 const showAddDropdown = () => {
   addDropdownVisible.value = true
 }
 
+/** 隐藏添加好友或创建群聊的下拉框 */
 const hideAddDropdown = () => {
   addDropdownVisible.value = false
 }
@@ -155,8 +169,17 @@ let buttonClass = 'button-box'
 buttonClass = 'button-box-mp'
 // #endif
 
+trackInit('ContactUIKit')
+
 onUnmounted(() => {
   unreadWatch()
+})
+
+onShow(() => {
+  unreadWatch = autorun(() => {
+    unreadSysMsgCount.value =
+      uni.$UIKitStore?.sysMsgStore.getTotalUnreadMsgsCount()
+  })
 })
 
 onHide(() => {

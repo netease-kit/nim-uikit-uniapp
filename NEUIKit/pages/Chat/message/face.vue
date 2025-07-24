@@ -47,26 +47,29 @@
 
 <script lang="ts" setup>
 /** 表情组件 */
-
 import { emojiMap } from '../../../utils/emoji'
-import { culculateMatrix } from '../../../utils/matrix'
+import { calculateMatrix } from '../../../utils/matrix'
 import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
 // 七个一行
 const emojiArr = Object.keys(emojiMap)
 const emojiColNum = 7
-const emojiMatrix = culculateMatrix(emojiArr, emojiColNum)
+// 处理表情需要网格布局
+const emojiMatrix = calculateMatrix(emojiArr, emojiColNum)
 
 const emit = defineEmits(['emojiClick', 'emojiSend', 'emojiDelete'])
 
+// 点击表情
 const handleEmojiClick = (emoji: any) => {
   emit('emojiClick', emoji)
 }
 
+// 删除表情
 const handleEmojiDelete = () => {
   emit('emojiDelete')
 }
 
+// 发送表情
 const handleEmojiSend = () => {
   emit('emojiSend')
 }

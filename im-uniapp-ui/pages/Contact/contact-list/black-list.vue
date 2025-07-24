@@ -20,7 +20,7 @@
 <script lang="ts" setup>
 /** 通讯录 黑名单列表组件 */
 import { autorun } from 'mobx'
-import { onUnmounted, ref } from '../../../utils/transformVue'
+import { onUnmounted, ref } from 'vue'
 import Empty from '../../../components/Empty.vue'
 import Avatar from '../../../components/Avatar.vue'
 import Appellation from '../../../components/Appellation.vue'
@@ -37,7 +37,7 @@ const handleClick = async (account: string) => {
     await uni.$UIKitStore.relationStore.removeUserFromBlockListActive(account)
     uni.showToast({
       title: t('removeBlackSuccessText'),
-      icon: 'success',
+      icon: 'none',
     })
   } catch (error) {
     uni.showToast({

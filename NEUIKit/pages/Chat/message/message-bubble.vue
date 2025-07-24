@@ -238,10 +238,16 @@
         <slot v-else></slot>
       </Tooltip>
     </div>
-    <div class="in-blacklist" v-if="props.msg.errorCode === 102426">
+    <div
+      class="in-blacklist"
+      v-if="props.msg.messageStatus.errorCode === 102426"
+    >
       {{ t('sendFailWithInBlackText') }}
     </div>
-    <div class="friend-delete" v-else-if="props.msg.errorCode === 104404">
+    <div
+      class="friend-delete"
+      v-else-if="props.msg.messageStatus.errorCode === 104404"
+    >
       {{ t('sendFailWithDeleteText') }}
       <span @tap="addFriend" class="friend-verification">{{
         t('friendVerificationText')
@@ -396,13 +402,7 @@
 
 <script lang="ts" setup>
 /** 消息操作组件 */
-import {
-  onMounted,
-  onUnmounted,
-  ref,
-  withDefaults,
-  defineProps,
-} from '../../../utils/transformVue'
+import { onMounted, onUnmounted, ref } from 'vue'
 // @ts-ignore
 import Tooltip from '../../../components/Tooltip.vue'
 import Icon from '../../../components/Icon.vue'
@@ -414,6 +414,7 @@ import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from '../../../utils/nim'
 import { msgRecallTime } from '../../../utils/constants'
 import { t } from '../../../utils/i18n'
+import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 const tooltipRef = ref(null)
 
 const props = withDefaults(
@@ -448,8 +449,7 @@ onMounted(() => {
   )
 })
 
-console.log('props.msg=================', props.msg)
-
+/** 是否是好友 */
 const isFriend = ref(true)
 
 /** 未知消息 */
@@ -496,38 +496,29 @@ const handleResendMsg = async () => {
   uni.$UIKitStore.msgStore.removeMsg(_msg.conversationId, [
     _msg.messageClientId,
   ])
+
   try {
-    switch (_msg.messageType) {
-      case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE:
-      case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_VIDEO:
-        uni.$UIKitStore.msgStore.sendMessageActive({
-          msg: _msg,
-          conversationId: _msg.conversationId,
-          progress: () => true,
-          sendBefore: () => {
-            scrollBottom()
-          },
-        })
-        break
-      case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT:
-        uni.$UIKitStore.msgStore.sendMessageActive({
-          msg: _msg,
-          conversationId: _msg.conversationId,
-          sendBefore: () => {
-            scrollBottom()
-          },
-        })
-        break
-      default:
-        uni.$UIKitStore.msgStore.sendMessageActive({
-          msg: _msg,
-          conversationId: _msg.conversationId,
-          sendBefore: () => {
-            scrollBottom()
-          },
-        })
-        break
+    if (_msg.threadReply) {
+      const beReplyMsg =
+        await uni.$UIKitNIM.V2NIMMessageService.getMessageListByRefers([
+          //@ts-ignore
+          _msg.threadReply,
+        ])
+      if (beReplyMsg.length > 0) {
+        //@ts-ignore
+        uni.$UIKitStore.msgStore.replyMsgActive(beReplyMsg[0])
+      }
     }
+
+    uni.$UIKitStore.msgStore.sendMessageActive({
+      msg: _msg,
+      conversationId: _msg.conversationId,
+      progress: () => true,
+      sendBefore: () => {
+        scrollBottom()
+      },
+    })
+
     scrollBottom()
   } catch (error) {
     console.log(error)
@@ -633,7 +624,7 @@ const handleCollectionMsg = () => {
     .then(() => {
       uni.showToast({
         title: t('addCollectionSuccessText'),
-        icon: 'success',
+        icon: 'none',
       })
     })
     .catch((err: any) => {
@@ -730,7 +721,7 @@ const handleDeleteMsg = () => {
           .then(() => {
             uni.showToast({
               title: t('deleteMsgSuccessText'),
-              icon: 'success',
+              icon: 'none',
             })
           })
           .catch((error: any) => {
@@ -750,7 +741,7 @@ const handleDeleteMsg = () => {
 /** 添加好友 */
 const addFriend = () => {
   customNavigateTo({
-    url: `/pages/user-card/friend/index?account=${props.msg.receiverId}`,
+    url: `/pages/User/friend/index?account=${props.msg.receiverId}`,
   })
 }
 
@@ -847,6 +838,7 @@ onUnmounted(() => {
 
 .msg-status-wrapper {
   // max-width: 450rpx;
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -861,6 +853,9 @@ onUnmounted(() => {
 .msg-status-icon {
   margin-right: 8px;
   font-size: 21px;
+  position: absolute;
+  bottom: 2px;
+  left: -30px;
 
   &.icon-loading {
     color: #337eff;

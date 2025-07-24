@@ -2,7 +2,7 @@
   <view :class="className" :style="iconStyle">
     <!-- #ifdef APP-PLUS -->
     <image
-      :src="_url"
+      :src="iconUrl"
       :style="{
         width: (width || size) + 'px',
         height: (height || size) + 'px',
@@ -12,7 +12,7 @@
     <!-- #endif -->
     <!-- #ifndef APP-PLUS -->
     <img
-      :src="_url"
+      :src="iconUrl"
       :style="{
         width: (width || size) + 'px',
         height: (height || size) + 'px',
@@ -24,8 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-// svg 解决方案参考：https://github.com/iconfont-cli/mini-program-iconfont-cli/tree/master
-import { computed, defineProps, withDefaults } from '../utils/transformVue'
+import { computed, withDefaults } from 'vue'
 const props = withDefaults(
   defineProps<{
     type: string
@@ -39,7 +38,7 @@ const props = withDefaults(
     size: 16,
   }
 )
-const urlMap = {
+const urlMap: any = {
   'icon-a-1':
     'https://yx-web-nosdn.netease.im/common/7c2e2c6ff08f4ed60f3ca7d5ab6d38ac/icon-a-1.png',
   'icon-a-2':
@@ -202,6 +201,8 @@ const urlMap = {
     'https://yx-web-nosdn.netease.im/common/9e0ba675eb4548bffe19da823fb712e3/icon-fuzhi1.png',
   'icon-guanbi':
     'https://yx-web-nosdn.netease.im/common/2d07f146ecb4b616632f0fcfdd02b5be/icon-guanbi.png',
+  'icon-guanbi1':
+    'https://yx-web-nosdn.netease.im/common/51bad0b424c2462df8213883e211fe07/icon-guanbi1.png',
   'icon-guanyu':
     'https://yx-web-nosdn.netease.im/common/24d2344c49b551d5a605b3e5e3e6f6da/icon-guanyu.png',
   'icon-huifu':
@@ -350,17 +351,11 @@ const urlMap = {
     'https://yx-web-nosdn.netease.im/common/fb3836a8731b57720fcfdd3b589b3d5f/collection.png',
 }
 
-//以上链接访问有频率控制，建议您将静态放到您服务器上，然后修改上面的链接即可
+//以上链接访问有频率控制，建议您将静态资源放到您服务器上，然后修改上面的链接即可
 
-const _url = computed(() => {
-  // @ts-ignore
+const iconUrl = computed(() => {
   return urlMap[props.type]
 })
-
-// const prefix = 'https://yiyong-qa.netease.im/yiyong-static/statics/uniapp-vue2-h5'
-// const url = computed(() => {
-//   return `${prefix}/static/icons/${props.type}.png`
-// })
 
 const className = `${props.iconClassName || ''} icon-wrapper`
 </script>

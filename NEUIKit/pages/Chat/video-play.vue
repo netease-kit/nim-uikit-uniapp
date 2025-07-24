@@ -1,6 +1,6 @@
 <template>
   <div class="video-wrapper">
-    <NavBar :title="t('videoPlayText')" />
+    <NavBar :title="t('videoPlayText')" :showLeft="false"></NavBar>/>
     <div class="video-box">
       <video
         v-if="show"
@@ -16,12 +16,16 @@
 
 <script lang="ts" setup>
 /** 视频播放界面 */
-import { ref } from '../../utils/transformVue'
+import { ref } from 'vue'
 import { onLoad, onReady } from '@dcloudio/uni-app'
-import NavBar from './message/nav-bar.vue'
+import NavBar from '../../components/NavBar.vue'
 import { t } from '../../utils/i18n'
+
+/** 视频地址 */
 const videoUrl = ref()
+/** 是否显示视频 */
 const show = ref(false)
+
 onLoad((option: any) => {
   videoUrl.value = decodeURIComponent(option.videoUrl)
   show.value = true

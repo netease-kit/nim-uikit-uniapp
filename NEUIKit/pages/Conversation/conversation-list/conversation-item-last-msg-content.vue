@@ -105,7 +105,7 @@
       "
       class="msg-conversation-text-wrap"
     >
-      <template v-for="item in textArr">
+      <template v-for="item in textArr" :key="item.key">
         <template v-if="item.type === 'text'">
           <span class="msg-conversation-text">{{ item.value }}</span>
         </template>
@@ -127,7 +127,7 @@
 
 <script lang="ts" setup>
 /** 会话列表Item 外漏消息组件 */
-import { defineProps, withDefaults, computed } from 'vue'
+import { computed } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { V2NIMConst } from '../../../utils/nim'
 import { t } from '../../../utils/i18n'
@@ -180,9 +180,17 @@ const parseTextWithEmoji = (text: string) => {
       })
   }
 
-  return matches.sort((a, b) => a.index - b.index)
+  return matches
+    .sort((a, b) => a.index - b.index)
+    .map((item, index) => {
+      return {
+        ...item,
+        key: index + item.type,
+      }
+    })
 }
 
+/** 解析的消息数组 */
 const textArr = computed(() => {
   return parseTextWithEmoji(props.lastMessage.text as string)
 })

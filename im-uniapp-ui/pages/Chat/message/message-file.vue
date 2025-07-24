@@ -48,7 +48,6 @@ import { isWxApp } from '../../../utils'
 import { t } from '../../../utils/i18n'
 import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMMessageFileAttachment } from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK/V2NIMMessageService'
-import { withDefaults, defineProps } from '../../../utils/transformVue'
 
 const props = withDefaults(defineProps<{ msg: V2NIMMessageForUI }>(), {})
 
@@ -77,7 +76,10 @@ const iconType = fileIconMap[getFileType(ext)] || 'icon-weizhiwenjian'
 
 const index = name.lastIndexOf('.') > -1 ? name.lastIndexOf('.') : name.length
 
+/** 文件名前缀 */
 const prefixName = name.slice(0, Math.max(index - 5, 0))
+
+/** 文件名后缀 */
 const suffixName = name.slice(Math.max(index - 5, 0))
 
 /** 下载地址 */
@@ -95,6 +97,7 @@ const mpDownload = () => {
   })
 }
 
+/** 打开浏览器 */
 const openInBrowser = (url: string) => {
   uni.setClipboardData({
     data: url,

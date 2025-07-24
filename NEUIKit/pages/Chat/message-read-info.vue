@@ -88,13 +88,20 @@ import Avatar from '../../components/Avatar.vue'
 import Appellation from '../../components/Appellation.vue'
 import Empty from '../../components/Empty.vue'
 
+/** 已读人数 */
 const readCount = ref(0)
+/** 未读人数 */
 const unReadCount = ref(0)
+/** 已读列表 */
 const readList = ref<string[]>([])
+/** 未读列表 */
 const unReadList = ref<string[]>([])
+/** 已读未读类型 */
 const selectedType = ref<string>('read')
+/** 群ID */
 const teamId = ref<string>('')
 
+/** 返回会话列表 */
 const backToConversation = () => {
   uni.navigateBack({
     delta: 1,
@@ -145,6 +152,7 @@ onLoad((props) => {
   width: 100%;
   height: 40px;
   margin-top: 5px;
+  margin-bottom: 10px;
   .msg-read-header-item {
     flex: 1;
     text-align: center;

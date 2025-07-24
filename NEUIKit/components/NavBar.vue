@@ -30,7 +30,7 @@
 <script lang="ts" setup>
 import { getUniPlatform } from '../utils'
 import Icon from './Icon.vue'
-import { defineProps, withDefaults } from '../utils/transformVue'
+import { withDefaults } from 'vue'
 
 withDefaults(
   defineProps<{
