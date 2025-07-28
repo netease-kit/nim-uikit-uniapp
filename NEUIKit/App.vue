@@ -255,43 +255,37 @@ export default {
       // #ifdef APP-PLUS
       /** 注册推送 */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
-        miPush: {
-          appId: "2882303761517864366",
-          appKey: "5991786427366",
-          certificateName: "KIT_UNIAPP_MI_PUSH",
-        },
-
-        hwPush: {
-          appId: "109540237",
-          certificateName: "KIT_UNIAPP_HW_PUSH",
-        },
-
-        oppoPush: {
-          appId: "30795055",
-          appKey: "6ffe2c1198c5448e84b75f3b78b711ce",
-          certificateName: "KIT_OPPO_PUSH",
-          secret: "f55d519d05a04360a8ba3404a24594a0",
-        },
-
-        vivoPush: {
-          appId: "105693306",
-          appKey: "c8ccf661e2aa7895c1a46b3631d5a163",
-          certificateName: "KIT_UNIAPP_VIVO_PUSH",
-        },
-
-        fcmPush: {
-          certificateName: "KIT_UNIAPP_FCM_PUSH",
-        },
-
-        mzPush: {
-          appId: "148192",
-          appKey: "6068c5a8323542deaf83ad5b6d3ca9e2",
-          certificateName: "KIT_MEIZU_PUSH",
-        },
-
-        apns: {
-          certificateName: "dis_im",
-        },
+        // miPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // hwPush: {
+        //   appId: "",
+        //   certificateName: "",
+        // },
+        // oppoPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        //   secret: "",
+        // },
+        // vivoPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // fcmPush: {
+        //   certificateName: "",
+        // },
+        // mzPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // apns: {
+        //   certificateName: "",
+        // },
       });
       // #endif
 
