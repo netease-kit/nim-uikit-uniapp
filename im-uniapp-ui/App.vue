@@ -65,7 +65,6 @@ export default {
   onShow() {
     // #ifdef APP-PLUS
     uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(false);
-    // #endif
 
     // 点击通知栏推送监听
     nimPushPlugin.addOpenNotificationListener((res: any) => {
@@ -78,6 +77,7 @@ export default {
         startByNotificationId = `${imOptions.account}|${type}|${res?.sessionId}`;
       }
     });
+    // #endif
   },
   onHide() {
     // #ifdef APP-PLUS
@@ -261,43 +261,37 @@ export default {
       /** 注册推送 实际根据您在推送厂商申请的证书进行配置，具体参考文档 https://doc.yunxin.163.com/messaging2/guide/zc4MTg5MDY?platform=client#%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%B8%8A%E4%BC%A0%E6%8E%A8%E9%80%81%E8%AF%81%E4%B9%A6
        */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
-        miPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        hwPush: {
-          appId: "",
-          certificateName: "",
-        },
-
-        oppoPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-          secret: "",
-        },
-
-        vivoPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        fcmPush: {
-          certificateName: "",
-        },
-
-        mzPush: {
-          appId: "",
-          appKey: "",
-          certificateName: "",
-        },
-
-        apns: {
-          certificateName: "",
-        },
+        // miPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // hwPush: {
+        //   appId: "",
+        //   certificateName: "",
+        // },
+        // oppoPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        //   secret: "",
+        // },
+        // vivoPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // fcmPush: {
+        //   certificateName: "",
+        // },
+        // mzPush: {
+        //   appId: "",
+        //   appKey: "",
+        //   certificateName: "",
+        // },
+        // apns: {
+        //   certificateName: "",
+        // },
       });
       // #endif
 
