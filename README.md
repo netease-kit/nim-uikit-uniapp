@@ -21,3 +21,10 @@ im-uikit-uniapp 界面效果如下图所示：
 ## 项目集成
 
 - [详见官网](https://doc.yunxin.163.com/messaging-uikit/guide/jQyNzk0Nzk?platform=uniapp)
+
+## 相关文档
+
+- IM UIKit 的功能清单，请参考 [IM UIKit 功能概览](https://doc.yunxin.163.com/messaging-uikit/concept/zMzMDQ2MTg)。
+- 若需要直接体验 IM Demo，请参考 [体验 Demo](https://doc.yunxin.163.com/messaging-uikit/guide?platform=uniapp)。
+- 若需要跑通 IM Demo，请参考 [跑通 IM Demo 源码](https://doc.yunxin.163.com/messaging-uikit/guide/jgwMDI2NTU?platform=uniapp)。
+- IM UIKit 已支持音视频通话，具体实现流程请参考 [实现音视频通话功能](https://doc.yunxin.163.com/messaging-uikit/guide/TA5NjkwNzk?platform=uniapp)。
