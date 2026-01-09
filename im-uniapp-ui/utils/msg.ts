@@ -23,11 +23,14 @@ const translate = (key: string): string => {
 export const getMsgContentTipByType = (msg: {
   messageType?: V2NIMConst.V2NIMMessageType
   text?: string
+  needSlice?: boolean
 }): string => {
-  const { messageType, text } = msg
+  const { messageType, text, needSlice } = msg
   switch (messageType) {
     case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_TEXT:
-      return text || translate('textMsgText')
+      return needSlice && text
+        ? text?.slice(0, 100)
+        : text || translate('textMsgText')
     case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_FILE:
       return translate('fileMsgText')
     case V2NIMConst.V2NIMMessageType.V2NIM_MESSAGE_TYPE_IMAGE:

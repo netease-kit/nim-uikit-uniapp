@@ -41,7 +41,7 @@ export function caculateTimeago(dateTimeStamp: number): string {
   return result
 }
 
-export const formatDateRange = (type: string) => {
+export const formatDateRange = (type) => {
   const date = new Date()
   let year = date.getFullYear()
   let month: string | number = date.getMonth() + 1

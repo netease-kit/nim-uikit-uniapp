@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { autorun } from 'mobx'
-import { onUnmounted, ref, withDefaults } from 'vue'
+import { onUnmounted, ref, defineProps, withDefaults } from 'vue'
 
 const appellation = ref('')
 

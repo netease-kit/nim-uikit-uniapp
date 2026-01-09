@@ -296,16 +296,10 @@ const inputVisible = computed(() => {
 /** 发起呼叫，type: 1 音频呼叫，2 视频呼叫 */
 const handleCall = (type: number) => {
   const myAccount = uni.$UIKitStore.userStore.myUserInfo.accountId
-
-  const remoteShowName = uni.$UIKitStore.uiStore.getAppellation({
-    account: props.to,
-  })
   if (myAccount) {
     startCall({
       remoteUserAccid: props.to,
-      currentUserAccid: myAccount,
       type: type,
-      remoteShowName: remoteShowName,
     })
   } else {
     uni.showToast({

@@ -1,5 +1,5 @@
 // 常规集成的V2NIMConst
-import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
+// import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 // ESM 版本集成的V2NIMConst
 
@@ -10,6 +10,6 @@ import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
  * 具体参考文档 https://doc.yunxin.163.com/messaging2/guide/DcyMjA1Njk?platform=client
  */
 //@ts-ignore
-// import { V2NIMConst } from '../esmNim.js'
+import { V2NIMConst } from '../esmNim.js'
 
-export { V2NIMConst };
+export { V2NIMConst }

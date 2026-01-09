@@ -16,12 +16,20 @@
     "preserveValueImports": false,
     "isolatedModules": false,
     "baseUrl": ".",
-    "types": ["node"],
+    "types": ["node", "webpack-env", "vue/types", "vue-router/types"],
     "paths": {
-      "@/*": ["/*"]
+      "@/*": ["src/*"]
     },
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
-  "include": ["*.d.ts", "**/*.ts", "**/*.vue", "**/*.ts", "main.js"],
+  "files": ["*.d.ts", "**/*.ts", "**/*.tsx", "**/*.vue", "**/*.ts", "**/*.tsx"],
+  "include": [
+    "*.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.vue",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
   "exclude": ["node_modules"]
 }

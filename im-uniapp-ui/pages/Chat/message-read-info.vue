@@ -79,7 +79,6 @@
 /** 消息已读未读详情页面 */
 import { ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
-import { customNavigateTo } from '../../utils/customNavigate'
 import NetworkAlert from '../../components/NetworkAlert.vue'
 import NavBar from './message/nav-bar.vue'
 import Icon from '../../components/Icon.vue'

@@ -25,6 +25,7 @@
         <div class="userInfo-item" @tap="handleAliasClick">
           <div class="item-left">{{ t('remarkText') }}</div>
           <div class="item-right">
+            {{ userInfo && userInfo.alias }}
             <Icon iconClassName="more-icon" color="#999" type="icon-jiantou" />
           </div>
         </div>
