@@ -40,7 +40,7 @@ const loginStateVisible = uni.$UIKitStore.localOptions.loginStateVisible
 
 /** 监听会话方在线离线状态 */
 const statusWatch = autorun(() => {
-  const stateMap = uni.$UIKitStore?.subscriptionStore.stateMap
+  const stateMap = uni.$UIKitStore?.subscriptionStore?.stateMap
 
   if (uni.$UIKitStore.localOptions.loginStateVisible) {
     isOnline.value =

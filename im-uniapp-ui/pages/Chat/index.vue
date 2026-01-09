@@ -303,7 +303,7 @@ const setNavTitle = () => {
   ) {
     if (loginStateVisible) {
       subTitle.value =
-        uni.$UIKitStore?.subscriptionStore.stateMap.get(to)?.statusType ===
+        uni.$UIKitStore?.subscriptionStore?.stateMap?.get(to)?.statusType ===
         V2NIMConst.V2NIMUserStatusType.V2NIM_USER_STATUS_TYPE_LOGIN
           ? `(${t('userOnlineText')})`
           : `(${t('userOfflineText')})`

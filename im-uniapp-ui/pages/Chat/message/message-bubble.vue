@@ -414,7 +414,6 @@ import { V2NIMMessageForUI } from '@xkit-yx/im-store-v2/dist/types/types'
 import { V2NIMConst } from '../../../utils/nim'
 import { msgRecallTime } from '../../../utils/constants'
 import { t } from '../../../utils/i18n'
-import { V2NIMMessage } from 'nim-web-sdk-ng/dist/esm/nim/src/V2NIMMessageService'
 const tooltipRef = ref(null)
 
 const props = withDefaults(

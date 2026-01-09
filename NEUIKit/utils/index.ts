@@ -134,25 +134,18 @@ export const convertSecondsToTime = (seconds: number): string | null => {
 
 export const startCall = (options: {
   remoteUserAccid: string
-  currentUserAccid: string
   type: number
-  remoteShowName: string
 }) => {
   try {
     // @ts-ignore
     uni.$UIKitCallKit.toCallPage(
       {
-        calledAccount: options.remoteUserAccid,
-        // currentUserAccid: options.currentUserAccid,
+        accountList: [options.remoteUserAccid],
         type: options.type,
-        calledShowName: options.remoteShowName,
       },
       () => {
         console.log('toCallPage: ', {
-          remoteUserAccid: options.remoteUserAccid,
-          currentUserAccid: options.currentUserAccid,
-          type: options.type,
-          remoteShowName: options.remoteShowName,
+          options,
         })
       }
     )

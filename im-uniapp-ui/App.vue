@@ -2,10 +2,10 @@
 import RootStore from "@xkit-yx/im-store-v2";
 /** esm 版本 */
 //@ts-ignore
-// import { V2NIMConst, NIM } from './esmNim.js'
+import { V2NIMConst, NIM } from "./esmNim.js";
 /** 常规版本*/
-import NIM from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
-import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
+// import NIM from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
+// import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
 
 import {
   customRedirectTo,
@@ -13,7 +13,7 @@ import {
   customSwitchTab,
 } from "./utils/customNavigate";
 import { getMsgContentTipByType } from "./utils/msg";
-import { STORAGE_KEY } from "./utils/constants";
+import { STORAGE_KEY, APP_KEY } from "./utils/constants";
 import { isWxApp } from "./utils";
 /** 国际化*/
 import { setLanguage } from "./utils/i18n";
@@ -88,7 +88,7 @@ export default {
     startByNotificationId = "";
   },
   methods: {
-    initNim(opts: { account: string; token: string; appkey: string }) {
+    initNim(opts: { account: string; token: string }) {
       /** 保存登录信息  demo 层逻辑 具体根据您的业务调整*/
       uni.setStorage({
         key: STORAGE_KEY,
@@ -103,7 +103,7 @@ export default {
       //@ts-ignore
       const nim = (uni.$UIKitNIM = NIM.getInstance(
         {
-          appkey: opts.appkey,
+          appkey: APP_KEY,
           needReconnect: true,
           debugLevel: "debug",
           apiVersion: "v2",
@@ -129,7 +129,6 @@ export default {
       /** 初始化 im store */
       // @ts-ignore
       const store = (uni.$UIKitStore = new RootStore(
-        // @ts-ignore
         nim,
         {
           // 添加好友是否需要验证
@@ -149,7 +148,9 @@ export default {
             const pushContent = getMsgContentTipByType({
               text: options.msg.text,
               messageType: options.msg.messageType,
+              needSlice: true,
             });
+            // @消息
             const yxAitMsg = options.serverExtension
               ? options.serverExtension.yxAitMsg
               : { forcePushIDsList: "[]", needForcePush: false };
@@ -222,8 +223,8 @@ export default {
                   android: {
                     priority: "",
                     data: {
-                      sessionType: "0",
-                      sessionId: "cs1",
+                      sessionType: "",
+                      sessionId: "",
                     },
                     notification: {
                       click_action: "",
@@ -258,40 +259,45 @@ export default {
       ));
 
       // #ifdef APP-PLUS
-      /** 注册推送 实际根据您在推送厂商申请的证书进行配置，具体参考文档 https://doc.yunxin.163.com/messaging2/guide/zc4MTg5MDY?platform=client#%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%B8%8A%E4%BC%A0%E6%8E%A8%E9%80%81%E8%AF%81%E4%B9%A6
-       */
+      /** 注册推送 */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
-        // miPush: {
-        //   appId: "",
-        //   appKey: "",
-        //   certificateName: "",
-        // },
-        // hwPush: {
-        //   appId: "",
-        //   certificateName: "",
-        // },
-        // oppoPush: {
-        //   appId: "",
-        //   appKey: "",
-        //   certificateName: "",
-        //   secret: "",
-        // },
-        // vivoPush: {
-        //   appId: "",
-        //   appKey: "",
-        //   certificateName: "",
-        // },
-        // fcmPush: {
-        //   certificateName: "",
-        // },
-        // mzPush: {
-        //   appId: "",
-        //   appKey: "",
-        //   certificateName: "",
-        // },
-        // apns: {
-        //   certificateName: "",
-        // },
+        miPush: {
+          appId: "",
+          appKey: "",
+          certificateName: "",
+        },
+
+        hwPush: {
+          appId: "",
+          certificateName: "",
+        },
+
+        oppoPush: {
+          appId: "",
+          appKey: "",
+          certificateName: "",
+          secret: "",
+        },
+
+        vivoPush: {
+          appId: "",
+          appKey: "",
+          certificateName: "",
+        },
+
+        fcmPush: {
+          certificateName: "",
+        },
+
+        mzPush: {
+          appId: "",
+          appKey: "",
+          certificateName: "",
+        },
+
+        apns: {
+          certificateName: "",
+        },
       });
       // #endif
 
@@ -299,31 +305,18 @@ export default {
       nim.V2NIMLoginService.login(opts.account, opts.token).then(async () => {
         // #ifdef APP-PLUS
         /** 初始化音视频通话插件*/
-        nimCallKit.initConfig(
+        nimCallKit.login(
           {
-            appKey: opts.appkey, // 请填写你的appkey
+            appKey: APP_KEY, // 请填写你的appkey
             account: opts.account, // 请填写你的account
             token: opts.token, // 请填写你的token
-            apnsCername: "",
-            pkCername: "",
           },
           (ret: any) => {
             if (ret.code != 200) {
               // callkit init失败
+              console.log("callkit init失败", ret);
             } else {
-              nimCallKit.login(
-                {
-                  account: opts.account,
-                  token: opts.token,
-                },
-                function (ret: any) {
-                  if (ret.code != 200) {
-                    // 登录失败
-                  } else {
-                    // 登录成功
-                  }
-                }
-              );
+              console.log("callkit init成功", ret);
             }
           }
         );

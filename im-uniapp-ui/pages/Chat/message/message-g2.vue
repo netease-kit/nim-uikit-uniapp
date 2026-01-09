@@ -39,25 +39,14 @@ const handleCall = () => {
     const isSelfMsg = props.msg.senderId === myAccount
 
     if (isSelfMsg) {
-      const remoteShowName = uni.$UIKitStore.uiStore.getAppellation({
-        account: props.msg.receiverId,
-      })
-
       startCall({
         remoteUserAccid: props.msg.receiverId,
-        currentUserAccid: myAccount,
         type: callType,
-        remoteShowName: remoteShowName,
       })
     } else {
-      const remoteShowName = uni.$UIKitStore.uiStore.getAppellation({
-        account: props.msg.senderId,
-      })
       startCall({
         remoteUserAccid: props.msg.senderId,
-        currentUserAccid: myAccount,
         type: callType,
-        remoteShowName: remoteShowName,
       })
     }
   } else {

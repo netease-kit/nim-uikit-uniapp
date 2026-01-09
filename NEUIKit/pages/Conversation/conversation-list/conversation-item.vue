@@ -297,7 +297,7 @@ const statusWatch = autorun(() => {
     props.conversation.type ===
     V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_P2P
   ) {
-    const stateMap = uni.$UIKitStore?.subscriptionStore.stateMap
+    const stateMap = uni.$UIKitStore?.subscriptionStore?.stateMap
 
     if (
       stateMap.get(to.value) &&

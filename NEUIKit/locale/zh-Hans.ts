@@ -256,7 +256,7 @@ export default {
   audioBtnText: '按住说话',
   audioRemindText: '松开发送',
   audioErrorText: '录音失败，请检查是否开启权限',
-  videoPlayText: '视频播放',
+  videoPlayText: '消息',
   updateTeamAvatar: '更新了群头像',
   updateTeamName: '更新群名称为',
   updateTeamIntro: '更新了群介绍',

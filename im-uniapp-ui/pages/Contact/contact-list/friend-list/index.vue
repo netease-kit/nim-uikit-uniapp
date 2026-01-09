@@ -110,7 +110,7 @@ const subscribeUserStatus = (friends: string[]) => {
       const chunk = friends.slice(i, i + chunkSize)
 
       if (chunk.length > 0) {
-        uni.$UIKitStore?.subscriptionStore.subscribeUserStatusActive(chunk)
+        uni.$UIKitStore?.subscriptionStore?.subscribeUserStatusActive(chunk)
       }
     }
   }
