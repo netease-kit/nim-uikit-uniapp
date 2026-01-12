@@ -2,10 +2,10 @@
 import RootStore from "@xkit-yx/im-store-v2";
 /** esm 版本 */
 //@ts-ignore
-import { V2NIMConst, NIM } from "./esmNim.js";
+// import { V2NIMConst, NIM } from "./esmNim.js";
 /** 常规版本*/
-// import NIM from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
-// import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
+import NIM from "nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK";
+import { V2NIMConst } from "nim-web-sdk-ng/dist/esm/nim";
 
 import {
   customRedirectTo,
@@ -88,7 +88,7 @@ export default {
     startByNotificationId = "";
   },
   methods: {
-    initNim(opts: { account: string; token: string }) {
+    initNim(opts: { account: string; token: string; appkey: string }) {
       /** 保存登录信息  demo 层逻辑 具体根据您的业务调整*/
       uni.setStorage({
         key: STORAGE_KEY,
@@ -103,7 +103,7 @@ export default {
       //@ts-ignore
       const nim = (uni.$UIKitNIM = NIM.getInstance(
         {
-          appkey: APP_KEY,
+          appkey: opts.appkey,
           needReconnect: true,
           debugLevel: "debug",
           apiVersion: "v2",
@@ -307,7 +307,7 @@ export default {
         /** 初始化音视频通话插件*/
         nimCallKit.login(
           {
-            appKey: APP_KEY, // 请填写你的appkey
+            appKey: opts.appkey, // 请填写你的appkey
             account: opts.account, // 请填写你的account
             token: opts.token, // 请填写你的token
           },
