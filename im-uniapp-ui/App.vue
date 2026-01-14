@@ -172,21 +172,24 @@ export default {
               nim.V2NIMConversationIdUtil.parseConversationTargetId(
                 conversationId
               );
+            const sessionId =
+              conversationType == 1
+                ? uni.$UIKitStore.userStore.myUserInfo.accountId
+                : targetId;
 
             // 设置离线强推，厂商相关推送在此处配置
             // 具体参考文档 https://doc.yunxin.163.com/messaging2/guide/zc4MTg5MDY?platform=client#%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%B8%8A%E4%BC%A0%E6%8E%A8%E9%80%81%E8%AF%81%E4%B9%A6
             const pushPayload = JSON.stringify({
               pushTitle: "", // 必填，推送消息标题
               notify_effect: "2", //可选项，预定义通知栏消息的点击行为。1：通知栏点击后打开app的Launcher Activity，2：通知栏点击后打开app的任一Activity（开发者还需要传入intent_uri），3：通知栏点击后打开网页（开发者还需要传入web_uri）
-              intent_uri:
-                "intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=0;S.sessionId=cs1;end", //可选项，打开当前app的任一组件。
+              // 注意此处 intent_uri 中，sessionType填对应会话类型,  sessionId (单聊 p2p 会话 要填本账号 ID, 群聊要填群 ID)
+              intent_uri: `intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=${conversationType};S.sessionId=${sessionId};end`, //可选项，打开当前app的任一组件。
               hwField: {
                 click_action: {
                   //必填，消息点击行为
                   type: 1, //必填，消息点击行为类型，取值如下：1：打开应用自定义页面 2：点击后打开特定URL 3：点击后打开应用
                   // 自定义页面中intent的实现，请参见指定intent参数​。当type为1时，字段intent和action至少二选一。scheme方式和指定activity方式都可以
-                  intent:
-                    "intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=0;S.sessionId=cs1;end",
+                  intent: `intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=${conversationType};S.sessionId=${sessionId};end`,
                 },
                 androidConfig: {
                   category: "IM", //可选项，标识消息类型，用于标识高优先级透传场景，详见官方文档 AndroidConfig.category
@@ -234,10 +237,7 @@ export default {
               },
 
               // IOS apns
-              sessionId:
-                conversationType == 1
-                  ? uni.$UIKitStore.userStore.myUserInfo.accountId
-                  : targetId,
+              sessionId: sessionId,
               sessionType: conversationType,
             });
 
