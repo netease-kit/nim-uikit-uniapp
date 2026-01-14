@@ -1,8 +1,8 @@
 <script lang="ts">
-import RootStore from '@xkit-yx/im-store-v2'
+import RootStore from "@xkit-yx/im-store-v2";
 /** esm 版本 */
 //@ts-ignore
-import { V2NIMConst, NIM } from './esmNim.js'
+import { V2NIMConst, NIM } from "./esmNim.js";
 /** 常规版本*/
 // import NIM from 'nim-web-sdk-ng/dist/v2/NIM_UNIAPP_SDK'
 // import { V2NIMConst } from 'nim-web-sdk-ng/dist/esm/nim'
@@ -11,75 +11,77 @@ import {
   customRedirectTo,
   customReLaunch,
   customSwitchTab,
-} from './utils/customNavigate'
-import { getMsgContentTipByType } from './utils/msg'
-import { STORAGE_KEY, APP_KEY } from './utils/constants'
-import { isWxApp } from './utils'
+} from "./utils/customNavigate";
+import { getMsgContentTipByType } from "./utils/msg";
+import { STORAGE_KEY, APP_KEY } from "./utils/constants";
+import { isWxApp } from "./utils";
 /** 国际化*/
-import { setLanguage } from './utils/i18n'
+import { setLanguage } from "./utils/i18n";
 
 // #ifdef APP-PLUS
 /** 推送插件 */
-const nimPushPlugin = uni.requireNativePlugin('NIMUniPlugin-PluginModule')
+const nimPushPlugin = uni.requireNativePlugin("NIMUniPlugin-PluginModule");
 /** 音视频通话插件 */
 const nimCallKit = (uni.$UIKitCallKit =
-  uni.requireNativePlugin('netease-CallKit'))
+  uni.requireNativePlugin("netease-CallKit"));
 // #endif
 
-let startByNotificationId = ''
+let startByNotificationId = "";
 
 export default {
   onLaunch() {
     // #ifdef APP-PLUS
     /** 关闭启动画面，锁定竖屏 */
-    plus.navigator.closeSplashscreen()
-    plus.screen.lockOrientation('portrait-primary')
+    plus.navigator.closeSplashscreen();
+    plus.screen.lockOrientation("portrait-primary");
     // #endif
 
     /** 设置语言 （此处为了方便demo切换语言，将其存到本地，实际需根据业务情况设置）*/
-    setLanguage(uni.getStorageSync('switchToEnglishFlag') == 'en' ? 'en' : 'zh')
+    setLanguage(
+      uni.getStorageSync("switchToEnglishFlag") == "en" ? "en" : "zh"
+    );
     /** 已经登录了 不用走初始化逻辑*/
     if (
       uni?.$UIKitStore?.connectStore?.connectStatus ===
       V2NIMConst.V2NIMConnectStatus.V2NIM_CONNECT_STATUS_CONNECTED
     ) {
-      return
+      return;
     }
 
-    const imOptions = uni.getStorageSync(STORAGE_KEY)
+    const imOptions = uni.getStorageSync(STORAGE_KEY);
     if (imOptions) {
-      this.initNim(imOptions)
+      this.initNim(imOptions);
     } else {
       /** 未登录 跳转登录页 */
       customRedirectTo({
-        url: isWxApp ? '/pages/index/index' : '/pages/Login/index',
-      })
+        url: isWxApp ? "/pages/index/index" : "/pages/Login/index",
+      });
     }
   },
   onShow() {
     // #ifdef APP-PLUS
-    uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(false)
+    uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(false);
 
     // 点击通知栏推送监听
     nimPushPlugin.addOpenNotificationListener((res: any) => {
-      if (typeof res == 'object' && res?.sessionId && res?.sessionType) {
+      if (typeof res == "object" && res?.sessionId && res?.sessionType) {
         // 当前登录账号id 具体获取根据您的业务逻辑调整
-        const imOptions = uni.getStorageSync(STORAGE_KEY)
+        const imOptions = uni.getStorageSync(STORAGE_KEY);
         // 会话类型
-        const type = res?.sessionType
+        const type = res?.sessionType;
         // 拼装会话ID
-        startByNotificationId = `${imOptions.account}|${type}|${res?.sessionId}`
+        startByNotificationId = `${imOptions.account}|${type}|${res?.sessionId}`;
       }
-    })
+    });
     // #endif
   },
   onHide() {
     // #ifdef APP-PLUS
-    uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(true)
+    uni?.$UIKitNIM?.V2NIMSettingService?.setAppBackground(true);
     // #endif
 
     // 重置推送 startByNotificationId
-    startByNotificationId = ''
+    startByNotificationId = "";
   },
   methods: {
     initNim(opts: { account: string; token: string }) {
@@ -87,11 +89,11 @@ export default {
       uni.setStorage({
         key: STORAGE_KEY,
         data: opts,
-      })
+      });
 
       /** 是否开启云端会话（此处为了方便demo切换云端/本地会话，将其存到本地，实际需根据业务情况设置）*/
       const enableV2CloudConversation =
-        uni.getStorageSync('enableV2CloudConversation') === 'on'
+        uni.getStorageSync("enableV2CloudConversation") === "on";
 
       /** 初始化 nim sdk */
       //@ts-ignore
@@ -99,8 +101,8 @@ export default {
         {
           appkey: APP_KEY,
           needReconnect: true,
-          debugLevel: 'debug',
-          apiVersion: 'v2',
+          debugLevel: "debug",
+          apiVersion: "v2",
           enableV2CloudConversation: enableV2CloudConversation,
         },
         {
@@ -109,16 +111,16 @@ export default {
              * 微信小程序需要使用单独的lbsUrls和linkUrl
              */
             lbsUrls: isWxApp
-              ? ['https://lbs.netease.im/lbs/wxwebconf.jsp']
-              : ['https://lbs.netease.im/lbs/webconf.jsp'],
-            linkUrl: isWxApp ? 'wlnimsc0.netease.im' : 'weblink.netease.im',
+              ? ["https://lbs.netease.im/lbs/wxwebconf.jsp"]
+              : ["https://lbs.netease.im/lbs/webconf.jsp"],
+            linkUrl: isWxApp ? "wlnimsc0.netease.im" : "weblink.netease.im",
             /**
              * 使用固定设备ID，
              */
             isFixedDeviceId: true,
           },
         }
-      ))
+      ));
 
       /** 初始化 im store */
       // @ts-ignore
@@ -143,11 +145,11 @@ export default {
               text: options.msg.text,
               messageType: options.msg.messageType,
               needSlice: true,
-            })
+            });
             // @消息
             const yxAitMsg = options.serverExtension
               ? options.serverExtension.yxAitMsg
-              : { forcePushIDsList: '[]', needForcePush: false }
+              : { forcePushIDsList: "[]", needForcePush: false };
 
             // 如果是 at 消息，需要走离线强推
             // @ts-ignore
@@ -157,33 +159,36 @@ export default {
                   yxAitMsg,
                   options.msg.text
                 )
-              : { forcePushIDsList: '[]', needForcePush: false }
+              : { forcePushIDsList: "[]", needForcePush: false };
 
-            const { conversationId } = options
+            const { conversationId } = options;
             const conversationType =
-              nim.V2NIMConversationIdUtil.parseConversationType(conversationId)
+              nim.V2NIMConversationIdUtil.parseConversationType(conversationId);
             const targetId =
               nim.V2NIMConversationIdUtil.parseConversationTargetId(
                 conversationId
-              )
+              );
+            const sessionId =
+              conversationType == 1
+                ? uni.$UIKitStore.userStore.myUserInfo.accountId
+                : targetId;
 
             // 设置离线强推，厂商相关推送在此处配置
             // 具体参考文档 https://doc.yunxin.163.com/messaging2/guide/zc4MTg5MDY?platform=client#%E7%AC%AC%E4%B8%80%E6%AD%A5%E4%B8%8A%E4%BC%A0%E6%8E%A8%E9%80%81%E8%AF%81%E4%B9%A6
             const pushPayload = JSON.stringify({
-              pushTitle: '', // 必填，推送消息标题
-              notify_effect: '2', //可选项，预定义通知栏消息的点击行为。1：通知栏点击后打开app的Launcher Activity，2：通知栏点击后打开app的任一Activity（开发者还需要传入intent_uri），3：通知栏点击后打开网页（开发者还需要传入web_uri）
-              intent_uri:
-                'intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=0;S.sessionId=cs1;end', //可选项，打开当前app的任一组件。
+              pushTitle: "", // 必填，推送消息标题
+              notify_effect: "2", //可选项，预定义通知栏消息的点击行为。1：通知栏点击后打开app的Launcher Activity，2：通知栏点击后打开app的任一Activity（开发者还需要传入intent_uri），3：通知栏点击后打开网页（开发者还需要传入web_uri）
+              // 注意此处 intent_uri 中，sessionType填对应会话类型,  sessionId (单聊 p2p 会话 要填本账号 ID, 群聊要填群 ID)
+              intent_uri: `intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=${conversationType};S.sessionId=${sessionId};end`, //可选项，打开当前app的任一组件。
               hwField: {
                 click_action: {
                   //必填，消息点击行为
                   type: 1, //必填，消息点击行为类型，取值如下：1：打开应用自定义页面 2：点击后打开特定URL 3：点击后打开应用
                   // 自定义页面中intent的实现，请参见指定intent参数​。当type为1时，字段intent和action至少二选一。scheme方式和指定activity方式都可以
-                  intent:
-                    'intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=0;S.sessionId=cs1;end',
+                  intent: `intent:#Intent;action=com.netease.nimlib.uniapp.push.NotificationClickActivity;component=com.netease.nim.demo/com.netease.nimlib.uniapp.push.NotificationClickActivity;launchFlags=0x04000000;i.sessionType=${conversationType};S.sessionId=${sessionId};end`,
                 },
                 androidConfig: {
-                  category: 'IM', //可选项，标识消息类型，用于标识高优先级透传场景，详见官方文档 AndroidConfig.category
+                  category: "IM", //可选项，标识消息类型，用于标识高优先级透传场景，详见官方文档 AndroidConfig.category
                 },
               },
               honorField: {
@@ -193,47 +198,44 @@ export default {
                     //必填，消息点击行为
                     type: 1, //必填，消息点击行为类型，取值如下：1：打开应用自定义页面 2：点击后打开特定URL 3：点击后打开应用
                     //自定义页面中intent的实现，请参见指定intent参数。当type为1时，字段intent和action至少二选一。
-                    intent: '',
+                    intent: "",
                   },
-                  importance: 'NORMAL', //可选项，Android通知消息分类，决定用户设备消息通知行为，取值如下：LOW：资讯营销类消息 NORMAL：服务与通讯类消息
+                  importance: "NORMAL", //可选项，Android通知消息分类，决定用户设备消息通知行为，取值如下：LOW：资讯营销类消息 NORMAL：服务与通讯类消息
                 },
               },
               vivoField: {
-                skipType: '4', //必填，点击跳转类型 1：打开APP首页 2：打开链接 3：自定义 4:打开app内指定页面，默认为1
-                skipContent: '',
-                classification: '1', //可选项，消息类型 0：运营类消息，1：系统类消息。默认为0
-                category: 'IM', // 可选项，二级分类
+                skipType: "4", //必填，点击跳转类型 1：打开APP首页 2：打开链接 3：自定义 4:打开app内指定页面，默认为1
+                skipContent: "",
+                classification: "1", //可选项，消息类型 0：运营类消息，1：系统类消息。默认为0
+                category: "IM", // 可选项，二级分类
               },
               oppoField: {
-                channel_id: '', //可选项，指定下发的通道ID
-                category: 'IM', //可选项，通道类别名
+                channel_id: "", //可选项，指定下发的通道ID
+                category: "IM", //可选项，通道类别名
                 notify_level: 2, //通知栏消息提醒等级，1-通知栏；2-通知栏+锁屏；16-通知栏+锁屏+横幅+震动+铃声
-                click_action_type: '1', //点击通知栏后触发的动作类型。0（默认0.启动应用；1.跳转指定应用内页（action标签名）；2.跳转网页；4.跳转指定应用内页（全路径类名）；5.跳转Intent scheme URL: "",
-                click_action_activity: '',
-                action_parameters: '',
+                click_action_type: "1", //点击通知栏后触发的动作类型。0（默认0.启动应用；1.跳转指定应用内页（action标签名）；2.跳转网页；4.跳转指定应用内页（全路径类名）；5.跳转Intent scheme URL: "",
+                click_action_activity: "",
+                action_parameters: "",
               },
               fcmFieldV1: {
                 message: {
                   android: {
-                    priority: '',
+                    priority: "",
                     data: {
-                      sessionType: '',
-                      sessionId: '',
+                      sessionType: "",
+                      sessionId: "",
                     },
                     notification: {
-                      click_action: '',
+                      click_action: "",
                     },
                   },
                 },
               },
 
               // IOS apns
-              sessionId:
-                conversationType == 1
-                  ? uni.$UIKitStore.userStore.myUserInfo.accountId
-                  : targetId,
+              sessionId: sessionId,
               sessionType: conversationType,
-            })
+            });
 
             // @ts-ignore
             const pushConfig = {
@@ -244,55 +246,55 @@ export default {
               forcePushAccountIds: forcePushIDsList,
               pushPayload,
               pushContent,
-            }
+            };
 
-            return { ...options, pushConfig }
+            return { ...options, pushConfig };
           },
         },
-        'UniApp'
-      ))
+        "UniApp"
+      ));
 
       // #ifdef APP-PLUS
       /** 注册推送 */
       nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
         miPush: {
-          appId: '2882303761517864366',
-          appKey: '5991786427366',
-          certificateName: 'KIT_UNIAPP_MI_PUSH',
+          appId: "2882303761517864366",
+          appKey: "5991786427366",
+          certificateName: "KIT_UNIAPP_MI_PUSH",
         },
 
         hwPush: {
-          appId: '109540237',
-          certificateName: 'KIT_UNIAPP_HW_PUSH',
+          appId: "109540237",
+          certificateName: "KIT_UNIAPP_HW_PUSH",
         },
 
         oppoPush: {
-          appId: '30795055',
-          appKey: '6ffe2c1198c5448e84b75f3b78b711ce',
-          certificateName: 'KIT_OPPO_PUSH',
-          secret: 'f55d519d05a04360a8ba3404a24594a0',
+          appId: "30795055",
+          appKey: "6ffe2c1198c5448e84b75f3b78b711ce",
+          certificateName: "KIT_OPPO_PUSH",
+          secret: "f55d519d05a04360a8ba3404a24594a0",
         },
 
         vivoPush: {
-          appId: '105693306',
-          appKey: 'c8ccf661e2aa7895c1a46b3631d5a163',
-          certificateName: 'KIT_UNIAPP_VIVO_PUSH',
+          appId: "105693306",
+          appKey: "c8ccf661e2aa7895c1a46b3631d5a163",
+          certificateName: "KIT_UNIAPP_VIVO_PUSH",
         },
 
         fcmPush: {
-          certificateName: 'KIT_UNIAPP_FCM_PUSH',
+          certificateName: "KIT_UNIAPP_FCM_PUSH",
         },
 
         mzPush: {
-          appId: '148192',
-          appKey: '6068c5a8323542deaf83ad5b6d3ca9e2',
-          certificateName: 'KIT_MEIZU_PUSH',
+          appId: "148192",
+          appKey: "6068c5a8323542deaf83ad5b6d3ca9e2",
+          certificateName: "KIT_MEIZU_PUSH",
         },
 
         apns: {
-          certificateName: 'dis_im',
+          certificateName: "dis_im",
         },
-      })
+      });
       // #endif
 
       /** nim sdk 登录 */
@@ -308,56 +310,56 @@ export default {
           (ret: any) => {
             if (ret.code != 200) {
               // callkit init失败
-              console.log('callkit init失败', ret)
+              console.log("callkit init失败", ret);
             } else {
-              console.log('callkit init成功', ret)
+              console.log("callkit init成功", ret);
             }
           }
-        )
+        );
 
         // #endif
         // 判断时手动点击唤起 还是 点击推送通知栏唤起,点击通知栏唤起直接跳转到聊天页面
         if (!startByNotificationId) {
           customSwitchTab({
-            url: '/pages/Conversation/index',
-          })
+            url: "/pages/Conversation/index",
+          });
         } else {
           if (startByNotificationId) {
             await uni.$UIKitStore.uiStore.selectConversation(
               startByNotificationId
-            )
+            );
 
             uni.navigateTo({
               url: `/pages/Chat/index?conversationId=${startByNotificationId}`,
-            })
-            startByNotificationId = ''
+            });
+            startByNotificationId = "";
           }
         }
-      })
+      });
     },
     logout() {
-      uni.removeStorageSync(STORAGE_KEY)
+      uni.removeStorageSync(STORAGE_KEY);
       try {
         nimCallKit.logout({}, (ret: any) => {
           if (ret.code != 200) {
-            console.log('音视频通话插件退出失败')
+            console.log("音视频通话插件退出失败");
           } else {
-            console.log('音视频通话插件退出成功')
+            console.log("音视频通话插件退出成功");
           }
-        })
+        });
       } catch (error) {
-        console.log('音视频通话插件退出失败', error)
+        console.log("音视频通话插件退出失败", error);
       }
       // 退出登录
       uni.$UIKitNIM.V2NIMLoginService.logout().then(() => {
-        uni.$UIKitStore.destroy()
+        uni.$UIKitStore.destroy();
         customReLaunch({
-          url: '/pages/Login/index',
-        })
-      })
+          url: "/pages/Login/index",
+        });
+      });
     },
   },
-}
+};
 </script>
 <style>
 uni-page-body {
