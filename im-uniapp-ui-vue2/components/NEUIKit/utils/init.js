@@ -6,7 +6,7 @@ import { V2NIMConst, NIM } from "./module/nim-web-sdk-ng_10.9.81_esm.js";
 
 import { customSwitchTab, customReLaunch } from "./customNavigate";
 import { getMsgContentTipByType } from "./msg";
-import { STORAGE_KEY, APP_KEY } from "./constants";
+import { STORAGE_KEY } from "./constants";
 import { isWxApp } from "./index";
 
 // #ifdef APP-PLUS
@@ -41,7 +41,7 @@ export function initIMUIKit(opts) {
   /** 初始化 nim sdk */
   const nim = (uni.$UIKitNIM = NIM.getInstance(
     {
-      appkey: APP_KEY,
+      appkey: opts.appkey,
       needReconnect: true,
       debugLevel: "debug",
       apiVersion: "v2",
@@ -190,41 +190,41 @@ export function initIMUIKit(opts) {
   /** 注册推送 */
   nim.V2NIMSettingService.setOfflinePushConfig(nimPushPlugin, {
     miPush: {
-      appId: "2882303761517864366",
-      appKey: "5991786427366",
-      certificateName: "KIT_UNIAPP_MI_PUSH",
+      appId: "",
+      appKey: "",
+      certificateName: "",
     },
 
     hwPush: {
       appId: "109540237",
-      certificateName: "KIT_UNIAPP_HW_PUSH",
+      certificateName: "",
     },
 
     oppoPush: {
-      appId: "30795055",
-      appKey: "6ffe2c1198c5448e84b75f3b78b711ce",
-      certificateName: "KIT_OPPO_PUSH",
-      secret: "f55d519d05a04360a8ba3404a24594a0",
+      appId: "",
+      appKey: "",
+      certificateName: "",
+      secret: "",
     },
 
     vivoPush: {
-      appId: "105693306",
-      appKey: "c8ccf661e2aa7895c1a46b3631d5a163",
-      certificateName: "KIT_UNIAPP_VIVO_PUSH",
+      appId: "",
+      appKey: "",
+      certificateName: "",
     },
 
     fcmPush: {
-      certificateName: "KIT_UNIAPP_FCM_PUSH",
+      certificateName: "",
     },
 
     mzPush: {
-      appId: "148192",
-      appKey: "6068c5a8323542deaf83ad5b6d3ca9e2",
-      certificateName: "KIT_MEIZU_PUSH",
+      appId: "",
+      appKey: "",
+      certificateName: "",
     },
 
     apns: {
-      certificateName: "dis_im",
+      certificateName: "",
     },
   });
   // #endif
@@ -235,7 +235,7 @@ export function initIMUIKit(opts) {
     /** 初始化音视频通话插件*/
     nimCallKit.login(
       {
-        appKey: "3e215d27b6a6a9e27dad7ef36dd5b65c", // 请填写你的appkey
+        appKey: opts.appkey, // 请填写你的appkey
         account: opts.account, // 请填写你的account
         token: opts.token, // 请填写你的token
       },
