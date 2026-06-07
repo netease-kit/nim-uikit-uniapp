@@ -1,0 +1,263 @@
+{
+  "pages": [
+    {
+      "path": "components/NEUIKit/pages/Conversation/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/index/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Conversation/conversation-search/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Login/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/index",
+      "style": {
+        "navigationBarBackgroundColor": "#F6F8FA",
+        "navigationBarTextStyle": "black",
+        "navigationStyle": "custom",
+        "enablePullDownRefresh": false,
+        "app-plus": {
+          "softinputNavBar": "none",
+          "bounce": "none"
+        }
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/video-play",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/message/p2p-set",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/message/pin-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/forward",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Chat/message-read-info",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-info-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-name-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-intro-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-avatar-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/nick-in-team",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-manage",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/transform-team",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/team-manager-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-set/add-team-manager",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-member/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-create/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Team/team-add/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Contact/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Contact/contact-list/group-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Contact/contact-list/valid-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/Contact/contact-list/black-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+
+    {
+      "path": "components/NEUIKit/pages/User/friend/add-friend",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/friend/friend-edit",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/friend/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my/about",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my/setting",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my/collection-card",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my/collection-list",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/my-detail/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "components/NEUIKit/pages/User/detail-item/index",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "backgroundColor": "#F6F8FA",
+    "color": "#999999",
+    "selectedColor": "#337EFF",
+    "height": "60px",
+    "list": [
+      {
+        "text": "消息",
+        "iconPath": "static/tabbar/conversation.png",
+        "selectedIconPath": "static/tabbar/conversation-selected.png",
+        "pagePath": "components/NEUIKit/pages/Conversation/index"
+      },
+      {
+        "text": "通讯录",
+        "iconPath": "static/tabbar/contact.png",
+        "selectedIconPath": "static/tabbar/contact-selected.png",
+        "pagePath": "components/NEUIKit/pages/Contact/index"
+      },
+      {
+        "text": "我的",
+        "pagePath": "components/NEUIKit/pages/User/my/index",
+        "iconPath": "static/tabbar/me.png",
+        "selectedIconPath": "static/tabbar/me-selected.png"
+      }
+    ]
+  }
+}
