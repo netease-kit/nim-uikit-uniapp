@@ -516,7 +516,7 @@ import Icon from '../../../components/Icon.vue'
 import { customNavigateTo } from '../../../utils/customNavigate'
 import { events } from '../../../utils/constants'
 import { autorun } from '../../../utils/module/im-store-v2/uniapp/index.esm.js'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 //@ts-ignore
 import { V2NIMConst } from '../../../utils/nim'
 import { msgRecallTime } from '../../../utils/constants'
@@ -631,7 +631,7 @@ const handleResendMsg = async () => {
     }
 
     uni.$UIKitStore.msgStore.sendMessageActive({
-      msg: _msg,
+      msg: uni.$UIKitStore.msgStore.handleMsgForSDK(_msg),
       conversationId: _msg.conversationId,
       progress: () => true,
       sendBefore: () => {
@@ -707,21 +707,23 @@ const handlePinMsg = () => {
     })
   } else {
     /** 显示标记 */
-    uni.$UIKitStore.msgStore.pinMessageActive(_msg).catch((err: any) => {
-      if (err?.code && typeof t(`${err.code}`) !== 'undefined') {
-        uni.showToast({
-          title: t(`${err.code}`),
-          icon: 'error',
-          duration: 1000,
-        })
-      } else {
-        uni.showToast({
-          title: t('pinFailedText'),
-          icon: 'error',
-          duration: 1000,
-        })
-      }
-    })
+    uni.$UIKitStore.msgStore
+      .pinMessageActive(uni.$UIKitStore.msgStore.handleMsgForSDK(_msg))
+      .catch((err: any) => {
+        if (err?.code && typeof t(`${err.code}`) !== 'undefined') {
+          uni.showToast({
+            title: t(`${err.code}`),
+            icon: 'error',
+            duration: 1000,
+          })
+        } else {
+          uni.showToast({
+            title: t('pinFailedText'),
+            icon: 'error',
+            duration: 1000,
+          })
+        }
+      })
   }
   closeTooltip()
 }
@@ -739,7 +741,9 @@ const handleCollectionMsg = () => {
         _msg.conversationId
       )
   const collectionDataObj = {
-    message: uni.$UIKitNIM.V2NIMMessageConverter.messageSerialization(_msg), // 序列化
+    message: uni.$UIKitNIM.V2NIMMessageConverter.messageSerialization(
+      uni.$UIKitStore.msgStore.handleMsgForSDK(_msg)
+    ), // 序列化
     avatar: uni.$UIKitStore.userStore.users.get(_msg.senderId)?.avatar,
     conversationName: conversation?.name,
     senderName: uni.$UIKitStore.uiStore.getAppellation({
@@ -787,7 +791,9 @@ const handleCollectionMsg = () => {
 const handleReplyMsg = async () => {
   const _msg = props.msg
 
-  uni.$UIKitStore.msgStore.replyMsgActive(_msg)
+  uni.$UIKitStore.msgStore.replyMsgActive(
+    uni.$UIKitStore.msgStore.handleMsgForSDK(_msg)
+  )
   closeTooltip()
   uni.$emit(events.REPLY_MSG, props.msg)
 
@@ -829,12 +835,14 @@ const handleRecallMsg = () => {
       if (data.confirm) {
         const _msg = props.msg
 
-        uni.$UIKitStore.msgStore.reCallMsgActive(_msg).catch(() => {
-          uni.showToast({
-            title: t('recallMsgFailText'),
-            icon: 'error',
+        uni.$UIKitStore.msgStore
+          .reCallMsgActive(uni.$UIKitStore.msgStore.handleMsgForSDK(_msg))
+          .catch(() => {
+            uni.showToast({
+              title: t('recallMsgFailText'),
+              icon: 'error',
+            })
           })
-        })
       }
     },
     complete() {
@@ -855,7 +863,7 @@ const handleDeleteMsg = () => {
     success(data) {
       if (data.confirm) {
         uni.$UIKitStore.msgStore
-          .deleteMsgActive([_msg])
+          .deleteMsgActive([uni.$UIKitStore.msgStore.handleMsgForSDK(_msg)])
           .then(() => {
             uni.showToast({
               title: t('deleteMsgSuccessText'),

@@ -80,7 +80,7 @@ import type {
   V2NIMTeam,
   V2NIMTeamMember,
 } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMTeamService'
-import type { YxServerExt } from '../../../utils/store'
+import type { YxServerExt } from '../../../utils/module/im-store-v2/types/src'
 import { V2NIMConst } from '../../../utils/nim'
 
 const rangeArr = [t('teamAll'), t('teamOwnerAndManagerText')]

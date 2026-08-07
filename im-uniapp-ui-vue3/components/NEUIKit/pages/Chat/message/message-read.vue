@@ -53,7 +53,7 @@
 /** 消息已读未读组件 */
 
 import { computed, ref, onMounted, onUnmounted } from 'vue'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 import Icon from '../../../components/Icon.vue'
 import { V2NIMConst } from '../../../utils/nim'
 

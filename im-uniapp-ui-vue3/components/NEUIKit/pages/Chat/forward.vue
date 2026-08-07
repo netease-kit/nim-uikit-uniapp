@@ -37,7 +37,7 @@ import {
   sendOneByOneForwardMessages,
 } from '../../utils/mergedForward'
 import { NIM_WEB_SDK_VERSION, V2NIMConst } from '../../utils/nim'
-import type { V2NIMMessageForUI } from '../../utils/store'
+import type { V2NIMMessageForUI } from '../../utils/module/im-store-v2/types/src'
 import ForwardModal from './message/forward/forward-modal.vue'
 import ForwardSelector from './message/forward/forward-selector.vue'
 

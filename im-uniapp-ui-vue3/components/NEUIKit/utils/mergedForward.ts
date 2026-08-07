@@ -1,5 +1,7 @@
-import type RootStore from './store'
-import type { V2NIMMessageForUI } from './store'
+import type {
+  RootStore,
+  V2NIMMessageForUI,
+} from './module/im-store-v2/types/src'
 import type { V2NIMMessage } from './module/nim-web-sdk/esm/nim/src/V2NIMMessageService'
 import { V2NIMConst } from './nim'
 import { getMsgContentTipByType } from './msg'

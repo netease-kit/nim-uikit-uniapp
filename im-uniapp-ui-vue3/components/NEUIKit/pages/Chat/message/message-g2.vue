@@ -13,7 +13,7 @@ import Icon from '../../../components/Icon.vue'
 import { t } from '../../../utils/i18n'
 import { convertSecondsToTime, startCall, isApp } from '../../../utils'
 import { g2StatusMap } from '../../../utils/constants'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 
 const props = withDefaults(defineProps<{ msg: V2NIMMessageForUI }>(), {})
 

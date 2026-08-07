@@ -63,7 +63,7 @@ import { t } from '../../../../utils/i18n'
 import { ref, computed } from 'vue'
 import Modal from '../../../../components/Modal.vue'
 import Avatar from '../../../../components/Avatar.vue'
-import type { V2NIMMessageForUI } from '../../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../../utils/module/im-store-v2/types/src'
 import { V2NIMConst } from '../../../../utils/nim'
 import type { ForwardMode } from '../../../../utils/forwardTask'
 import type { ForwardTarget } from '../../../../utils/forwardTarget'
@@ -127,8 +127,9 @@ const forwardModeTextKey = computed(() => {
 /** 转发消息所属会话名称 */
 const forwardSourceName = computed(() => {
   if (props.forwardMode === 'single') {
+    if (!props.forwardMsg?.senderId) return ''
     return uni.$UIKitStore.uiStore.getAppellation({
-      account: props.forwardMsg?.senderId,
+      account: props.forwardMsg.senderId,
     })
   }
   const conversationId =

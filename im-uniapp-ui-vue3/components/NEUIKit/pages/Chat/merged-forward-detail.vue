@@ -30,7 +30,7 @@ import Icon from '../../components/Icon.vue'
 import MessageList from './message/message-list.vue'
 import { t } from '../../utils/i18n'
 import { V2NIMConst } from '../../utils/nim'
-import type { V2NIMMessageForUI } from '../../utils/store'
+import type { V2NIMMessageForUI } from '../../utils/module/im-store-v2/types/src'
 import {
   getMergedViewerTask,
   removeMergedViewerTask,

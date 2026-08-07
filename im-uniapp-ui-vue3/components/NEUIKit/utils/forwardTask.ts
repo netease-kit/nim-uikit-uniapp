@@ -1,4 +1,4 @@
-import type { V2NIMMessageForUI } from './store'
+import type { V2NIMMessageForUI } from './module/im-store-v2/types/src'
 import { getMessageSelectKey } from './messageKey'
 
 export type ForwardMode = 'single' | 'oneByOne' | 'merged'

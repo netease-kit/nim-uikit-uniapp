@@ -146,7 +146,7 @@ import { V2NIMConst } from '../../../utils/nim'
 import type {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
-} from '../../../utils/store'
+} from '../../../utils/module/im-store-v2/types/src'
 
 let teamId = ''
 /** 群成员*/

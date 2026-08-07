@@ -27,7 +27,7 @@
 import { ref, onUnmounted, computed, watch, withDefaults } from 'vue'
 import Icon from '../../../components/Icon.vue'
 import { events } from '../../../utils/constants'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 import type { V2NIMMessageAudioAttachment } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMMessageService'
 //@ts-ignore
 import { onHide, onUnload } from '@dcloudio/uni-app'

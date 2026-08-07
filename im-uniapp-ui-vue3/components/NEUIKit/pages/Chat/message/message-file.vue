@@ -45,7 +45,7 @@ import Icon from '../../../components/Icon.vue'
 import UniLink from '../../../components/uni-components/uni-link/components/uni-link/uni-link.vue'
 import { getFileType, isWxApp, parseFileSize } from '../../../utils'
 import { t } from '../../../utils/i18n'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 import type { V2NIMMessageFileAttachment } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMMessageService'
 
 const props = withDefaults(defineProps<{ msg: V2NIMMessageForUI }>(), {})

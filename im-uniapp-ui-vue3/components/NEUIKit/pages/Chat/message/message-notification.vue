@@ -14,7 +14,7 @@ import type { V2NIMTeam } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2
 import type {
   V2NIMMessageForUI,
   YxServerExt,
-} from '../../../utils/store'
+} from '../../../utils/module/im-store-v2/types/src'
 import type { V2NIMMessageNotificationAttachment } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMMessageService'
 import { onUnmounted, ref } from 'vue'
 import { autorun } from '../../../utils/module/im-store-v2/uniapp/index.esm.js'

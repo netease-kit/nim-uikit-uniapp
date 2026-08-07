@@ -119,7 +119,7 @@
 <script lang="ts" setup>
 import { formatRecentDateTime, stopAllAudio } from '../../../utils'
 import { V2NIMConst } from '../../../utils/nim'
-import type { V2NIMMessageForUI } from '../../../utils/store'
+import type { V2NIMMessageForUI } from '../../../utils/module/im-store-v2/types/src'
 import { computed } from 'vue'
 
 import { customNavigateTo } from '../../../utils/customNavigate'

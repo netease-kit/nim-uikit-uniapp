@@ -83,7 +83,7 @@ import type {
 } from "../../utils/module/nim-web-sdk/esm/nim/src/V2NIMMessageService";
 import { V2NIMConst } from "../../utils/nim";
 import type { V2NIMConversationType } from "../../utils/module/nim-web-sdk/esm/nim/src/V2NIMConversationService";
-import type { V2NIMMessageForUI } from "../../utils/store";
+import type { V2NIMMessageForUI } from "../../utils/module/im-store-v2/types/src";
 import {
   isCompleteReplyMessageRefer,
   normalizeLegacyReplyMessageRefer,
@@ -284,7 +284,11 @@ const handleMultiDelete = () => {
     success: async (data) => {
       if (!data.confirm) return;
       try {
-        await uni.$UIKitStore.msgStore.deleteMsgActive(selectedMessages.value);
+        await uni.$UIKitStore.msgStore.deleteMsgActive(
+          selectedMessages.value.map((message) =>
+            uni.$UIKitStore.msgStore.handleMsgForSDK(message)
+          )
+        );
         syncConversationLastMessageAfterDelete(uni.$UIKitStore, conversationId);
         showTextToast("deleteMsgSuccessText");
         exitMultiSelect();
@@ -628,7 +632,9 @@ const msgsWatch = autorun(() => {
   msgs.value = messages;
 
   // 处理回复消息
-  handleReplyMsg(messages);
+  handleReplyMsg(
+    messages.map((message) => uni.$UIKitStore.msgStore.handleMsgForSDK(message))
+  );
 
   // 当聊天消息小于6条时，由于页面被键盘撑起，导致已经发出的消息不可见，所以需要隐藏键盘
   if (messages.length < 6) {

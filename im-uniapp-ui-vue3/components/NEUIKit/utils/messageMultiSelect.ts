@@ -1,5 +1,7 @@
-import type RootStore from './store'
-import type { V2NIMMessageForUI } from './store'
+import type {
+  RootStore,
+  V2NIMMessageForUI,
+} from './module/im-store-v2/types/src'
 import { ref } from 'vue'
 import { V2NIMConst } from './nim'
 import {

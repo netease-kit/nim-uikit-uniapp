@@ -25,7 +25,7 @@ import Icon from './Icon.vue'
 import { EMOJI_ICON_MAP_CONFIG, emojiRegExp } from '../utils/emoji'
 import { computed, withDefaults } from 'vue'
 import { t } from '../utils/i18n'
-import type { V2NIMMessageForUI } from '../utils/store'
+import type { V2NIMMessageForUI } from '../utils/module/im-store-v2/types/src'
 import { parseMergedForwardPayload } from '../utils/mergedForward'
 
 const props = withDefaults(

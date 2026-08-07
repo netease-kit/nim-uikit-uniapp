@@ -96,7 +96,7 @@ import {
   customRedirectTo,
   customNavigateTo,
 } from '../../../utils/customNavigate'
-import type { Relation } from '../../../utils/store'
+import type { Relation } from '../../../utils/module/im-store-v2/types/src'
 import type { V2NIMUser } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMUserService'
 import { V2NIMConst } from '../../../utils/nim'
 import Icon from '../../../components/Icon.vue'

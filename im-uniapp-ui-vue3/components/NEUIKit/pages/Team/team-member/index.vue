@@ -79,7 +79,7 @@ import { customNavigateTo } from "../../../utils/customNavigate";
 import type {
   V2NIMTeam,
   V2NIMTeamMember,
-} from "../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMTeamService";
+} from "../../../utils/module/im-store-v2/types/src";
 import { V2NIMConst } from "../../../utils/nim";
 import { isDiscussionFunc } from "../../../utils";
 
@@ -153,13 +153,15 @@ const isGroupOwner = computed(() => {
 // 是否是管理员
 const isGroupManager = computed(() => {
   const myUser = uni.$UIKitStore.userStore.myUserInfo;
-  return groupMembers.value
-    .filter(
-      (item) =>
-        item.memberRole ===
-        V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER,
-    )
-    .some((member) => member.accountId === (myUser ? myUser.accountId : ""));
+  return (
+    groupMembers.value
+      .filter(
+        (item) =>
+          item.memberRole ===
+          V2NIMConst.V2NIMTeamMemberRole.V2NIM_TEAM_MEMBER_ROLE_MANAGER,
+      )
+      .some((member) => member.accountId === (myUser ? myUser.accountId : ""))
+  );
 });
 
 // 是否可以添加成员
@@ -178,8 +180,7 @@ const isShowRemoveBtn = (target: V2NIMTeamMember) => {
   if (isDiscussion.value) {
     return false;
   }
-
-  if (target.accountId === uni.$UIKitStore.userStore.myUserInfo.accountId) {
+  if (target.accountId === uni.$UIKitStore.userStore.myUserInfo?.accountId) {
     return false;
   }
 

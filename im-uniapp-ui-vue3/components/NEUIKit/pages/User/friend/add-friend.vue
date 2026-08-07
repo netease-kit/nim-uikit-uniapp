@@ -60,7 +60,7 @@ import { customRedirectTo } from '../../../utils/customNavigate'
 import { V2NIMConst } from '../../../utils/nim'
 import type { V2NIMUser } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMUserService'
 import { autorun } from '../../../utils/module/im-store-v2/uniapp/index.esm.js'
-import type { Relation } from '../../../utils/store'
+import type { Relation } from '../../../utils/module/im-store-v2/types/src'
 
 // 搜索结果状态
 const searchResState = ref<'beginSearch' | 'searchEmpty' | 'searchResult'>(

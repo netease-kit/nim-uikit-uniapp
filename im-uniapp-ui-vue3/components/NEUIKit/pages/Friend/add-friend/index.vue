@@ -58,7 +58,7 @@ import Empty from '../../../components/Empty.vue'
 import { t } from '../../../utils/i18n'
 import { customRedirectTo } from '../../../utils/customNavigate'
 import { autorun } from '../../../utils/module/im-store-v2/uniapp/index.esm.js'
-import type { Relation } from '../../../utils/store'
+import type { Relation } from '../../../utils/module/im-store-v2/types/src'
 import { V2NIMConst } from '../../../utils/nim'
 import type { V2NIMUser } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMUserService'
 

@@ -252,7 +252,7 @@ import type {
   V2NIMMessageForUI,
   YxServerExt,
   YxAitMsg,
-} from '../../../utils/store'
+} from '../../../utils/module/im-store-v2/types/src'
 //@ts-ignore
 import { V2NIMConst } from '../../../utils/nim'
 import type { V2NIMMessage } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMMessageService'
@@ -735,7 +735,7 @@ onMounted(() => {
       props.conversationType ===
       V2NIMConst.V2NIMConversationType.V2NIM_CONVERSATION_TYPE_TEAM
     ) {
-      const _team: V2NIMTeam = uni.$UIKitStore.teamStore.teams.get(props.to)
+      const _team = uni.$UIKitStore.teamStore.teams.get(props.to)
 
       teamMembers.value = uni.$UIKitStore.teamMemberStore.getTeamMember(
         props.to
@@ -771,7 +771,10 @@ onMounted(() => {
 
     /** 如果重新编辑的是回复消息，则需要将回复消息展示在输入框上方 */
     if (_replyMsg?.messageClientId) {
-      _replyMsg && uni.$UIKitStore.msgStore.replyMsgActive(_replyMsg)
+      _replyMsg &&
+        uni.$UIKitStore.msgStore.replyMsgActive(
+          uni.$UIKitStore.msgStore.handleMsgForSDK(_replyMsg)
+        )
       replyMsg.value = _replyMsg
       isReplyMsg.value = true
     }

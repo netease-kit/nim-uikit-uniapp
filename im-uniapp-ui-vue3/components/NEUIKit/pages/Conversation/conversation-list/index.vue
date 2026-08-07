@@ -135,7 +135,7 @@ import { trackInit } from '../../../utils/reporter'
 import type {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
-} from '../../../utils/store'
+} from '../../../utils/module/im-store-v2/types/src'
 
 /**会话列表 */
 const conversationList = ref<

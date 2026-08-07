@@ -48,12 +48,10 @@ import { t } from "../../../utils/i18n";
 import { customNavigateTo } from "../../../utils/customNavigate";
 
 import type {
-  V2NIMTeam,
-  V2NIMTeamMember,
-} from "../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMTeamService";
-import type {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
+  V2NIMTeam,
+  V2NIMTeamMember,
 } from "../../../utils/module/im-store-v2/types/src";
 
 import { isDiscussionFunc } from "../../../utils";

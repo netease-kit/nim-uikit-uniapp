@@ -32,7 +32,7 @@ import { V2NIMConst } from '../../../utils/nim'
 import type {
   V2NIMConversationForUI,
   V2NIMLocalConversationForUI,
-} from '../../../utils/store'
+} from '../../../utils/module/im-store-v2/types/src'
 
 import type { V2NIMConversationType } from '../../../utils/module/nim-web-sdk/esm/nim/src/V2NIMConversationService'
 
