@@ -1,0 +1,40 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "allowJs": true,
+    "types": ["node", "@dcloudio/types"]
+  },
+  "include": [
+    "typings.d.ts",
+    "components/NEUIKit/utils/store.d.ts",
+    "components/NEUIKit/utils/forwardTask.ts",
+    "components/NEUIKit/utils/forwardTarget.ts",
+    "components/NEUIKit/utils/mergedForward.ts",
+    "components/NEUIKit/utils/messageKey.ts",
+    "components/NEUIKit/utils/messageMultiSelect.ts",
+    "components/NEUIKit/utils/constants.ts",
+    "tests/merged-forward/**/*.test.ts",
+    "components/NEUIKit/components/Icon.vue",
+    "components/NEUIKit/components/MessageOneLine.vue",
+    "components/NEUIKit/pages/Chat/index.vue",
+    "components/NEUIKit/pages/Chat/forward.vue",
+    "components/NEUIKit/pages/Chat/merged-forward-detail.vue",
+    "components/NEUIKit/pages/Chat/message/forward/*.vue",
+    "components/NEUIKit/pages/Chat/message/message-list.vue",
+    "components/NEUIKit/pages/Chat/message/message-item.vue",
+    "components/NEUIKit/pages/Chat/message/message-bubble.vue",
+    "components/NEUIKit/pages/Chat/message/message-reply.vue",
+    "components/NEUIKit/pages/Chat/message/message-text.vue",
+    "components/NEUIKit/pages/Conversation/conversation-list/conversation-item-last-msg-content.vue",
+    "components/NEUIKit/locale/zh-Hans.ts",
+    "components/NEUIKit/locale/en.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "harmony-configs",
+    "unpackage",
+    "nativeplugins",
+    "components/NEUIKit/pages/Friend"
+  ]
+}

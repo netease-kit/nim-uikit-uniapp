@@ -17,19 +17,19 @@ im-uikit-uniapp 界面效果如下图所示：
 - [创建应用并获取 AppKey](https://doc.yunxin.163.com/console/docs/TIzMDE4NTA?platform=console)
 - [注册云信账号，获取 account、token](https://doc.yunxin.163.com/messaging/docs/DQ3Nzk1MTY?platform=server)
 
-### im-uniapp-ui
+### im-uniapp-ui-vue3
 
 `im-uniapp-ui` 是 Vue3 版本 demo，运行方式如下：
 
 1. 进入项目目录并安装依赖：
 
    ```bash
-   cd im-uniapp-ui
+   cd im-uniapp-ui-vue3
    npm install
    ```
 
-2. 在 `im-uniapp-ui/App.vue` 中填入 `appkey`、`account` 和 `token`。
-3. 使用 HBuilderX 导入 `im-uniapp-ui` 目录。
+2. 在 `im-uniapp-ui-vue3/App.vue` 中填入 `appkey`、`account` 和 `token`。
+3. 使用 HBuilderX 导入 `im-uniapp-ui-vue3` 目录。
 4. 在 HBuilderX 中选择对应平台运行项目，例如运行到浏览器、微信小程序、Android 或 iOS。
 
 ### im-uniapp-ui-vue2
